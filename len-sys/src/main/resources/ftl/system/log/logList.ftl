@@ -29,7 +29,18 @@
     </div>
     操作类型：
     <div class="layui-inline">
-      <input class="layui-input" height="20px" id="type" autocomplete="off">
+      <#--<input class="layui-input" height="20px" id="type" autocomplete="off">-->
+
+      <select name="city" lay-verify="required" id="type" class="layui-input">
+          <option value=""></option>
+          <option value="ADD">ADD</option>, , , ,
+          <option value="UPDATE">UPDATE</option>
+          <option value="SELECT">SELECT</option>
+          <option value="DEL">DEL</option>
+          <option value="ATHOR">ATHOR</option>
+      </select>
+
+
     </div>
     <button class="select-on layui-btn layui-btn-sm" data-type="select"><i class="layui-icon"></i>
     </button>

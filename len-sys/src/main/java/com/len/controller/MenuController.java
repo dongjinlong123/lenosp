@@ -92,15 +92,17 @@ public class MenuController extends BaseController {
     }
 
     @GetMapping(value = "showUpdateMenu")
-    public String showUpdateMenu(Model model, String id) {
+    public String showUpdateMenu(Model model, String id,String flag) {
         SysMenu sysMenu = menuService.selectByPrimaryKey(id);
         JSONArray ja = menuService.getMenuJsonList();
         model.addAttribute("menus", ja.toJSONString());
         model.addAttribute("sysMenu", sysMenu);
-        if (null != sysMenu.getPId()) {
+        if (sysMenu != null && null != sysMenu.getPId()) {
             SysMenu pSysMenu = menuService.selectByPrimaryKey(sysMenu.getPId());
             model.addAttribute("pName", pSysMenu.getName());
         }
+        //得到是查看还是update的标识
+        model.addAttribute("flag", flag);
         return "/system/menu/update-menu";
     }
 

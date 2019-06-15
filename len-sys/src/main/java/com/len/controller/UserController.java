@@ -92,7 +92,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "/addUser", httpMethod = "POST", notes = "添加用户")
-    @Log(desc = "添加用户")
+    @Log(desc = "添加用户",type = LOG_TYPE.ADD)
     @PostMapping(value = "addUser")
     @ResponseBody
     public JsonUtil addUser(SysUser user, String[] role) {

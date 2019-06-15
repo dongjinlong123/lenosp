@@ -180,7 +180,7 @@
         detail('编辑用户', 'updateUser?id=' + data.id, 700, 450);
       } else if (obj.event === 'del') {
         layer.confirm('确定删除用户[<label style="color: #00AA91;">' + data.username + '</label>]?', {
-          btn: ['逻辑删除', '物理删除']
+          btn: ['置为无效', '永久删除']
         }, function () {
             toolDelByFlag(data.id,'userList',true);
         }, function () {

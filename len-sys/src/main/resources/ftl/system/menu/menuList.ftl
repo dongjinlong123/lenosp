@@ -11,6 +11,15 @@
   <link rel="stylesheet" href="${re.contextPath}/plugin/layuitree/layui/css/layui.css">
   <link rel="stylesheet" href="${re.contextPath}/plugin/lenos/main.css"/>
     <script type="text/javascript" src="${re.contextPath}/plugin/jquery/jquery-3.2.1.min.js"></script>
+    <style>
+        /*< 去除掉序号 */
+        .layui-table tbody tr td:first-of-type{
+            display: none;
+        }
+        .layui-table thead tr th:first-of-type{
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <div  class="layui-col-md13">
@@ -31,7 +40,7 @@
 <script type="text/javascript">
   function select(nodeId) {
     console.info(nodeId);
-    alert(nodeId)
+    add('查看菜单', 'showUpdateMenu?flag=select&id='+nodeId, 700, 550);
   }
   function del(nodeId) {
       layer.confirm('确定删除?', function(){
@@ -40,7 +49,7 @@
   }
   function update(nodeId){
       console.log(nodeId);
-    add('编辑菜单', 'showUpdateMenu?id='+nodeId, 700, 550);
+    add('编辑菜单', 'showUpdateMenu?flag=update&id='+nodeId, 700, 550);
   }
 
   var layout = [

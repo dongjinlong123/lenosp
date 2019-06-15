@@ -113,7 +113,7 @@ To change this template use File | Settings | File Templates.-->
   <div style="width: 100%;height: 55px;background-color: white;border-top:1px solid #e6e6e6;
   position: fixed;bottom: 1px;margin-left:-20px;">
     <div class="layui-form-item" style=" float: right;margin-right: 30px;margin-top: 8px">
-      <button  class="layui-btn layui-btn-normal" lay-filter="add" lay-submit>
+      <button  class="layui-btn layui-btn-normal" lay-filter="add" lay-submit id="update">
         更新
       </button>
       <button  class="layui-btn layui-btn-primary"  id="close">
@@ -140,6 +140,17 @@ To change this template use File | Settings | File Templates.-->
           $('#pName').val(node.name);
         }
   });
+    initFlag("${flag}") //根据flag判断是否是查看还是编辑
+    function initFlag(flag){
+        if(flag == "select"){
+            //如果是查看，所有的输入框都是只读状态
+            $("input").attr("readonly",true);
+            //隐藏更新按钮
+            $("#update").hide();
+            //隐藏选择图标按钮
+            $("#select_icon").hide();
+        }
+    }
     $('#select_icon').click(function(){
       parent.layer.open({
         id:'icon',
