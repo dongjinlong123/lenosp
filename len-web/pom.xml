@@ -48,10 +48,6 @@
       <groupId>com.len</groupId>
       <artifactId>len-sys</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.len</groupId>
-      <artifactId>len-activiti</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>com.len</groupId>

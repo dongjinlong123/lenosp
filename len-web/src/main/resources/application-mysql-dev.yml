@@ -83,3 +83,10 @@ dataType: mysql
 
 redis:
   prefix: len_
+
+mail:
+  protocol: smtps
+  host: smtp.qq.com
+  port: 465
+  username: 904118787@qq.com
+  password: cgumkngftovzbbej
