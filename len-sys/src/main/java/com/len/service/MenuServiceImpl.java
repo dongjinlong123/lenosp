@@ -1,4 +1,4 @@
-package com.len.service.impl;
+package com.len.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.len.base.BaseMapper;

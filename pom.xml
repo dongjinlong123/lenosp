@@ -24,6 +24,7 @@
     <module>len-sys</module>
     <module>len-web</module>
     <module>len-blog</module>
+    <module>len-myPerson</module>
   </modules>
 
   <dependencies>
@@ -333,10 +334,10 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.len</groupId>
-        <artifactId>len-core</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
+      <groupId>com.len</groupId>
+      <artifactId>len-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
 
       <dependency>
         <groupId>com.len</groupId>
@@ -348,11 +349,7 @@
         <artifactId>len-sys</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
-      <dependency>
-        <groupId>com.len</groupId>
-        <artifactId>len-ti</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
+
       <dependency>
         <groupId>com.len</groupId>
         <artifactId>len-blog</artifactId>
@@ -360,7 +357,7 @@
       </dependency>
       <dependency>
         <groupId>com.len</groupId>
-        <artifactId>len-admin</artifactId>
+        <artifactId>len-myPerson</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
     </dependencies>

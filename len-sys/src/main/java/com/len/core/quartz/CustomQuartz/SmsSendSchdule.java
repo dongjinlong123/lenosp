@@ -34,8 +34,8 @@ public class SmsSendSchdule implements Job{
   }
 
   public void run(){
-    smsService.sendMail("316799047","测试邮件","测试");
-    smsService.sendMail("316799047","测试邮件2","测试内容",new File("F:\\头像.png"),"#",
+    smsService.sendMail("316799047@qq.com","测试邮件","测试");
+    smsService.sendMail("316799047@qq.com","测试邮件2","测试内容",new File("F:\\头像.png"),"#",
             new File[]{new File("F:\\djl\\ecjtu_info.xlsx")
     ,new File("F:\\djl\\wechat.log")});
    log.info("SmsSendSchdule：执行完毕=======================");

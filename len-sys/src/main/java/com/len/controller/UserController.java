@@ -40,22 +40,12 @@ import java.util.List;
 @Api(value = "用户管理",description="用户管理业务")
 public class UserController extends BaseController {
 
-    //private static final Logger
-
     @Autowired
     SysUserService userService;
 
     @Autowired
     RoleUserService roleUserService;
 
-    @Autowired
-    JobTask task;
-
-    @GetMapping(value = "mainTest")
-    @RequiresPermissions("user:show")
-    public String showTest() {
-        return "system/user/mainTest";
-    }
 
     @GetMapping(value = "showUser")
     @RequiresPermissions("user:show")

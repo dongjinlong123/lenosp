@@ -1,4 +1,4 @@
-package com.len.service.impl;
+package com.len.service;
 
 import com.github.pagehelper.PageHelper;
 import com.len.base.BaseMapper;

@@ -1,4 +1,4 @@
-package com.len.service.impl;
+package com.len.service;
 
 import com.len.service.SmsService;
 import lombok.extern.slf4j.Slf4j;

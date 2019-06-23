@@ -9,9 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>len-blog</artifactId>
+    <artifactId>len-myPerson</artifactId>
 
-
+    <name>len-myPerson</name>
+    <!-- FIXME change it to the project's website -->
+    <url>http://www.example.com</url>
 
     <dependencies>
         <dependency>

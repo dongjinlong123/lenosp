@@ -1,4 +1,4 @@
-package com.len.service.impl;
+package com.len.service;
 
 import com.len.base.BaseMapper;
 import com.len.base.impl.BaseServiceImpl;
