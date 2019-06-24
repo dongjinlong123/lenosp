@@ -19,10 +19,12 @@ public class CreateDTOUtil {
         System.out.println(getConnection());
         //获取表结构信息
         List<ColumnModel> columnModelList = getTableStructure("ecjtu_ie_user_info");
+       // System.out.println(columnModelList.get(0));
         //在控制台输出DTO
-        System.out.println(genJavaBeanFromTableStructure(columnModelList, "HJPerson"));
+       //System.out.println(genJavaBeanFromTableStructure(columnModelList, "HJPerson","ecjtu_ie_user_info"));
+        //在控制台输出Mapper.xml文件
+        System.out.println(CreateMapperXMLUtil.createMapperXMLUtil(columnModelList,"HJPerson","ecjtu_ie_user_info"));
     }
-
     /**
      * 获取表结构
      *
@@ -46,8 +48,10 @@ public class CreateDTOUtil {
                 columnModel.setTypeName(columnSet.getString("TYPE_NAME"));
                 String columnClassName = ColumnTypeEnum.getColumnTypeEnumByDBType(columnModel.getTypeName());
                 String fieldName = getFieldName(columnModel.getColumnName());
+                String fileOldName = columnModel.getColumnName();
                 String fieldType = Class.forName(columnClassName).getSimpleName();
                 columnModel.setFieldName(fieldName);
+                columnModel.setFieldOldName(fileOldName);
                 columnModel.setColumnClassName(columnClassName);
                 columnModel.setFieldType(fieldType);
                 columnModelList.add(columnModel);
@@ -114,28 +118,43 @@ public class CreateDTOUtil {
      * @param beanName
      * @return
      */
-    public static String genJavaBeanFromTableStructure(List<ColumnModel> columnModelList, String beanName) {
+    public static String genJavaBeanFromTableStructure(List<ColumnModel> columnModelList, String beanName,String tableName) {
         StringBuffer sb = new StringBuffer();
         try {
+            sb.append("import lombok.Data;\n" +
+                    "import javax.persistence.Column;\n" +
+                    "import javax.persistence.Id;\n" +
+                    "import javax.persistence.Table;\n" +
+                    "import java.util.Date;\n");
+
+            sb.append("@Table(name=\""+tableName+"\")\n");
+            sb.append("@Data\n");
+
             sb.append("public class " + toFirstCharUpCase(beanName) + " {\r\n");
+            int idx = 0;
             for (ColumnModel columnModel : columnModelList) {
                 if (StringUtils.isNotBlank(columnModel.getRemarks())) {
                     sb.append(" //" + columnModel.getRemarks() + " \r\n");
                 }
+                if(idx ==0){
+                    sb.append("@Id\n");
+                }
+                sb.append("@Column(name = \""+columnModel.getFieldOldName()+"\")\n");
                 sb.append(" private " + columnModel.getFieldType() + " " + columnModel.getFieldName() + ";\r\n");
+                idx++;
             }
             sb.append("\r\n");
             //get set
-            for (ColumnModel columnModel : columnModelList) {
-                sb.append(
-                        "\tpublic String get" + toFirstCharUpCase((String) columnModel.getFieldName()) + "() {\r\n" +
-                                "\t\treturn " + columnModel.getFieldName() + ";\r\n" +
-                                "\t}\r\n" +
-                                "\r\n" +
-                                "\tpublic void set" + toFirstCharUpCase((String) columnModel.getFieldName()) + "(String " + columnModel.getFieldName() + ") {\r\n" +
-                                "\t\t" + columnModel.getFieldName() + " = " + columnModel.getFieldName() + ";\r\n" +
-                                "\t}\r\n\r\n");
-            }
+//            for (ColumnModel columnModel : columnModelList) {
+//                sb.append(
+//                        "\tpublic String get" + toFirstCharUpCase((String) columnModel.getFieldName()) + "() {\r\n" +
+//                                "\t\treturn " + columnModel.getFieldName() + ";\r\n" +
+//                                "\t}\r\n" +
+//                                "\r\n" +
+//                                "\tpublic void set" + toFirstCharUpCase((String) columnModel.getFieldName()) + "(String " + columnModel.getFieldName() + ") {\r\n" +
+//                                "\t\t" + columnModel.getFieldName() + " = " + columnModel.getFieldName() + ";\r\n" +
+//                                "\t}\r\n\r\n");
+//            }
             sb.append("}\r\n");
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,7 +195,7 @@ public class CreateDTOUtil {
         private int columnSize;
         private String columnDef;
         private String remarks;
-
+        private String fieldOldName;
         @Override
         public String toString() {
             return "ColumnModel [columnName=" + columnName + ", dataType="

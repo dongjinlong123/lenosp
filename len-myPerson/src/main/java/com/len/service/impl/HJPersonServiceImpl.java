@@ -8,6 +8,8 @@ import com.len.service.HJPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class HJPersonServiceImpl extends BaseServiceImpl<HJPerson, String>
         implements HJPersonService {
@@ -18,5 +20,10 @@ public class HJPersonServiceImpl extends BaseServiceImpl<HJPerson, String>
     @Override
     public BaseMapper<HJPerson, String> getMappser() {
         return hPersonMapper;
+    }
+
+    @Override
+    public List<String> getAllStudyYear() {
+        return hPersonMapper.getAllStudyYear();
     }
 }
