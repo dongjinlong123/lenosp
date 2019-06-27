@@ -13,12 +13,6 @@
     <script type="text/javascript" src="${re.contextPath}/plugin/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${re.contextPath}/plugin/layui/layui.all.js" charset="utf-8"></script>
     <script type="text/javascript"  src="${re.contextPath}/plugin/common.js" charset="utf-8"></script>
-    <style>
-        input {
-            border: 1px solid #b2b2b2 !important;
-        }
-
-    </style>
 </head>
 <body>
 
@@ -71,6 +65,9 @@
     <@shiro.hasPermission name="hjPerson:update">
       <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">编辑</a>
     </@shiro.hasPermission>
+    <@shiro.hasPermission name="hjPerson:del">
+      <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="delete"> <i class="layui-icon">&#xe640;</i>删除</a>
+    </@shiro.hasPermission>
 </script>
 
 <script>
@@ -120,19 +117,6 @@
                 //window.location.href="/hjPerson/showAddHjPerson";
                 //新增一个Tab项
                 openTab();
-            },
-            del:function(){
-                var checkStatus = table.checkStatus('personList'),
-                        data = checkStatus.data;
-                if (data.length ==0) {
-                    layer.msg('请选择要删除的数据', {icon: 5});
-                    return false;
-                }
-                var ids=[];
-                for(item in data){
-                    ids.push(data[item].id);
-                }
-                del(ids);
             }
             ,reload:function(){
                 $('#userName').val('');
@@ -157,10 +141,13 @@
         table.on('tool(hjPerson)', function (obj) {
             var data = obj.data;
             if (obj.event === 'detail') {
-                detail('查看角色', 'updateJob?id=' + data.id, 700, 450);
+                openMaxWindow("update-hjPersonInfo",'查看角色', '/hjPerson/showHjPersonDetail?detail=true&id=' + data.userNum, 600, 400,true);
             }
             if (obj.event === 'edit') {
-                edit('编辑角色', 'updateJob?id=' + data.id, 700, 450);
+                openMaxWindow("update-hjPersonInfo",'编辑角色', '/hjPerson/showHjPersonDetail?detail=false&id=' + data.userNum, 600, 400,true);
+            }
+            if(obj.event ==='delete'){
+                del(data.userNum);
             }
         });
 
@@ -174,17 +161,22 @@
         }
     }
     /**批量删除id*/
-    function del(ids) {
-        $.ajax({
-            url: "del",
-            type: "post",
-            data: {ids: ids},
-            dataType: "json", traditional: true,
-            success: function (data) {
-                layer.msg(data.msg, {icon: 6});
-                layui.table.reload('personList');
-            }
+    function del(userNum) {
+        layer.confirm('确定要删除?', {icon: 3, title:'提示'}, function(index){
+            layer.close(index);
+            $.ajax({
+                url: "/hjPerson/del",
+                type: "post",
+                data: {"userNum": userNum},
+                dataType: "json", traditional: true,
+                success: function (data) {
+                    layer.msg(data.msg, {icon: 6});
+                    layui.table.reload('personList');
+                }
+            });
+
         });
+
     }
     function initStudyYear(){
         $.ajax({
@@ -206,15 +198,9 @@
     }
 
     function openTab(){
-
-        openMyWindow("添加校友信息",'/hjPerson/showAddHjPerson',600,400,true)
+        openMaxWindow("add-hjPerson","添加校友信息",'/hjPerson/showAddHjPerson',600,400,true)
     }
-    function detail(){
 
-    }
-    function edit(){
-
-    }
 </script>
 </body>
 </html>

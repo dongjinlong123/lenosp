@@ -14,6 +14,7 @@
     <script src="${re.contextPath}/plugin/layui/lay/modules/laydate.js" charset="utf-8"></script>
     <script type="text/javascript" src="${re.contextPath}/plugin/common.js" charset="utf-8"></script>
     <script type="text/javascript" src="${re.contextPath}/plugin/tools/tool.js"></script>
+    <script type="text/javascript" src="${re.contextPath}/plugin/tools/update-setting.js"></script>
     <style>
         /*重写label 的宽度*/
         .layui-form-pane .layui-form-label{
@@ -25,6 +26,14 @@
          }
 
     </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var flag='${detail}';
+            if(flag){
+                $("form").disable();
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -43,7 +52,8 @@
           <span class="x-red">*</span>姓名
        </label>
         <div class="layui-input-inline">
-            <input type="text"  id="useName" name="useName"  lay-verify="useName"
+            <input type="hidden" value="${hJPerson.userNum}" name="userNum"  class="layui-input" >
+            <input type="text"  id="useName" name="useName" value="${hJPerson.useName}" lay-verify="useName"
                    autocomplete="off" class="layui-input">
         </div>
 
@@ -51,7 +61,7 @@
            <span class="x-red">*</span>性别
           </label>
           <div class="layui-input-inline" style="width:190px;">
-              <select  id="sex" name="sex" lay-verify="required">
+              <select  id="sex" name="sex" lay-verify="required" value="${hJPerson.sex}">
                   <option value="男">男</option>
                   <option value="女">女</option>
               </select>
@@ -63,7 +73,7 @@
                 <span class="x-red">*</span>入学年份
             </label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="studyYear" name="studyYear"  lay-verify="studyYear" readonly="readonly">
+                <input type="text" class="layui-input" id="studyYear" name="studyYear"  value="${hJPerson.studyYear}"  lay-verify="studyYear" readonly="readonly">
             </div>
 
 
@@ -71,7 +81,7 @@
                 <span class="x-red">*</span>班级
             </label>
             <div class="layui-input-inline" style="width:190px;">
-                <select  id="classNum" name="classNum" lay-verify="required">
+                <select  id="classNum" name="classNum" lay-verify="required"  value="${hJPerson.classNum}" >
                     <option value="1">1班</option>
                     <option value="2">2班</option>
                     <option value="3">3班</option>
@@ -90,14 +100,14 @@
                 <span class="x-red"></span>学号
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="studentId" name="studentId"  autocomplete="off" class="layui-input">
+                <input type="text"  id="studentId" name="studentId"  autocomplete="off" class="layui-input" value="${hJPerson.studentId}">
             </div>
 
             <label for="birthday" class="layui-form-label">
                 <span class="x-red"></span>出生日期
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="birthday" name="birthday"  autocomplete="off" class="layui-input" lay-verify="birthday" readonly="readonly">
+                <input type="text"  id="birthday" name="birthday" value="${hJPerson.birthday}"  autocomplete="off" class="layui-input" lay-verify="birthday" readonly="readonly">
             </div>
 
         </div>
@@ -108,14 +118,14 @@
                 <span class="x-red"></span>qq
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="qq" name="qq"  autocomplete="off" class="layui-input">
+                <input type="text"  id="qq" name="qq"  value="${hJPerson.qq}"  autocomplete="off" class="layui-input">
             </div>
 
             <label for="telphone" class="layui-form-label">
                 <span class="x-red">*</span>手机号码
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="telphone" name="telphone"  autocomplete="off" class="layui-input" lay-verify="required|phone">
+                <input type="text"  id="telphone" name="telphone"  autocomplete="off" class="layui-input" lay-verify="required|phone" value="${hJPerson.telphone}">
             </div>
         </div>
 
@@ -134,14 +144,14 @@
                 <span class="x-red"></span>居住城市
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="liveCity" name="liveCity"  autocomplete="off" class="layui-input">
+                <input type="text"  id="liveCity" name="liveCity"  value="${hJPerson.liveCity}"    autocomplete="off" class="layui-input">
             </div>
 
             <label for="profession" class="layui-form-label">
                 <span class="x-red"></span>在职行业
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="profession" name="profession"  autocomplete="off" class="layui-input">
+                <input type="text"  id="profession" name="profession"  value="${hJPerson.profession}" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -151,14 +161,14 @@
                 <span class="x-red"></span>单位全称
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="company" name="company"  autocomplete="off" class="layui-input">
+                <input type="text"  id="company" name="company" value="${hJPerson.company}" autocomplete="off" class="layui-input">
             </div>
 
             <label for="job" class="layui-form-label">
                 <span class="x-red"></span>职务
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="job" name="job"  autocomplete="off" class="layui-input">
+                <input type="text"  id="job" name="job" value="${hJPerson.job}"  autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -166,13 +176,13 @@
                 <span class="x-red"></span>职称
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="title" name="title"  autocomplete="off" class="layui-input">
+                <input type="text"  id="title" name="title"  value="${hJPerson.title}" autocomplete="off" class="layui-input">
             </div>
             <label for="schoolJob" class="layui-form-label">
                 <span class="x-red"></span>在校期间班委职务
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="schoolJob" name="schoolJob"  autocomplete="off" class="layui-input">
+                <input type="text"  id="schoolJob" name="schoolJob"  value="${hJPerson.schoolJob}" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -186,7 +196,7 @@
                 <span class="x-red"></span>是否继续攻读硕士
             </label>
             <div class="layui-input-inline" style="width:190px;">
-                <select  id="isGraduate" name="isGraduate"   lay-filter="isGraduate">
+                <select  id="isGraduate" name="isGraduate"  value="${hJPerson.isGraduate}"  lay-filter="isGraduate">
                     <option value="否">否</option>
                     <option value="是">是</option>
                 </select>
@@ -197,7 +207,7 @@
                 <span class="x-red"></span>硕士毕业院校
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="graduateSchool" name="graduateSchool"  autocomplete="off" class="layui-input isGraduateInput">
+                <input type="text"  id="graduateSchool" name="graduateSchool"  value="${hJPerson.graduateSchool}"  autocomplete="off" class="layui-input isGraduateInput">
             </div>
         </div>
 
@@ -208,7 +218,7 @@
                 <span class="x-red"></span>硕士攻读专业
             </label>
             <div class="layui-input-inline" style="width:190px;">
-               <input type="text"  id="graduateDegree" name="graduateDegree"  autocomplete="off" class="layui-input isGraduateInput">
+               <input type="text"  id="graduateDegree" name="graduateDegree" value="${hJPerson.graduateDegree}"  autocomplete="off" class="layui-input isGraduateInput">
             </div>
 
 
@@ -216,7 +226,7 @@
                 <span class="x-red"></span>硕士学位
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="masterDegree" name="masterDegree"  autocomplete="off" class="layui-input isGraduateInput">
+                <input type="text"  id="masterDegree" name="masterDegree" value="${hJPerson.masterDegree}" autocomplete="off" class="layui-input isGraduateInput">
             </div>
         </div>
 
@@ -226,7 +236,7 @@
                 <span class="x-red"></span>硕导
             </label>
             <div class="layui-input-inline" style="width:190px;">
-                <input type="text"  id="masterGuide" name="masterGuide"  autocomplete="off" class="layui-input isGraduateInput">
+                <input type="text"  id="masterGuide" name="masterGuide" value="${hJPerson.masterGuide}"  autocomplete="off" class="layui-input isGraduateInput">
             </div>
 
         </div>
@@ -237,7 +247,7 @@
                 <span class="x-red"></span>是否继续攻读博士
             </label>
             <div class="layui-input-inline" style="width:190px;">
-                <select  id="isDoctor" name="isDoctor"   lay-filter="isDoctor">
+                <select  id="isDoctor" name="isDoctor"   lay-filter="isDoctor" value="${hJPerson.isDoctor}" >
                     <option value="否">否</option>
                     <option value="是">是</option>
                 </select>
@@ -248,7 +258,7 @@
                 <span class="x-red"></span>硕士毕业院校
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="doctorSchool" name="doctorSchool"  autocomplete="off" class="layui-input isDoctorInput">
+                <input type="text"  id="doctorSchool" name="doctorSchool" value="${hJPerson.doctorSchool}"  autocomplete="off" class="layui-input isDoctorInput">
             </div>
         </div>
         <div class="layui-form-item">
@@ -256,7 +266,7 @@
                 <span class="x-red"></span>博士攻读专业
             </label>
             <div class="layui-input-inline" style="width:190px;">
-                <input type="text"  id="doctorDegree" name="doctorDegree"  autocomplete="off" class="layui-input isDoctorInput">
+                <input type="text"  id="doctorDegree" name="doctorDegree" value="${hJPerson.doctorDegree}"  autocomplete="off" class="layui-input isDoctorInput">
             </div>
 
 
@@ -264,7 +274,7 @@
                 <span class="x-red"></span>博士学位
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="doctorMasterDegree" name="doctorMasterDegree"  autocomplete="off" class="layui-input isDoctorInput">
+                <input type="text"  id="doctorMasterDegree" name="doctorMasterDegree" value="${hJPerson.doctorMasterDegree}"  autocomplete="off" class="layui-input isDoctorInput">
             </div>
         </div>
 
@@ -273,13 +283,13 @@
                 <span class="x-red"></span>博导
             </label>
             <div class="layui-input-inline" style="width:190px;">
-                <input type="text"  id="doctorGuide" name="doctorGuide"  autocomplete="off" class="layui-input isDoctorInput">
+                <input type="text"  id="doctorGuide" name="doctorGuide" value="${hJPerson.doctorGuide}" autocomplete="off" class="layui-input isDoctorInput">
             </div>
             <label for="idea" class="layui-form-label">
                 <span class="x-red"></span>建议
             </label>
             <div class="layui-input-inline" style="width:190px;">
-                <input type="text"  id="idea" name="idea"  autocomplete="off" class="layui-input">
+                <input type="text"  id="idea" name="idea"  value="${hJPerson.idea}" autocomplete="off" class="layui-input">
             </div>
 
         </div>
@@ -288,29 +298,43 @@
 
 
 
-
-
+    <#if !detail>
     <div style="width: 100%;height: 55px;background-color: white;border-top:1px solid #e6e6e6;
     position: fixed;bottom: 1px;margin-left:-20px;">
       <div class="layui-form-item" style=" float: right;margin-right: 30px;margin-top: 8px">
 
-        <button  class="layui-btn layui-btn-normal" lay-filter="add" lay-submit>
-          增加
+        <button  class="layui-btn layui-btn-normal" lay-filter="update" lay-submit>
+        确认
         </button>
-        <button  class="layui-btn layui-btn-primary" id="close">
+
+        <button  class="layui-btn layui-btn-primary" id="close" lay-filter="close">
           取消
         </button>
       </div>
+
     </div>
+    </#if>
   </form>
 </div>
 <script>
   layui.use(['form','layer','laydate'], function(){
-    $ = layui.jquery;
+      $ = layui.jquery;
     var form = layui.form
         ,layer = layui.layer
        ,laydate = layui.laydate;
-    //渲染select
+
+      $("#classNum").val("${hJPerson.classNum}")
+      $("#sex").val("${hJPerson.sex}")
+      $("#isDoctor").val("${hJPerson.isDoctor}")
+      if("${hJPerson.isDoctor}" == "否"){
+          hideInputByClass("isDoctorInput",true);
+      }
+
+      $("#isGraduate").val("${hJPerson.isGraduate}")
+      if("${hJPerson.isGraduate}" == "否"){
+          hideInputByClass("isGraduateInput",true);
+      }
+        //渲染select
       form.render('select');
 
 
@@ -343,12 +367,15 @@
       }
     });
 
-   $('#close').click(function(){
-     var index = parent.layer.getFrameIndex(window.name);
-     parent.layer.close(index);
-   });
+       $('#close').click(function(){
+         var index = parent.layer.getFrameIndex(window.name);
+         parent.layer.close(index);
+       });
+
+
+
       //监听id 为isGraduate 的下拉框
-      hideInputByClass("isGraduateInput",true);
+
       form.on('select(isGraduate)', function(data){
           if(data.value=='是'){
               hideInputByClass("isGraduateInput",false);
@@ -358,7 +385,7 @@
       });
 
       //监听id 为isDoctor 的下拉框
-      hideInputByClass("isDoctorInput",true);
+
       form.on('select(isDoctor)', function(data){
           if(data.value=='是'){
               hideInputByClass("isDoctorInput",false);
@@ -368,8 +395,8 @@
       });
 
     //监听提交
-    form.on('submit(add)', function(data){
-        layerAjax('/hjPerson/addHjPerson', data.field, 'personList');
+    form.on('submit(update)', function(data){
+        layerAjax('/hjPerson/updateHjPerson', data.field, 'personList');
         return false;
     });
   });
