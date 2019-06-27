@@ -8,6 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
   <link rel="stylesheet" href="${re.contextPath}/plugin/layui/css/layui.css">
+    <link rel="stylesheet" href="${re.contextPath}/plugin/build/css/city.css">
   <link rel="stylesheet" href="${re.contextPath}/plugin/layui/css/modules/laydate/default/laydate.css">
   <script type="text/javascript" src="${re.contextPath}/plugin/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="${re.contextPath}/plugin/layui/layui.all.js" charset="utf-8"></script>
@@ -28,6 +29,7 @@
 </head>
 
 <body>
+
 <div class="x-body">
   <form class="layui-form layui-form-pane" style="margin-left: 20px;">
     <div style="width:100%;height:100%;overflow: auto;">
@@ -305,14 +307,19 @@
   </form>
 </div>
 <script>
-  layui.use(['form','layer','laydate'], function(){
+layui.config({
+    base: '${re.contextPath}/plugin/build/js/',
+    version: '1.0.1'
+})
+  layui.use(['form','layer','laydate','city'], function(){
     $ = layui.jquery;
     var form = layui.form
         ,layer = layui.layer
+        ,city = layui.city
        ,laydate = layui.laydate;
-    //渲染select
+     //渲染select
       form.render('select');
-
+      city.init()
 
       //执行一个laydate实例
       laydate.render({

@@ -57,6 +57,7 @@ public class FreeMarkerConfig{
     FreeMarkerConfigurer result = new FreeMarkerConfigurer();
     freemarker.template.Configuration configuration = factory.createConfiguration();
     configuration.setClassicCompatible(true);
+    configuration.setNumberFormat("#");
     result.setConfiguration(configuration);
     Properties settings = new Properties();
     settings.put("template_update_delay", "0");

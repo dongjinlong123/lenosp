@@ -1,3 +1,27 @@
+/**
+ * 默认最大化砖石
+ * @param title
+ * @param url
+ */
+function openMaxWindow(id,title, url) {
+
+    layer.open({
+        id:id,
+        type: 2,
+        fix: false,
+        area: [$("#container").offsetWidth + 'px', $("#container").offsetHeight + 'px'],
+        maxmin: true,
+        shadeClose: false,
+        shade: 0.4,
+        title: title,
+        content: url,
+        success: function(layero,index){
+            //在回调方法中的第2个参数“index”表示的是当前弹窗的索引。
+            //通过layer.full方法将窗口放大。
+            layer.full(index);
+        }
+    });
+}
 /*弹出层*/
 /*
  参数解释：
@@ -7,7 +31,7 @@
  w       弹出层宽度（缺省调默认值）
  h       弹出层高度（缺省调默认值）
  */
-function openMyWindow(title, url, w, h,isMax) {
+function openMyWindow(title, url, w, h) {
     if (title == null || title == '') {
         title = false;
     }
@@ -21,7 +45,7 @@ function openMyWindow(title, url, w, h,isMax) {
         h = ($(window).height() - 50);
     }
     layer.open({
-        id: 'job-add',
+        id: 'normal',
         type: 2,
         area: [w + 'px', h + 'px'],
         fix: false,
@@ -29,14 +53,7 @@ function openMyWindow(title, url, w, h,isMax) {
         shadeClose: false,
         shade: 0.4,
         title: title,
-        content: url,
-        success: function(layero,index){
-            //在回调方法中的第2个参数“index”表示的是当前弹窗的索引。
-            //通过layer.full方法将窗口放大。
-            if(isMax){
-                layer.full(index);
-            }
-        }
+        content: url
     });
 
 

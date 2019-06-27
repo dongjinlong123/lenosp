@@ -38,7 +38,8 @@ function postAjaxre(url,data,tableId){
     url: url,
     type: "post",
     data:data,
-    dataType: "json", traditional: true,
+    dataType: "json",
+    traditional: true,
     success: function (data) {
       if(data.flag){
         var index = parent.layer.getFrameIndex(window.name);

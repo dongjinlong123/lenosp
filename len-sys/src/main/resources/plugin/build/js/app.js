@@ -6,7 +6,7 @@
  * Website:http://kit.zhengjinfan.cn/
  * LICENSE:MIT
  */
-var tab;
+
 layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar', 'onelevel', 'laytpl', 'spa'], function(exports) {
     var $ = layui.jquery,
         element = layui.element,
@@ -20,7 +20,7 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
         navbar = layui.navbar,
         _componentPath = 'components/',
         spa = layui.spa;
-    tab = layui.tab
+    var tab = layui.tab;
     var app = {
         hello: function(str) {
             layer.alert('Hello ' + (str || 'test'));
