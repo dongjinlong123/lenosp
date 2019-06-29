@@ -320,9 +320,13 @@ layui.config({
      //渲染select
       form.render('select');
       //选择城市
-      console.log("----------"+$("#liveCity").val())
+
       $("#liveCity").click(function(){
-          city.init("liveCity")
+          var arr;
+          if($("#liveCity").val() != ""){
+              arr = $("#liveCity").val().split("-");
+          }
+          city.init("liveCity",arr)
       });
 
       //执行一个laydate实例

@@ -48,9 +48,12 @@ var html = '<div  id="selectCity">'+
             layer.msg("城市不能为空！")
             return false;
         }
+        var areaV= "-"+$("#djl_area :selected").text();
+        if($("#djl_area :selected").val() == ""){
+            areaV = "";
+        }
+        var result = $("#djl_province :selected").text() +"-" +$("#djl_city :selected").text() +areaV
 
-        var result = $("#djl_province :selected").text() +"-" +$("#djl_province :selected").text() +"-"+$("#djl_province :selected").text();
-        console.log($("#"+ret),result)
         $("#"+ret).val(result)
         //关闭弹窗
         layer.close(cityIndex);
@@ -59,7 +62,7 @@ var html = '<div  id="selectCity">'+
     var ret;
     var cityIndex;
     var city = {
-        init:function(className){
+        init:function(className,arr){
             ret = className
             cityIndex= layer.open({
                 type: 1,
@@ -85,9 +88,45 @@ var html = '<div  id="selectCity">'+
                     }
                    city.getCity();
                    city.getArea();
-
+                   city.setDefaultValue(arr)//设置初始值
                 }
             });
+        },
+        setDefaultValue:function(arr){
+            if(!arr || arr[0] == undefined || arr[1] == undefined){
+                return;
+            }
+            if(arr[2] == undefined){
+                arr[2] = "";
+            }
+            //设置初始值
+            var provinceOptions = $("#djl_province")[0].options;
+            for(var po =0;po< provinceOptions.length; po++){
+                if(provinceOptions[po].innerHTML == arr[0]){
+                    provinceOptions[po].setAttribute("selected","selected")
+                    $("#djl_province").change();
+                    break;
+                }
+            }
+            setTimeout(function () {
+                var cityOptions = $("#djl_city")[0].options;
+                for(var co =0;co< cityOptions.length; co++){
+                    if(cityOptions[co].innerHTML == arr[1]){
+                        cityOptions[co].setAttribute("selected","selected")
+                        $("#djl_city").change();
+                        break;
+                    }
+                }
+            },300);
+            setTimeout(function () {
+                var areaOptions = $("#djl_area")[0].options;
+                for(var ao = 0 ;ao< areaOptions.length; ao++){
+                    if(areaOptions[ao].innerHTML == arr[2]){
+                        areaOptions[ao].setAttribute("selected","selected")
+                        break;
+                    }
+                }
+            },400);
         },
         getArea:function () {
             $("#djl_city").change(function () {
