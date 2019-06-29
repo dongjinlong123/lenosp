@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/15.
- * @email 154040976@qq.com
- * ajax 回执
+ * ajax 回执 json封装
  */
 @Data
 public class JsonUtil {

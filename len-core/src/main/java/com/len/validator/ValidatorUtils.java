@@ -11,8 +11,6 @@ import javax.validation.Validator;
  * 
  * @ClassName: ValidatorUtils   
  * @Description: hibernate-validator校验工具类
- * @author: liutao
- * @date: 2018年3月16日 上午11:56:34
  */
 public class ValidatorUtils {
 	private static Validator validator;

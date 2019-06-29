@@ -6,10 +6,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/4.
- * @email 154040976@qq.com
- *
  * 管理工具类
  */
 public class CommonUtil {

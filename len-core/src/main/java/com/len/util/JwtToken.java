@@ -3,9 +3,7 @@ package com.len.util;
 import org.apache.shiro.authc.AuthenticationToken;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/8/19.
- * @email 154040976@qq.com
+ * 授权令牌
  */
 public class JwtToken implements AuthenticationToken {
 

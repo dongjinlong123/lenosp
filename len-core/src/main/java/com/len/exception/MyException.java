@@ -1,9 +1,7 @@
 package com.len.exception;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/15.
- * @email 154040976@qq.com
+ * 自定义异常
  */
 public class MyException extends RuntimeException {
 

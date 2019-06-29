@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/5/6.
- * @email 154040976@qq.com
+ * 异常试图解析
  */
 @ControllerAdvice
 public class CustomErrorViewResolver implements ErrorViewResolver {

@@ -11,9 +11,7 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/11/24.
- * @email 154040976@qq.com
+ * redis服务
  */
 @Service
 public class RedisService {

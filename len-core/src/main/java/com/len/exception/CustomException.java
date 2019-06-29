@@ -9,9 +9,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/8.
- * @email 154040976@qq.com
+ * 客户端异常
  */
 @Slf4j
 public class CustomException implements HandlerExceptionResolver {

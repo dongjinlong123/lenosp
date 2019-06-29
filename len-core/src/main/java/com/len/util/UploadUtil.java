@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.UUID;
 
 /**
- * Created by meng on 2018/5/8.
  * 文件上传工具类
  */
 @Getter

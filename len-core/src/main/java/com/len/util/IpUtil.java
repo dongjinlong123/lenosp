@@ -3,9 +3,7 @@ package com.len.util;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/28.
- * @email 154040976@qq.com
+ * IP工具类
  */
 public class IpUtil {
 
