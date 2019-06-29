@@ -7,10 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +37,11 @@ public class SysMenu {
     @Column(name = "order_num")
     private Integer orderNum;
 
+    /**
+     * layui升级 ， 显示为title
+     */
+    @Transient
+    private String title;
     /**
      * 图标
      */

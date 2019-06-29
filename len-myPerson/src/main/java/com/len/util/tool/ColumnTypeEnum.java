@@ -7,6 +7,7 @@ public enum ColumnTypeEnum {
     VARCHAR("VARCHAR", "java.lang.String"),
     BIGINT("BIGINT", "java.lang.Integer"),
     DATE("DATETIME", "java.util.Date"),
+    TINYINT("TINYINT","java.lang.Integer"),
     INT("INT", "java.lang.Integer");
 
     private String dbType;

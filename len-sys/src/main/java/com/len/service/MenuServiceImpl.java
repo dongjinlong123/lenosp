@@ -66,6 +66,7 @@ public class MenuServiceImpl extends BaseServiceImpl<SysMenu, String> implements
         for (SysMenu menu : childSysMenu) {
             ++num;
             m = child(menu, sysMenus, pNum, num);
+            menu.setTitle(menu.getName()); //设置title值
             sysMenu.addChild(menu);
         }
         return sysMenu;
@@ -82,6 +83,7 @@ public class MenuServiceImpl extends BaseServiceImpl<SysMenu, String> implements
         JSONArray jsonArr = new JSONArray();
         for (SysMenu sysMenu : supers) {
             SysMenu child = child(sysMenu, sysMenus, 0, 0);
+            child.setTitle(child.getName());
             jsonArr.add(child);
         }
         return jsonArr;

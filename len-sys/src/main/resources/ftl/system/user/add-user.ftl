@@ -52,7 +52,7 @@ To change this template use File | Settings | File Templates.-->
       </label>
       <div class="layui-input-inline">
         <input type="text"  id="uname" name="username"  lay-verify="username"
-               autocomplete="off" class="layui-input">
+               class="layui-input">
       </div>
       <div id="ms" class="layui-form-mid layui-word-aux">
         <span class="x-red">*</span><span id="ums">将会成为您唯一的登入名</span>
@@ -64,7 +64,7 @@ To change this template use File | Settings | File Templates.-->
         <span class="x-red">*</span>真实姓名
       </label>
       <div class="layui-input-inline">
-        <input type="text" id="realName" name="realName" lay-verify="realName"  autocomplete="off" class="layui-input">
+        <input type="text" id="realName" name="realName" lay-verify="realName"  class="layui-input">
       </div>
     </div>
       <div class="layui-inline">
@@ -73,7 +73,7 @@ To change this template use File | Settings | File Templates.-->
         </label>
         <div class="layui-input-inline">
           <input type="text" id="age" name="age"  lay-verify="number"
-                 autocomplete="off" class="layui-input">
+                  class="layui-input">
         </div>
       </div>
 
@@ -85,7 +85,7 @@ To change this template use File | Settings | File Templates.-->
       </label>
       <div class="layui-input-inline">
         <input type="password" id="password" name="password"  lay-verify="password"
-               autocomplete="off" class="layui-input">
+               class="layui-input">
       </div>
       </div>
       <div class="layui-inline">
@@ -94,7 +94,7 @@ To change this template use File | Settings | File Templates.-->
         </label>
         <div class="layui-input-inline">
           <input type="password" id="l_repass" name="repass"  lay-verify="repass"
-                 autocomplete="off" class="layui-input">
+                  class="layui-input">
         </div>
       </div>
     </div>
@@ -104,7 +104,7 @@ To change this template use File | Settings | File Templates.-->
       </label>
       <div class="layui-input-block">
         <input type="email" id="email" style="width: 93%" name="email"  lay-verify="email"
-               autocomplete="off" class="layui-input">
+                class="layui-input">
         <input id="photo" name="photo" type="hidden">
       </div>
     </div>

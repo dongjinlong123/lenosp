@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="${re.contextPath}/plugin/plugins/font-awesome/css/font-awesome.min.css" media="all" />
   <link rel="stylesheet" href="${re.contextPath}/plugin/build/css/app.css" media="all" />
   <link rel="stylesheet" href="${re.contextPath}/plugin/build/css/themes/default.css" media="all" id="skin" kit-skin />
-  <style>
+  <link rel="shortcut icon" type="image/x-icon" href="${re.contextPath}/plugin/favicon.ico" />
+    <style>
     <#--前端无聊美化ing-->
     .layui-footer{background-color: #2F4056;}
     .layui-side-scroll{border-right: 3px solid #009688;}

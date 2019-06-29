@@ -124,14 +124,16 @@ To change this template use File | Settings | File Templates.-->
   </form>
 </div>
 <script>
-  layui.use(['form','layer'], function(){
+  layui.use(['form','layer','tree'], function(){
     $ = layui.jquery;
     var form = layui.form
+         ,tree = layui.tree
         ,layer = layui.layer;
-    layui.tree({
+    tree.render({
         elem:'#tree',
-        nodes:${menus}
-        ,click: function(node){
+        data:${menus}
+        ,click: function(obj){
+            var node = obj.data;
             if(node.menuType=='1'){
                 layer.msg('请勿选择按钮', {icon: 5,anim:6});
                 return false;

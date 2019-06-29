@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <button class="select-on layui-btn layui-btn-sm" data-type="select"><i class="layui-icon"></i>
+        <button class="select-on layui-btn layui-btn-sm" style=" margin-bottom: 9px;" data-type="select"><i class="layui-icon"></i>
         </button>
         <button class="layui-btn layui-btn-sm icon-position-button" id="refresh" style="float: right;"
                 data-type="reload">
@@ -47,7 +47,7 @@
 </div>
 
 <@shiro.hasPermission name="hjPerson:add">
-<div class="layui-col-md12" style="height:40px;margin-top:3px;">
+<div class="layui-row" style="height:40px;margin-top:3px;">
     <div class="layui-btn-group">
         <button class="layui-btn layui-btn-normal" data-type="add">
             <i class="layui-icon">&#xe608;</i>新增
@@ -76,6 +76,7 @@
     })
     layui.use(['form','table'], function () {
         var table = layui.table;
+        var form = layui.form;
         //方法级渲染
         table.render({
             id: 'personList',
@@ -101,7 +102,8 @@
             height: 'full-83'
         });
 
-        var $ = layui.$, active = {
+        var $ = layui.$,
+                active = {
             select: function () {
                 var userName = $('#userName').val();
                 var studyYear = $('#studyYear').val();
@@ -113,10 +115,24 @@
                 });
             },
             add: function () {
-                //openMyWindow('添加任务', '/hjPerson/showAddHjPerson', 800, 450);
-                //window.location.href="/hjPerson/showAddHjPerson";
-                //新增一个Tab项
-                openTab();
+                console.log(parent.layer)
+                console.log(parent.layui)
+                layer.open({
+                    id:"add-hjPerson",
+                    type: 2,
+                    fix: false,
+                    area: ["100%","100%"],
+                    maxmin: true,
+                    shadeClose: false,
+                    shade: 0.4,
+                    title: '添加人员',
+                    content: "/hjPerson/showAddHjPerson",
+                    success: function(layero,index){
+                        //在回调方法中的第2个参数“index”表示的是当前弹窗的索引。
+                        //通过layer.full方法将窗口放大。
+                        layer.full(index);
+                    }
+                });
             }
             ,reload:function(){
                 $('#userName').val('');
@@ -129,7 +145,7 @@
                 });
             },
         };
-        $('.layui-col-md12 .layui-btn').on('click', function () {
+        $('.layui-row .layui-btn').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
@@ -141,10 +157,42 @@
         table.on('tool(hjPerson)', function (obj) {
             var data = obj.data;
             if (obj.event === 'detail') {
-                openMaxWindow("update-hjPersonInfo",'查看角色', '/hjPerson/showHjPersonDetail?detail=true&id=' + data.userNum, 600, 400,true);
+
+
+                layer.open({
+                    id:"update-hjPersonInfo",
+                    type: 2,
+                    fix: false,
+                    area: ["100%","100%"],
+                    maxmin: true,
+                    shadeClose: false,
+                    shade: 0.4,
+                    title: '查看人员信息',
+                    content: '/hjPerson/showHjPersonDetail?detail=true&id=' + data.userNum,
+                    success: function(layero,index){
+                        //在回调方法中的第2个参数“index”表示的是当前弹窗的索引。
+                        //通过layer.full方法将窗口放大。
+                        layer.full(index);
+                    }
+                });
+                //openMaxWindow("update-hjPersonInfo",'查看人员信息', '/hjPerson/showHjPersonDetail?detail=true&id=' + data.userNum, 600, 400,true);
             }
             if (obj.event === 'edit') {
-                openMaxWindow("update-hjPersonInfo",'编辑角色', '/hjPerson/showHjPersonDetail?detail=false&id=' + data.userNum, 600, 400,true);
+                layer.open({
+                    id:"update-hjPersonInfo",
+                    type: 2,
+                    fix: false,
+                    area: ["100%","100%"],
+                    maxmin: true,
+                    shadeClose: false,
+                    shade: 0.4,
+                    title: '编辑人员信息',
+                    content: '/hjPerson/showHjPersonDetail?detail=false&id=' + data.userNum,
+                    success: function(layero,index){
+                        layer.full(index);
+                    }
+                });
+                //openMaxWindow("update-hjPersonInfo",'编辑人员信息', '/hjPerson/showHjPersonDetail?detail=false&id=' + data.userNum, 600, 400,true);
             }
             if(obj.event ==='delete'){
                 del(data.userNum);
@@ -153,6 +201,7 @@
 
     });
 
+
     document.onkeydown = function (e) { // 回车提交表单
         var theEvent = window.event || e;
         var code = theEvent.keyCode || theEvent.which;
@@ -160,6 +209,8 @@
             $(".select .select-on").click();
         }
     }
+
+
     /**批量删除id*/
     function del(userNum) {
         layer.confirm('确定要删除?', {icon: 3, title:'提示'}, function(index){
@@ -195,10 +246,6 @@
                 layui.form.render('select');
             }
         });
-    }
-
-    function openTab(){
-        openMaxWindow("add-hjPerson","添加校友信息",'/hjPerson/showAddHjPerson',600,400,true)
     }
 
 </script>

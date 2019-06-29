@@ -27,7 +27,7 @@ public class CreateMapperXMLUtil {
             sb = createPageSql(sb,columnModelList,beanName,tableName);
 
             //添加
-           sb = addSql(sb,columnModelList,beanName,tableName);
+          // sb = addSql(sb,columnModelList,beanName,tableName);
 
             sb.append("</mapper>\n");
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class CreateMapperXMLUtil {
         //添加
         sb.append("\t<!-- 添加 -->\n");
         sb.append("\t<insert id=\"add\" parameterType=\"com.len.entity."+beanName+"\">\n");
-        sb.append("\t\t<selectKey  keyProperty=\""+columnModelList.get(0).getFieldName()+"\" order=\"AFTER\" resultType=\"java.lang.Integer\">\n");
+        sb.append("\t\t<selectKey  keyProperty=\""+columnModelList.get(0).getFieldOldName()+"\" order=\"AFTER\" resultType=\"java.lang.Integer\">\n");
         sb.append("\t\t\t  select LAST_INSERT_ID()\n");
         sb.append("\t\t </selectKey>\n");
         sb.append("\t\t insert into "+tableName+"( <include refid=\"dmlColumn\"/>) values (<include refid=\"dmlValue\"/>)");
@@ -99,7 +99,7 @@ public class CreateMapperXMLUtil {
         sb.append("\t\t  <trim suffix=\"\" suffixOverrides=\",\">\n");
         for (CreateDTOUtil.ColumnModel columnModel : columnModelList) {
             sb.append("\t\t\t  <if test=\""+ columnModel.getFieldName()+"!=null\">\n");
-            sb.append("\t\t\t\t "+columnModel.getFieldName()+",\n");
+            sb.append("\t\t\t\t "+columnModel.getFieldOldName()+",\n");
             sb.append("\t\t\t </if>\n");
         }
 

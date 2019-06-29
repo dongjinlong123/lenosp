@@ -18,12 +18,12 @@ public class CreateDTOUtil {
     public static void main(String[] args) {
         System.out.println(getConnection());
         //获取表结构信息
-        List<ColumnModel> columnModelList = getTableStructure("ecjtu_ie_user_info");
+        List<ColumnModel> columnModelList = getTableStructure("sys_area");
        // System.out.println(columnModelList.get(0));
         //在控制台输出DTO
        //System.out.println(genJavaBeanFromTableStructure(columnModelList, "HJPerson","ecjtu_ie_user_info"));
         //在控制台输出Mapper.xml文件
-        System.out.println(CreateMapperXMLUtil.createMapperXMLUtil(columnModelList,"HJPerson","ecjtu_ie_user_info"));
+        System.out.println(CreateMapperXMLUtil.createMapperXMLUtil(columnModelList,"SysArea","sys_area"));
     }
     /**
      * 获取表结构

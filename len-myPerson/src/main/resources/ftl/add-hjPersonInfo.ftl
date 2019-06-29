@@ -312,7 +312,7 @@ layui.config({
     version: '1.0.1'
 })
   layui.use(['form','layer','laydate','city'], function(){
-    $ = layui.jquery;
+    var $ = layui.jquery;
     var form = layui.form
         ,layer = layui.layer
         ,city = layui.city

@@ -42,7 +42,7 @@
   </div>
 
 </div>
-<div class="layui-col-md12" style="height:40px;margin-top:3px;">
+<div class="layui-row" style="height:40px;margin-top:3px;">
   <div class="layui-btn-group">
       <@shiro.hasPermission name="user:select">
       <button class="layui-btn layui-btn-normal" data-type="add">
@@ -191,7 +191,7 @@
       }
     });
 
-    $('.layui-col-md12 .layui-btn').on('click', function () {
+    $('.layui-row .layui-btn').on('click', function () {
       var type = $(this).data('type');
       active[type] ? active[type].call(this) : '';
     });
