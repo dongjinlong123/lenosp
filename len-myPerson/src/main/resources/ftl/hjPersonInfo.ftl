@@ -93,7 +93,7 @@
                 , {field: 'sex', title: '性别', width: '5%'}
                 , {field: 'studyYear', title: '入学年份', width: '8%'}
                 , {field: 'classNum', title: '班级', width: '8%', templet:'<div>{{ d.classNum+"班" }}</div>'}
-                , {field: 'liveCity', title: '现居城市', width: '10%'}
+                , {field: 'liveCity', title: '现居城市', width: '20%'}
                 , {field: 'telphone', title: '手机', width: '10%'}
                 ,{field: 'profession', title: '在职行业', width: '15%'}
                 , {field: 'remark', title: '操作', width: '20%', toolbar: "#toolBar"}
@@ -101,7 +101,26 @@
             , page: true,
             height: 'full-83'
         });
-
+        //监听表格点击事件
+        table.on('rowDouble(hjPerson)',function(obj){
+            console.log(obj)
+            layer.open({
+                id:"update-hjPersonInfo",
+                type: 2,
+                fix: false,
+                area: ["100%","100%"],
+                maxmin: true,
+                shadeClose: false,
+                shade: 0.4,
+                title: '查看人员信息',
+                content: '/hjPerson/showHjPersonDetail?detail=true&id=' + obj.data.userNum,
+                success: function(layero,index){
+                    //在回调方法中的第2个参数“index”表示的是当前弹窗的索引。
+                    //通过layer.full方法将窗口放大。
+                    layer.full(index);
+                }
+            });
+        })
         var $ = layui.$,
                 active = {
             select: function () {
