@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
   <link rel="stylesheet" href="${re.contextPath}/plugin/layui/css/layui.css">
   <link rel="stylesheet" href="${re.contextPath}/plugin/layui/css/modules/laydate/default/laydate.css">
+    <link rel="stylesheet" href="${re.contextPath}/plugin/build/css/city.css">
   <script type="text/javascript" src="${re.contextPath}/plugin/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="${re.contextPath}/plugin/layui/layui.all.js" charset="utf-8"></script>
     <script src="${re.contextPath}/plugin/layui/lay/modules/laydate.js" charset="utf-8"></script>
@@ -317,10 +318,15 @@
   </form>
 </div>
 <script>
-  layui.use(['form','layer','laydate'], function(){
+    layui.config({
+        base: '${re.contextPath}/plugin/build/js/',
+        version: '1.0.1'
+    })
+  layui.use(['form','layer','laydate','city'], function(){
       $ = layui.jquery;
     var form = layui.form
         ,layer = layui.layer
+       ,city = layui.city
        ,laydate = layui.laydate;
 
       $("#classNum").val("${hJPerson.classNum}")
@@ -336,6 +342,19 @@
       }
         //渲染select
       form.render('select');
+
+      //选择城市
+      var flag='${detail}';
+      if(!flag){
+          //编辑
+          $("#liveCity").click(function(){
+              var arr;
+              if($("#liveCity").val() != ""){
+                  arr = $("#liveCity").val().split("-");
+              }
+              city.init("liveCity",arr)
+          });
+      }
 
 
       //执行一个laydate实例
