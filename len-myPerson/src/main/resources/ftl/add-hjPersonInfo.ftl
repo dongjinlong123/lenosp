@@ -136,7 +136,7 @@
                 <span class="x-red"></span>居住城市
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="liveCity" name="liveCity"  autocomplete="off" class="layui-input">
+                <input type="text"  id="liveCity" name="liveCity"  autocomplete="off" class="layui-input" readonly>
             </div>
 
             <label for="profession" class="layui-form-label">
@@ -311,7 +311,7 @@ layui.config({
     base: '${re.contextPath}/plugin/build/js/',
     version: '1.0.1'
 })
-  layui.use(['form','layer','laydate','city'], function(){
+  layui.use(['form','layer','laydate','city','jquery'], function(){
     var $ = layui.jquery;
     var form = layui.form
         ,layer = layui.layer
@@ -319,7 +319,11 @@ layui.config({
        ,laydate = layui.laydate;
      //渲染select
       form.render('select');
-      city.init()
+      //选择城市
+      console.log("----------"+$("#liveCity").val())
+      $("#liveCity").click(function(){
+          city.init("liveCity")
+      });
 
       //执行一个laydate实例
       laydate.render({

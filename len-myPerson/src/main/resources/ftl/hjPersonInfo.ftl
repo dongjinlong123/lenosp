@@ -115,8 +115,6 @@
                 });
             },
             add: function () {
-                console.log(parent.layer)
-                console.log(parent.layui)
                 layer.open({
                     id:"add-hjPerson",
                     type: 2,
@@ -157,7 +155,6 @@
         table.on('tool(hjPerson)', function (obj) {
             var data = obj.data;
             if (obj.event === 'detail') {
-
 
                 layer.open({
                     id:"update-hjPersonInfo",

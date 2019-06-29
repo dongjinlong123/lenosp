@@ -1,7 +1,5 @@
 package com.len.util.tool;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 
 /**
@@ -13,12 +11,12 @@ public class CreateMapperXMLUtil {
      * @param columnModelList 表结构信息
      * @param beanName 对于的dto的名字
      */
-    public static String createMapperXMLUtil( List<CreateDTOUtil.ColumnModel> columnModelList,String beanName,String tableName){
+    public static String createMapperXMLUtil(String classPath,List<CreateCodeUtil.ColumnModel> columnModelList, String beanName, String tableName){
         StringBuffer sb = new StringBuffer();
         try {
             sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                     "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\n");
-            sb.append("<mapper namespace=\"com.len.mapper."+beanName+"Mapper\">\n");//引入对于的javaMapper文件
+            sb.append("<mapper namespace=\""+ classPath +".mapper."+beanName+"Mapper\">\n");//引入对于的javaMapper文件
 
             //创建BaseResultMap
             sb = createBaseResultMap(sb,columnModelList,beanName,tableName);
@@ -36,7 +34,7 @@ public class CreateMapperXMLUtil {
         return sb.toString();
     }
 
-    private static StringBuffer createPageSql(StringBuffer sb, List<CreateDTOUtil.ColumnModel> columnModelList, String beanName, String tableName) {
+    private static StringBuffer createPageSql(StringBuffer sb, List<CreateCodeUtil.ColumnModel> columnModelList, String beanName, String tableName) {
         sb.append("\t<!--分页 -->\n");
         sb.append("\t <select id=\"selectListByPage\" parameterType=\"com.len.entity."+beanName+"\" resultMap=\"BaseResultMap\">\n");
         sb.append("\t\tselect * from "+tableName+"\n");
@@ -52,7 +50,7 @@ public class CreateMapperXMLUtil {
         sb.append("\t<!--默认查询的sql -->\n");
         sb.append("\t<sql id=\"whereSql\">\n");
         sb.append("\t\t<where>\n");
-        for (CreateDTOUtil.ColumnModel columnModel : columnModelList) {
+        for (CreateCodeUtil.ColumnModel columnModel : columnModelList) {
             sb.append("\t\t\t<if test=\""+columnModel.getFieldName()+" !=null and "+columnModel.getFieldName()+" !=''\"> and "+columnModel.getFieldOldName()+"=#{"+columnModel.getFieldName()+"}</if>\n");
         }
         sb.append("\t\t</where>\n");
@@ -60,11 +58,11 @@ public class CreateMapperXMLUtil {
         return sb;
     }
 
-    private static StringBuffer createBaseResultMap(StringBuffer sb, List<CreateDTOUtil.ColumnModel> columnModelList, String beanName, String tableName) {
+    private static StringBuffer createBaseResultMap(StringBuffer sb, List<CreateCodeUtil.ColumnModel> columnModelList, String beanName, String tableName) {
         //BaseResultMap
         sb.append("\t<resultMap id=\"BaseResultMap\" type=\"com.len.entity."+beanName+"\">\n");//对于的dto
         int idx = 0;
-        for (CreateDTOUtil.ColumnModel columnModel : columnModelList) {
+        for (CreateCodeUtil.ColumnModel columnModel : columnModelList) {
             //INT -- INTEGER
             String typeName = columnModel.getTypeName();
             if("INT".equals(typeName)){
@@ -85,7 +83,7 @@ public class CreateMapperXMLUtil {
         return sb;
     }
 
-    private static StringBuffer addSql(StringBuffer sb,List<CreateDTOUtil.ColumnModel> columnModelList,String beanName,String tableName) {
+    private static StringBuffer addSql(StringBuffer sb, List<CreateCodeUtil.ColumnModel> columnModelList, String beanName, String tableName) {
         //添加
         sb.append("\t<!-- 添加 -->\n");
         sb.append("\t<insert id=\"add\" parameterType=\"com.len.entity."+beanName+"\">\n");
@@ -97,7 +95,7 @@ public class CreateMapperXMLUtil {
         //dmlColumn 和 dmlValue sql片段
         sb.append("\t<sql id=\"dmlColumn\">\n");
         sb.append("\t\t  <trim suffix=\"\" suffixOverrides=\",\">\n");
-        for (CreateDTOUtil.ColumnModel columnModel : columnModelList) {
+        for (CreateCodeUtil.ColumnModel columnModel : columnModelList) {
             sb.append("\t\t\t  <if test=\""+ columnModel.getFieldName()+"!=null\">\n");
             sb.append("\t\t\t\t "+columnModel.getFieldOldName()+",\n");
             sb.append("\t\t\t </if>\n");
@@ -109,7 +107,7 @@ public class CreateMapperXMLUtil {
 
         sb.append("\t<sql id=\"dmlValue\">\n");
         sb.append("\t\t  <trim suffix=\"\" suffixOverrides=\",\">\n");
-        for (CreateDTOUtil.ColumnModel columnModel : columnModelList) {
+        for (CreateCodeUtil.ColumnModel columnModel : columnModelList) {
             sb.append("\t\t\t  <if test=\""+ columnModel.getFieldName()+"!=null\">\n");
             sb.append("\t\t\t\t #{"+columnModel.getFieldName()+"},\n");
             sb.append("\t\t\t </if>\n");

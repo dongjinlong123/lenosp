@@ -3,8 +3,8 @@ package com.len.util.tool;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.*;
 import java.sql.Connection;
-
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -12,18 +12,69 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * 自动读取数据库表字段描述生成DTO
+ * 自动生成代码工具类
  */
-public class CreateDTOUtil {
+public class CreateCodeUtil {
     public static void main(String[] args) {
-        System.out.println(getConnection());
-        //获取表结构信息
-        List<ColumnModel> columnModelList = getTableStructure("sys_area");
-       // System.out.println(columnModelList.get(0));
         //在控制台输出DTO
-       //System.out.println(genJavaBeanFromTableStructure(columnModelList, "HJPerson","ecjtu_ie_user_info"));
-        //在控制台输出Mapper.xml文件
-        System.out.println(CreateMapperXMLUtil.createMapperXMLUtil(columnModelList,"SysArea","sys_area"));
+        saveCode("F://code//","com.len",null,"sys_area","SysArea");
+        System.out.println("输出文件成功");
+    }
+
+    /**
+     * 保存自动生成的代码
+     * @param saveDir 代码输出的目录
+     * @param packageName 包名
+     * @param childPackage 子包名：为空表示不生成子包
+     * @param tableName 表名
+     * @param beanName  生成的bean名称
+     */
+    public static void saveCode(String saveDir,String packageName,String childPackage,String tableName,String beanName){
+        //获取表结构信息
+        List<ColumnModel> columnModelList = getTableStructure(tableName);
+        //类全路径
+        String classPath = packageName.trim();
+        if(StringUtils.isNotEmpty(childPackage)){
+            classPath = classPath + "." + childPackage.trim();
+        }
+        String dtoStr = CreateJavaCodeUtil.genJavaBeanFromTableStructure(classPath,columnModelList, beanName,tableName);
+        //System.out.println(dtoStr);
+        String dto = saveDir + toFirstCharUpCase(beanName)+".java";
+        saveAsFile(dto,dtoStr);
+        //Mapper.xml文件
+        String  xmlStr= CreateMapperXMLUtil.createMapperXMLUtil(classPath,columnModelList,beanName,tableName);
+        //System.out.println(xmlStr);
+        String xml = saveDir + toFirstCharUpCase(beanName)+"Mapper.xml";
+        saveAsFile(xml,xmlStr);
+        //mapper.java
+        String mapperStr = CreateJavaCodeUtil.createJavaMapper(classPath,columnModelList,beanName,tableName);
+        String mapper = saveDir + toFirstCharUpCase(beanName)+"Mapper.java";
+        saveAsFile(mapper,mapperStr);
+        //service.java
+        String serviceStr = CreateJavaCodeUtil.createJavaService(classPath,columnModelList,beanName,tableName);
+        String service = saveDir + toFirstCharUpCase(beanName)+"Service.java";
+        saveAsFile(service,serviceStr);
+        //serviceImpl.java
+        String serviceImplStr = CreateJavaCodeUtil.createJavaServiceImpl(classPath,columnModelList,beanName,tableName);
+        String serviceImpl = saveDir + toFirstCharUpCase(beanName)+"ServiceImpl.java";
+        saveAsFile(serviceImpl,serviceImplStr);
+        //controller.java
+        String controllerStr = CreateJavaCodeUtil.createJavaController(classPath,columnModelList,beanName,tableName);
+        String controller = saveDir + toFirstCharUpCase(beanName)+"Controller.java";
+        saveAsFile(controller,controllerStr);
+    }
+    private static void saveAsFile(String file ,String cotent){
+        byte[] contentInBytes = cotent.getBytes();
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(contentInBytes);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+
+        }
+
+
     }
     /**
      * 获取表结构
@@ -109,57 +160,6 @@ public class CreateDTOUtil {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * 从表结构中去生成javabean
-     *
-     * @param columnModelList
-     * @param beanName
-     * @return
-     */
-    public static String genJavaBeanFromTableStructure(List<ColumnModel> columnModelList, String beanName,String tableName) {
-        StringBuffer sb = new StringBuffer();
-        try {
-            sb.append("import lombok.Data;\n" +
-                    "import javax.persistence.Column;\n" +
-                    "import javax.persistence.Id;\n" +
-                    "import javax.persistence.Table;\n" +
-                    "import java.util.Date;\n");
-
-            sb.append("@Table(name=\""+tableName+"\")\n");
-            sb.append("@Data\n");
-
-            sb.append("public class " + toFirstCharUpCase(beanName) + " {\r\n");
-            int idx = 0;
-            for (ColumnModel columnModel : columnModelList) {
-                if (StringUtils.isNotBlank(columnModel.getRemarks())) {
-                    sb.append(" //" + columnModel.getRemarks() + " \r\n");
-                }
-                if(idx ==0){
-                    sb.append("@Id\n");
-                }
-                sb.append("@Column(name = \""+columnModel.getFieldOldName()+"\")\n");
-                sb.append(" private " + columnModel.getFieldType() + " " + columnModel.getFieldName() + ";\r\n");
-                idx++;
-            }
-            sb.append("\r\n");
-            //get set
-//            for (ColumnModel columnModel : columnModelList) {
-//                sb.append(
-//                        "\tpublic String get" + toFirstCharUpCase((String) columnModel.getFieldName()) + "() {\r\n" +
-//                                "\t\treturn " + columnModel.getFieldName() + ";\r\n" +
-//                                "\t}\r\n" +
-//                                "\r\n" +
-//                                "\tpublic void set" + toFirstCharUpCase((String) columnModel.getFieldName()) + "(String " + columnModel.getFieldName() + ") {\r\n" +
-//                                "\t\t" + columnModel.getFieldName() + " = " + columnModel.getFieldName() + ";\r\n" +
-//                                "\t}\r\n\r\n");
-//            }
-            sb.append("}\r\n");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
     }
 
     /**

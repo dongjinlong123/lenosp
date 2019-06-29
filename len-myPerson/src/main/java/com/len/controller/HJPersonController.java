@@ -5,11 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.len.base.BaseController;
 import com.len.core.shiro.Principal;
 import com.len.entity.HJPerson;
-import com.len.entity.SysJob;
 import com.len.exception.MyException;
 import com.len.service.HJPersonService;
 import com.len.util.JsonUtil;
-
 import com.len.util.ReType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +42,7 @@ public class HJPersonController extends BaseController {
     private HJPersonService hJPersonService;
     @GetMapping("/showHjPerson")
     @RequiresPermissions("hjPerson:show")
-    public String articleListPage(HttpServletRequest req, HttpServletResponse resp) {
+    public String hjPersonListPage(HttpServletRequest req, HttpServletResponse resp) {
         log.info("进入花椒人员管理页面");
         log.info("当前的用户信息"+Principal.getCurrentUse() );
         return "/hjPersonInfo";
