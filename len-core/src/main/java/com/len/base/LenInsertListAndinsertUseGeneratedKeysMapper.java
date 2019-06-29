@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Options;
 import java.util.List;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/10/12.
- * @email 154040976@qq.com
+ *@RegisterMapper 注解可以避免 mappers 参数配置，
+ * 通用 Mapper 检测到该接口被继承时，会自动注册。
+ * @param <T>
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
 public interface LenInsertListAndinsertUseGeneratedKeysMapper<T> {

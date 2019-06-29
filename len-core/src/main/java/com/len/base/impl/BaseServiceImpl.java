@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/13.
- * @email 154040976@qq.com
+ * 基本服务类的封装
+ * @param <T>
+ * @param <E>
  */
 @Slf4j
 public abstract class BaseServiceImpl<T, E extends Serializable> implements BaseService<T, E> {

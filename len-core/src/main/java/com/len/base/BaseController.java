@@ -19,9 +19,8 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/19.
- * @email 154040976@qq.com
+ * 基本控制类
+ * @param <T>
  */
 @Slf4j
 public abstract class BaseController<T> {

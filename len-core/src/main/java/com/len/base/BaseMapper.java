@@ -6,10 +6,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/12.
- * @email 154040976@qq.com
- * mapper封装 crud
+ * mapper 封装
+ * @param <T>
+ * @param <E>
  */
 public interface BaseMapper<T, E extends Serializable> extends tk.mybatis.mapper.common.Mapper<T>, LenInsertListAndinsertUseGeneratedKeysMapper<T>, IdsMapper<T> {
     /*

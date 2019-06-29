@@ -8,9 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/30.
- * @email 154040976@qq.com
+ * 角色封装
  */
 @Data
 public class CurrentRole implements Serializable {

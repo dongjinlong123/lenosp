@@ -11,10 +11,9 @@ import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import java.util.Set;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/10/12
- * @email 154040976@qq.com
  * 重写 SpecialProvider 使得批量方法支持主键自增和自定义自增  (仅测试了mysql)
+ * @RegisterMapper 注解可以避免 mappers 参数配置，
+ * 通用 Mapper 检测到该接口被继承时，会自动注册。
  */
 public class MySpecialProvider extends MapperTemplate {
     public MySpecialProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
