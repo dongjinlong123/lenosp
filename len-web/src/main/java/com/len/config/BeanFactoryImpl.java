@@ -8,9 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ResolvableType;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/31.
- * @email 154040976@qq.com
+ * bean工厂
  */
 @Configuration
 public class BeanFactoryImpl implements BeanFactoryAware {

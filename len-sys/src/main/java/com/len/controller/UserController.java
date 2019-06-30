@@ -29,9 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/6.
- * @email 154040976@qq.com
  * 用户管理
  */
 //@Api(value="user")

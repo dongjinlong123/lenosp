@@ -24,11 +24,7 @@ import javax.servlet.Filter;
 import java.util.*;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/1.
- * @email 154040976@qq.com
  * spring shiro
- * 元旦快乐：code everybody
  */
 @Configuration
 public class ShiroConfig {

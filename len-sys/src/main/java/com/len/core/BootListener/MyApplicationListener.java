@@ -8,10 +8,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/6.
- * @email 154040976@qq.com
- * <p>
  * 通过监听，开辟线程，执行定时任务 当然 也可以执行其他
  */
 @Component

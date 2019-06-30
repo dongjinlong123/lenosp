@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.awt.geom.Area;
 import java.util.List;
 
+/**
+ * 系统地址
+ */
 @CrossOrigin
 @Controller
 @Slf4j

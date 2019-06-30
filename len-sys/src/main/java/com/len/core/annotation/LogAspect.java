@@ -26,9 +26,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/28.
- * @email 154040976@qq.com
  * <p>
  * 为增删改添加监控
  */

@@ -146,7 +146,9 @@
           for(item in data){
               ids.push(data[item].id);
           }
-          del(ids);
+            layer.confirm('确定删除?', function() {
+                del(ids);
+            });
         }
       ,reload:function(){
         $('#userName').val('');
@@ -164,7 +166,9 @@
       var data = obj.data;
       if (obj.event === 'del') {
           var ids=[];
-          del(ids.push(data.id));
+          layer.confirm('确定删除?', function() {
+              del(ids.push(data.id));
+          });
       }
     });
 

@@ -8,11 +8,7 @@ import com.len.util.Checkbox;
 import com.len.util.JsonUtil;
 import java.util.List;
 
-/**
- * @author zhuxiaomeng
- * @date 2017/12/4.
- * @email 154040976@qq.com
- */
+
 public interface SysUserService extends BaseService<SysUser,String> {
 
   SysUser login(String username);

@@ -7,9 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/29.
- * @email 154040976@qq.com
  *
  * 验证码拦截
  */

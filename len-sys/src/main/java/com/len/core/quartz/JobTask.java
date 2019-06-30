@@ -14,9 +14,6 @@ import java.util.Date;
 import java.util.HashSet;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/5.
- * @email 154040976@qq.com
  * <p>
  * 定时任务类 增删改 可参考api：http://www.quartz-scheduler.org/api/2.2.1/
  * <p>

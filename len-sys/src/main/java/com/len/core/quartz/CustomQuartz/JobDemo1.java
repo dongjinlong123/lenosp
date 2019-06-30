@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/7.
- * @email 154040976@qq.com
  *
  * 定时
  */

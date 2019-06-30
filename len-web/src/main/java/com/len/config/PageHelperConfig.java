@@ -6,10 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/2.
- * @email 154040976@qq.com
- *
  * 此方案可替代 application.yml中 pagehelper配置
  */
 //@Configuration

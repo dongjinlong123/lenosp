@@ -12,11 +12,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/7.
- * @email 154040976@qq.com
- *
- * 定时
+ * 短信发送任务
  */
 @Slf4j
 public class SmsSendSchdule implements Job{

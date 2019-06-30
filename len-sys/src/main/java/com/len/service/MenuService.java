@@ -7,11 +7,7 @@ import com.len.util.JsonUtil;
 
 import java.util.List;
 
-/**
- * @author zhuxiaomeng
- * @date 2017/12/12.
- * @email 154040976@qq.com
- */
+
 public interface MenuService extends BaseService<SysMenu,String> {
 
   List<SysMenu> getMenuNotSuper();

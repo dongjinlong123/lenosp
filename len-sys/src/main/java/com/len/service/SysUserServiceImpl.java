@@ -34,11 +34,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author zhuxiaomeng
- * @date 2017/12/4.
- * @email 154040976@qq.com
- */
+
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> implements SysUserService {
 

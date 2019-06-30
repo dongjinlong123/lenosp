@@ -6,11 +6,7 @@ import com.len.util.JsonUtil;
 
 import java.util.List;
 
-/**
- * @author zhuxiaomeng
- * @date 2017/12/19.
- * @email 154040976@qq.com
- */
+
 public interface RoleService extends BaseService<SysRole,String> {
 
 

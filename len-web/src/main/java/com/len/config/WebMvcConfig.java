@@ -17,9 +17,6 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/1.
- * @email 154040976@qq.com
  * spring shiro
  */
 @Configuration

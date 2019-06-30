@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/19.
- * @email 154040976@qq.com
+ * 异常处理
  * 404 403 500
  */
 @Controller

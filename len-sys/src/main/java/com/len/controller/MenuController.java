@@ -22,9 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/13.
- * @email 154040976@qq.com
  * 菜单
  */
 @RequestMapping("/menu")

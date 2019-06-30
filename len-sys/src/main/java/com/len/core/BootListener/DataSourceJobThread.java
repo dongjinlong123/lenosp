@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/6.
- * @email 154040976@qq.com
  * <p>
  * 启动数据库中已经设定为 启动状态(status:true)的任务 项目启动时init
  */

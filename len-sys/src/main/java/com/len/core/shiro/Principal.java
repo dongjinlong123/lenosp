@@ -6,9 +6,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/28.
- * @email 154040976@qq.com
+ * 登录用户信息
  */
 public class Principal {
 

@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/16.
- * @email 154040976@qq.com
+ * freemarkerShiro配置
  */
 @Component
 public class FreemarkerShiroConfig implements InitializingBean {

@@ -10,11 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tk.mybatis.spring.annotation.MapperScan;
 
-/**
- * @author zhuxiaomeng
- * @date 2018/1/1.
- * @email 154040976@qq.com
- */
 
 @EnableWebMvc
 @SpringBootApplication

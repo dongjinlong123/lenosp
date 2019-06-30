@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.quartz.AdaptableJobFactory;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("myJobFactory")
 public class MyJobFactory extends AdaptableJobFactory{
       
     @Autowired

@@ -25,9 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/4.
- * @email 154040976@qq.com
  * 登录、退出页面
  */
 @Controller

@@ -17,11 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author zhuxiaomeng
- * @date 2017/12/19.
- * @email 154040976@qq.com
- */
 @Service
 public class RoleServiceImpl extends BaseServiceImpl<SysRole, String> implements RoleService {
 

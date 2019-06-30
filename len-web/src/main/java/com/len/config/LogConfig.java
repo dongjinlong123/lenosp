@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/3.
- * @email 154040976@qq.com
+ * 日志切面配置
  */
 @Configuration
 public class LogConfig {

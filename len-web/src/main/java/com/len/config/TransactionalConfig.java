@@ -8,10 +8,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/30.
- * @email 154040976@qq.com
- * 事务不能忘。。。
+ * 事务
  */
 @Configuration
 public class TransactionalConfig {

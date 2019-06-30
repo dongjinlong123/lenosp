@@ -14,11 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * @author zhuxiaomeng
- * @date 2018/1/6.
- * @email 154040976@qq.com
- */
+
 @Service
 @Slf4j
 public class JobServiceImpl extends BaseServiceImpl<SysJob, String> implements JobService {

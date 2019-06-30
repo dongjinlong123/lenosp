@@ -22,9 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author zhuxiaomeng
- * @date 2017/12/4.
- * @email 154040976@qq.com
+ * shiro权限校验
  */
 @Service
 public class LoginRealm extends AuthorizingRealm {

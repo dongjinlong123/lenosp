@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
- * @author zhuxiaomeng
- * @date 2019-04-05.
- * @email 154040976@qq.com
+ * 用户管理
  */
 @Controller
 @RequestMapping("/person")

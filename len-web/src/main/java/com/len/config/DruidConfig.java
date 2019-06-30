@@ -21,9 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/1/2.
- * @email 154040976@qq.com
+ * 数据源配置
  */
 @Configuration
 @EnableTransactionManagement
