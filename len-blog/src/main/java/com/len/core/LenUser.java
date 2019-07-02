@@ -7,9 +7,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/11/22.
- * @email 154040976@qq.com
+ *
  */
 public class LenUser {
     public static Principal getPrincipal() {

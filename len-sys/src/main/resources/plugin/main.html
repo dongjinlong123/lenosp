@@ -10,7 +10,10 @@
             background-size: 100% 100%;
             overflow:hidden
         }
-        canvas { display: block; }</style>
+        canvas {
+            display: block;
+            background: #010102;
+        }</style>
 </head>
 <body>
 <div>
@@ -176,6 +179,7 @@
     }
 
     const canvas = document.createElement('canvas');
+    canvas.id="canvas"
     const context = canvas.getContext('2d');
     const time = new Time;
     let rockets = [];
@@ -278,10 +282,8 @@
     window.onresize = resize;
     resize();
 
-    setInterval(addRocket, 2000);
-    render();</script>
-<div style="text-align:center;">
-    <p>更多源码：<a href="http://www.mycodes.net/" target="_blank">源码之家</a></p>
-</div>
+    setInterval(addRocket, 500);
+    render();
+</script>
 </body>
 </html>

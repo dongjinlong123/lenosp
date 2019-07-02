@@ -1,21 +1,16 @@
 package com.len.core;
 
-import com.len.core.exception.UnauthorizedException;
 import com.len.util.JwtToken;
-import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 
-import javax.security.auth.Subject;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/8/19.
- * @email 154040976@qq.com
+ * 是否拥有博客权限过滤器
  */
 public class MyBasicHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
 

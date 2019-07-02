@@ -25,13 +25,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author zhuxiaomeng
- * @date 2018/7/25.
- * @email 154040976@qq.com
+ * 登录页面
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/")
+@RequestMapping("/blog")
 @Slf4j
 public class SignController {
 
