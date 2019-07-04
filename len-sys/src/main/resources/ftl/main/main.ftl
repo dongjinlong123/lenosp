@@ -25,7 +25,7 @@
     <div class="layui-hide-xs">
     <ul class="layui-nav layui-layout-left kit-nav">
       <li class="layui-nav-item"><a href="javascript:s();">会员管理</a></li>
-        <li class="layui-nav-item"><a href="javascript:;" kit-target data-options="{url:'/blog/articleList',icon:'&#xe658;',title:'文章管理',id:'966'}">文章管理</a></li>
+        <li class="layui-nav-item"><a href="javascript:;" kit-target data-options="{url:'/article/showArticle',icon:'&#xe658;',title:'文章管理',id:'966'}">文章管理</a></li>
       <li class="layui-nav-item">
         <a href="javascript:;">其它系统</a>
         <dl class="layui-nav-child">

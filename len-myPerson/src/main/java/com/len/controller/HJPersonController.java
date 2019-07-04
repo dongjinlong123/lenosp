@@ -40,20 +40,22 @@ public class HJPersonController extends BaseController {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Autowired
     private HJPersonService hJPersonService;
+
     @GetMapping("/showHjPerson")
     @RequiresPermissions("hjPerson:show")
     public String hjPersonListPage(HttpServletRequest req, HttpServletResponse resp) {
         log.info("进入花椒人员管理页面");
-        log.info("当前的用户信息"+Principal.getCurrentUse() );
+        log.info("当前的用户信息" + Principal.getCurrentUse());
         return "/hjPersonInfo";
     }
+
     /**
      * 获取 人员信息列表 分页
      */
     @GetMapping(value = "/showHjPersonList")
     @ResponseBody
     @RequiresPermissions("hjPerson:show")
-    public ReType showHjPersonList(String userName,String studyYear, String page, String limit) {
+    public ReType showHjPersonList(String userName, String studyYear, String page, String limit) {
         List<HJPerson> tList = null;
         Page<HJPerson> tPage = PageHelper.startPage(Integer.valueOf(page), Integer.valueOf(limit));
         try {
@@ -67,6 +69,7 @@ public class HJPersonController extends BaseController {
         }
         return new ReType(tPage.getTotal(), tList);
     }
+
     @GetMapping(value = "/getAllStudyYear")
     @ResponseBody
     @RequiresPermissions("hjPerson:show")
@@ -76,6 +79,7 @@ public class HJPersonController extends BaseController {
         j.setData(studyYearList);
         return j;
     }
+
     @GetMapping(value = "/showAddHjPerson")
     @RequiresPermissions("hjPerson:add")
     public String showAddHjPerson(Model model) {
@@ -86,7 +90,7 @@ public class HJPersonController extends BaseController {
     @RequiresPermissions("hjPerson:add")
     @ResponseBody
     public JsonUtil addHjPerson(HJPerson hjPerson) {
-        log.info("入参"+hjPerson);
+        log.info("入参" + hjPerson);
         JsonUtil j = new JsonUtil();
         String msg = "保存成功";
         try {
@@ -103,6 +107,7 @@ public class HJPersonController extends BaseController {
         j.setMsg(msg);
         return j;
     }
+
     @GetMapping(value = "/showHjPersonDetail")
     @RequiresPermissions("hjPerson:select")
     public String showHjPersonDetail(String id, Model model, boolean detail) {
@@ -113,6 +118,7 @@ public class HJPersonController extends BaseController {
         model.addAttribute("detail", detail);
         return "/update-hjPersonInfo";
     }
+
     @PostMapping(value = "/updateHjPerson")
     @ResponseBody
     @RequiresPermissions("hjPerson:update")
@@ -125,7 +131,7 @@ public class HJPersonController extends BaseController {
         }
         hjPerson.setLastUpdateBy(Principal.getCurrentUse().getUsername());
         hjPerson.setLastUpdateDate(new Date());
-        if ( hJPersonService.updateByPrimaryKeySelective(hjPerson) > 0) {
+        if (hJPersonService.updateByPrimaryKeySelective(hjPerson) > 0) {
             j.setFlag(true);
             j.setMsg("更新成功");
         } else {
@@ -134,6 +140,7 @@ public class HJPersonController extends BaseController {
         }
         return j;
     }
+
     @PostMapping("/del")
     @ResponseBody
     @RequiresPermissions("hjPerson:del")
@@ -144,7 +151,7 @@ public class HJPersonController extends BaseController {
             j.setMsg("刪除数据失败");
             return j;
         }
-        if ( hJPersonService.deleteByPrimaryKey(userNum) > 0) {
+        if (hJPersonService.deleteByPrimaryKey(userNum) > 0) {
             j.setFlag(true);
             j.setMsg("刪除成功");
         } else {

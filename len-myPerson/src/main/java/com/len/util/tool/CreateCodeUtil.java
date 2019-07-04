@@ -17,8 +17,8 @@ import java.util.Properties;
 public class CreateCodeUtil {
     public static void main(String[] args) {
         //在控制台输出DTO
-        saveCode("F://code//","com.len",null,"sys_area","SysArea");
-        System.out.println("输出文件成功");
+       saveCode("F://code//","com.len",null,"boke_article","article");
+       System.out.println("输出文件成功");
     }
 
     /**
@@ -62,6 +62,10 @@ public class CreateCodeUtil {
         String controllerStr = CreateJavaCodeUtil.createJavaController(classPath,columnModelList,beanName,tableName);
         String controller = saveDir + toFirstCharUpCase(beanName)+"Controller.java";
         saveAsFile(controller,controllerStr);
+
+        String htmlListStr = CreateHtmlCodeUtil.createFtlFile(classPath,columnModelList,beanName,tableName);
+        String articleFtl = saveDir + beanName+".ftl";
+        saveAsFile(articleFtl,htmlListStr);
     }
     private static void saveAsFile(String file ,String cotent){
         byte[] contentInBytes = cotent.getBytes();
@@ -121,7 +125,8 @@ public class CreateCodeUtil {
      * @return
      */
     private static String getFieldName(String columnName) {
-        char[] columnCharArr = columnName.toLowerCase().toCharArray();
+       // char[] columnCharArr = columnName.toLowerCase().toCharArray();
+        char[] columnCharArr = columnName.toCharArray();
         StringBuffer sb = new StringBuffer();
         int ad = -1;
         for (int i = 0; i < columnCharArr.length; i++) {
@@ -186,23 +191,23 @@ public class CreateCodeUtil {
     //列模型
     @Data
     static class ColumnModel {
-        private String columnName;
-        private String dataType;
-        private String typeName;
-        private String columnClassName;
-        private String fieldName;
-        private String fieldType;
-        private int columnSize;
-        private String columnDef;
-        private String remarks;
-        private String fieldOldName;
+        private String columnName;//数据字段名称
+        private String dataType;//数据类型编码
+        private String typeName;//数据类型
+        private String columnClassName;//java类型
+        private String fieldName;//java属性名称
+        private String fieldType;//java属性类型
+        private int columnSize;//长度
+        private String columnDef;//默认值
+        private String remarks;//描述
+        private String fieldOldName;//数据字段名称
         @Override
         public String toString() {
             return "ColumnModel [columnName=" + columnName + ", dataType="
                     + dataType + ", typeName=" + typeName + ", columnClassName="
                     + columnClassName + ", fieldName=" + fieldName + ", fieldType="
                     + fieldType + ", columnSize=" + columnSize + ", columnDef="
-                    + columnDef + ", remarks=" + remarks + "]";
+                    + columnDef + ", remarks=" + remarks + "，fieldOldName="+fieldOldName+"]";
         }
     }
 }

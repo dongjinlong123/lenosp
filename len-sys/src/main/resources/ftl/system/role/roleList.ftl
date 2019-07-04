@@ -55,7 +55,7 @@
 </div>
 <table id="roleList" class="layui-hide" lay-filter="user"></table>
 <script type="text/html" id="toolBar">
-  <@shiro.hasPermission name="role:add">
+  <@shiro.hasPermission name="role:update">
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
   </@shiro.hasPermission>
 <@shiro.hasPermission name="role:update">

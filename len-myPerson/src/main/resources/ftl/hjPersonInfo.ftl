@@ -20,14 +20,14 @@
     <div class="select">
         <div class="layui-form" >
             <div class="layui-inline">
-                <label class="layui-form-label">用户名：</label>
+                <label class="">用户名：</label>
                 <div class="layui-input-inline">
                     <input class="layui-input" height="20px" id="userName" autocomplete="off">
                  </div>
             </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label">入学年份：</label>
+            <label class="">入学年份：</label>
             <div class="layui-input-inline">
                 <select name="studyYear" lay-verify="required" id="studyYear" class="layui-input">
                     <option value=""></option>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <button class="select-on layui-btn layui-btn-sm" style=" margin-bottom: 9px;" data-type="select"><i class="layui-icon"></i>
+        <button class="select-on layui-btn layui-btn-sm"  data-type="select"><i class="layui-icon"></i>
         </button>
         <button class="layui-btn layui-btn-sm icon-position-button" id="refresh" style="float: right;"
                 data-type="reload">

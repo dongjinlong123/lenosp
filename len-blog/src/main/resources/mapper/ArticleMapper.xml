@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.len.mapper.ArticleMapper">
+	<resultMap id="BaseResultMap" type="com.len.entity.Article">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="readCounts" jdbcType="INTEGER" property="readcounts" />
+		<result column="excerpt" jdbcType="VARCHAR" property="excerpt" />
+		<result column="author" jdbcType="VARCHAR" property="author" />
+		<result column="createdAt" jdbcType="TIMESTAMP" property="createdat" />
+		<result column="category" jdbcType="VARCHAR" property="category" />
+		<result column="listPic" jdbcType="VARCHAR" property="listpic" />
+		<result column="mdcontent" jdbcType="VARCHAR" property="mdcontent" />
+		<result column="shareCode" jdbcType="VARCHAR" property="sharecode" />
+	</resultMap>
+	<!--分页 -->
+	 <select id="selectListByPage" parameterType="com.len.entity.Article" resultMap="BaseResultMap">
+		select * from boke_article
+		 <include refid="whereSql" />
+	</select>
+	<select id="count" resultType="java.lang.Integer">
+		select count(1) from boke_article
+		 <include refid="whereSql" />
+	</select>
+	<!--默认查询的sql -->
+	<sql id="whereSql">
+		<where>
+			<if test="id !=null and id !=''"> and id=#{id}</if>
+			<if test="title !=null and title !=''"> and title=#{title}</if>
+			<if test="readcounts !=null and readcounts !=''"> and readCounts=#{readcounts}</if>
+			<if test="excerpt !=null and excerpt !=''"> and excerpt=#{excerpt}</if>
+			<if test="author !=null and author !=''"> and author=#{author}</if>
+			<if test="createdat !=null and createdat !=''"> and createdAt=#{createdat}</if>
+			<if test="category !=null and category !=''"> and category=#{category}</if>
+			<if test="listpic !=null and listpic !=''"> and listPic=#{listpic}</if>
+			<if test="mdcontent !=null and mdcontent !=''"> and mdcontent=#{mdcontent}</if>
+			<if test="sharecode !=null and sharecode !=''"> and shareCode=#{sharecode}</if>
+		</where>
+	</sql>
+</mapper>
