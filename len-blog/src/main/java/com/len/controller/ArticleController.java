@@ -3,6 +3,7 @@ package com.len.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.len.base.BaseController;
+import com.len.common.QRCodeUtil;
 import com.len.entity.Article;
 import com.len.exception.MyException;
 import com.len.service.ArticleService;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +30,19 @@ public class ArticleController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
+    @Value("${lenosp.imagePath}")
+    private String imagePath;
+
+    @Value("${lenosp.rootUrl}")
+    private String rootUrl;
     /**
      *展示首页
      */
     @GetMapping("/showArticle")
     @RequiresPermissions("article:show")
-    public String articleListPage(HttpServletRequest req, HttpServletResponse resp) {
+    public String articleListPage(Model model,HttpServletRequest req, HttpServletResponse resp) {
+
+        model.addAttribute("categoryList",articleService.getAllCategory());
         return "/article";
     }
     /**
@@ -53,28 +62,34 @@ public class ArticleController extends BaseController {
         }
         return new ReType(tPage.getTotal(), tList);
     }
-/**
+    /**
      * 展示新增页面
      */
     @GetMapping(value = "/showArticleAdd")
     @RequiresPermissions("article:add")
     public String showArticleAdd(Model model) {
+        model.addAttribute("categoryList",articleService.getAllCategory());
         return "/add-article";
     }
- /**
+
+    /**
      * 展示修改|查看页面
      */
-    @GetMapping(value = "/shoArticleDetail")
+    @GetMapping(value = "/showArticleDetail")
     @RequiresPermissions("article:select")
     public String showArticleDetail(String id, Model model, boolean detail) {
+        Article article = null;
         if (StringUtils.isNotEmpty(id)) {
-            Article article = articleService.selectByPrimaryKey(id);
+            article = articleService.selectByKey(Integer.valueOf(id));
             model.addAttribute("article", article);
         }
+        String mainPng = rootUrl + article.getListPic();
+        model.addAttribute("mainPng",mainPng);
+        model.addAttribute("categoryList",articleService.getAllCategory());
         model.addAttribute("detail", detail);
         return "/update-article";
     }
-/**
+    /**
      * 添加
      */
     @PostMapping(value = "/addArticle")
@@ -85,7 +100,7 @@ public class ArticleController extends BaseController {
         JsonUtil j = new JsonUtil();
         String msg = "添加成功";
         try {
-            articleService.insertSelective(article);
+            articleService.insertArticle(article);
         } catch (MyException e) {
             msg = "添加失败";
             j.setFlag(false);
@@ -94,7 +109,33 @@ public class ArticleController extends BaseController {
         j.setMsg(msg);
         return j;
     }
-/**
+//    @GetMapping(value = "/getAllCategory")
+//    @ResponseBody
+//    public JsonUtil getAllCategory() {
+//        JsonUtil j = new JsonUtil();
+//        j.setData(articleService.getAllCategory());
+//        return j;
+//    }
+
+
+    @PostMapping(value = "/getErWeiMa")
+    @ResponseBody
+    public JsonUtil getErWeiMa(String  text,String listPic) {
+
+        JsonUtil j = new JsonUtil();
+        String imgPath = imagePath + listPic;
+        String msg = "生成成功";
+        try {
+            String erWeiMaUrl = QRCodeUtil.encode(text, imgPath, imagePath, true);
+            j.setData(rootUrl + erWeiMaUrl);
+        } catch (Exception e) {
+            msg="生成失败";
+        }
+        j.setMsg(msg);
+
+        return j;
+    }
+    /**
      * 更新
      */
     @PostMapping(value = "/updateArticle")
@@ -107,7 +148,7 @@ public class ArticleController extends BaseController {
             j.setMsg("获取数据失败");
             return j;
         }
-        if (articleService.updateByPrimaryKeySelective(article) > 0) {
+        if (articleService.updateByKey(article)) {
             j.setFlag(true);
             j.setMsg("更新成功");
         } else {
@@ -119,14 +160,14 @@ public class ArticleController extends BaseController {
     @PostMapping("/del")
     @ResponseBody
     @RequiresPermissions("article:del")
-    public JsonUtil updateArticle(Integer userNum) {
+    public JsonUtil updateArticle(Integer id) {
         JsonUtil j = new JsonUtil();
-        if (userNum == null) {
+        if (id == null) {
             j.setFlag(false);
             j.setMsg("刪除数据失败");
             return j;
         }
-        if (articleService.deleteByPrimaryKey(userNum) > 0) {
+        if (articleService.deleteByKey(id)) {
             j.setFlag(true);
             j.setMsg("刪除成功");
         } else {

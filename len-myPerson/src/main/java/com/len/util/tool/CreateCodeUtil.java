@@ -119,13 +119,13 @@ public class CreateCodeUtil {
     }
 
     /**
-     * 将数据库字段转换成bean属性
+     * 将数据库字段转换成bean属性(针对驼峰类型的写法)
      *
      * @param columnName
      * @return
      */
     private static String getFieldName(String columnName) {
-       // char[] columnCharArr = columnName.toLowerCase().toCharArray();
+        // char[] columnCharArr = columnName.toLowerCase().toCharArray();
         char[] columnCharArr = columnName.toCharArray();
         StringBuffer sb = new StringBuffer();
         int ad = -1;

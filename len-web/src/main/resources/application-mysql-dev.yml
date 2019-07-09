@@ -70,10 +70,10 @@ pagehelper:
     params: count=countSql
 
 lenosp:
-  uploadPath: F:/djl/boke/log/file/
+  uploadPath: F:/djl/boke/file/
   isDayType: false
   imagePath: F:/djl/boke/image/
-
+  rootUrl: http://localhost/image/image/
 logging:
   file: F:/djl/boke/logs/lenosp-log.log
   level:

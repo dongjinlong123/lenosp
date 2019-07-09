@@ -4,37 +4,101 @@
 	<resultMap id="BaseResultMap" type="com.len.entity.Article">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="title" jdbcType="VARCHAR" property="title" />
-		<result column="readCounts" jdbcType="INTEGER" property="readcounts" />
+		<result column="readCounts" jdbcType="INTEGER" property="readCounts" />
 		<result column="excerpt" jdbcType="VARCHAR" property="excerpt" />
 		<result column="author" jdbcType="VARCHAR" property="author" />
-		<result column="createdAt" jdbcType="TIMESTAMP" property="createdat" />
+		<result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
 		<result column="category" jdbcType="VARCHAR" property="category" />
-		<result column="listPic" jdbcType="VARCHAR" property="listpic" />
+		<result column="listPic" jdbcType="VARCHAR" property="listPic" />
 		<result column="mdcontent" jdbcType="VARCHAR" property="mdcontent" />
-		<result column="shareCode" jdbcType="VARCHAR" property="sharecode" />
+		<result column="shareCode" jdbcType="VARCHAR" property="shareCode" />
 	</resultMap>
+	<select id="selectByKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * from  (select t.id,
+		t.title,
+		t.readCounts,
+		t.excerpt,
+		t.author,
+		t.createdAt,
+		t.listPic,
+		t.mdcontent,
+		t.shareCode,
+		GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category
+		from boke_article t,boke_article_type t2
+		where t.id = t2.articleId
+		and t.id = #{id}
+		GROUP BY  t.id,t.title,
+		t.readCounts,
+		t.excerpt,
+		t.author,
+		t.createdAt,
+		t.listPic,
+		t.mdcontent) t
+
+	</select>
+
 	<!--分页 -->
 	 <select id="selectListByPage" parameterType="com.len.entity.Article" resultMap="BaseResultMap">
-		select * from boke_article
+		select * from  (select t.id,
+		 t.title,
+		 t.readCounts,
+		 t.excerpt,
+		 t.author,
+		 t.createdAt,
+		 t.listPic,
+		 t.mdcontent,
+		 t.shareCode,
+		 GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category
+		 from boke_article t,boke_article_type t2
+		 where t.id = t2.articleId
 		 <include refid="whereSql" />
+		 GROUP BY  t.id,t.title,
+		 t.readCounts,
+		 t.excerpt,
+		 t.author,
+		 t.createdAt,
+		 t.listPic,
+		 t.mdcontent) t
+
 	</select>
 	<select id="count" resultType="java.lang.Integer">
-		select count(1) from boke_article
-		 <include refid="whereSql" />
+		select count(1) from  boke_article t,boke_article_type t2
+		where t.id = t2.articleId
+		<include refid="whereSql" />
+
 	</select>
 	<!--默认查询的sql -->
 	<sql id="whereSql">
-		<where>
-			<if test="id !=null and id !=''"> and id=#{id}</if>
-			<if test="title !=null and title !=''"> and title=#{title}</if>
-			<if test="readcounts !=null and readcounts !=''"> and readCounts=#{readcounts}</if>
-			<if test="excerpt !=null and excerpt !=''"> and excerpt=#{excerpt}</if>
-			<if test="author !=null and author !=''"> and author=#{author}</if>
-			<if test="createdat !=null and createdat !=''"> and createdAt=#{createdat}</if>
-			<if test="category !=null and category !=''"> and category=#{category}</if>
-			<if test="listpic !=null and listpic !=''"> and listPic=#{listpic}</if>
-			<if test="mdcontent !=null and mdcontent !=''"> and mdcontent=#{mdcontent}</if>
-			<if test="sharecode !=null and sharecode !=''"> and shareCode=#{sharecode}</if>
-		</where>
+			<if test="id !=null and id !=''"> and t.id=#{id}</if>
+			<if test="title !=null and title !=''"> and t.title like '%${title}%'</if>
+			<if test="readCounts !=null and readCounts !=''"> and t.readCounts=#{readCounts}</if>
+			<if test="excerpt !=null and excerpt !=''"> and t.excerpt=#{excerpt}</if>
+			<if test="author !=null and author !=''"> and t.author like '%${author}%'</if>
+			<if test="createdAt !=null and createdAt !=''"> and t.createdAt=#{createdAt}</if>
+			<if test="category !=null and category !=''"> and t2.category=#{category}</if>
+			<if test="listPic !=null and listPic !=''"> and t.listPic=#{listPic}</if>
+			<if test="mdcontent !=null and mdcontent !=''"> and t.mdcontent=#{mdcontent}</if>
+			<if test="shareCode !=null and shareCode !=''"> and t.shareCode=#{sharecode}</if>
 	</sql>
+
+	<select id="getAllCategory"  resultType="java.lang.String">
+		select distinct category from  boke_article_type
+
+	</select>
+	<insert id="insertArticle" parameterType="com.len.entity.Article" >
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into boke_article(id,title,readCounts,excerpt,author,createdAt,listPic,mdcontent,shareCode)
+		values
+		(#{id},#{title},0,#{excerpt},#{author},now(),#{listPic},#{mdcontent},#{shareCode})
+
+	</insert>
+	<delete id="deleteByArticleId" parameterType="java.lang.Integer">
+		delete from boke_article_type where articleId = #{articleId}
+
+	</delete>
+	<insert id="insertArticleType" parameterType="com.len.entity.Article">
+		insert into  boke_article_type(articleId,category)values(#{id},#{category})
+	</insert>
 </mapper>

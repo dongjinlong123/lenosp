@@ -29,7 +29,7 @@
         <div class="layui-inline">
             <label class="">入学年份：</label>
             <div class="layui-input-inline">
-                <select name="studyYear" lay-verify="required" id="studyYear" class="layui-input">
+                <select name="studyYear"  id="studyYear" class="layui-input">
                     <option value=""></option>
 
                 </select>

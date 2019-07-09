@@ -49,7 +49,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/ftl/**").addResourceLocations("classpath:/ftl/");
         registry.addResourceHandler("/images/**").addResourceLocations("file:" + imagePath);
         registry.addResourceHandler("/img/**").addResourceLocations("file:" + imagePath);
-        registry.addResourceHandler("/file/**").addResourceLocations("file:" + imagePath);
+        registry.addResourceHandler("/file/**").addResourceLocations("file:" + filePath);
         registry.addResourceHandler("/blog/**");
         super.addResourceHandlers(registry);
     }
