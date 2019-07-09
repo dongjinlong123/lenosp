@@ -17,7 +17,7 @@ import java.util.Properties;
 public class CreateCodeUtil {
     public static void main(String[] args) {
         //在控制台输出DTO
-       saveCode("F://code//","com.len",null,"boke_article","article");
+       saveCode("F://code//","com.len",null,"boke_wx_user","wxUser");
        System.out.println("输出文件成功");
     }
 

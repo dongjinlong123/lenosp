@@ -2,6 +2,8 @@ package com.len.util.tool;
 
 import java.util.List;
 
+import static com.len.util.tool.CreateCodeUtil.toFirstCharUpCase;
+
 /**
  * 根据dto创建mapper文件
  */
@@ -16,7 +18,7 @@ public class CreateMapperXMLUtil {
         try {
             sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                     "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\n");
-            sb.append("<mapper namespace=\""+ classPath +".mapper."+beanName+"Mapper\">\n");//引入对于的javaMapper文件
+            sb.append("<mapper namespace=\""+ classPath +".mapper."+toFirstCharUpCase(beanName) +"Mapper\">\n");//引入对于的javaMapper文件
 
             //创建BaseResultMap
             sb = createBaseResultMap(sb,columnModelList,beanName,tableName);
@@ -36,7 +38,7 @@ public class CreateMapperXMLUtil {
 
     private static StringBuffer createPageSql(StringBuffer sb, List<CreateCodeUtil.ColumnModel> columnModelList, String beanName, String tableName) {
         sb.append("\t<!--分页 -->\n");
-        sb.append("\t <select id=\"selectListByPage\" parameterType=\"com.len.entity."+beanName+"\" resultMap=\"BaseResultMap\">\n");
+        sb.append("\t <select id=\"selectListByPage\" parameterType=\"com.len.entity."+toFirstCharUpCase(beanName)+"\" resultMap=\"BaseResultMap\">\n");
         sb.append("\t\tselect * from "+tableName+"\n");
         sb.append("\t\t <include refid=\"whereSql\" />\n");//默认查询的sql
         sb.append("\t</select>\n");
@@ -60,7 +62,7 @@ public class CreateMapperXMLUtil {
 
     private static StringBuffer createBaseResultMap(StringBuffer sb, List<CreateCodeUtil.ColumnModel> columnModelList, String beanName, String tableName) {
         //BaseResultMap
-        sb.append("\t<resultMap id=\"BaseResultMap\" type=\"com.len.entity."+beanName+"\">\n");//对于的dto
+        sb.append("\t<resultMap id=\"BaseResultMap\" type=\"com.len.entity."+toFirstCharUpCase(beanName)+"\">\n");//对于的dto
         int idx = 0;
         for (CreateCodeUtil.ColumnModel columnModel : columnModelList) {
             //INT -- INTEGER
@@ -86,7 +88,7 @@ public class CreateMapperXMLUtil {
     private static StringBuffer addSql(StringBuffer sb, List<CreateCodeUtil.ColumnModel> columnModelList, String beanName, String tableName) {
         //添加
         sb.append("\t<!-- 添加 -->\n");
-        sb.append("\t<insert id=\"add\" parameterType=\"com.len.entity."+beanName+"\">\n");
+        sb.append("\t<insert id=\"add\" parameterType=\"com.len.entity."+toFirstCharUpCase(beanName)+"\">\n");
         sb.append("\t\t<selectKey  keyProperty=\""+columnModelList.get(0).getFieldOldName()+"\" order=\"AFTER\" resultType=\"java.lang.Integer\">\n");
         sb.append("\t\t\t  select LAST_INSERT_ID()\n");
         sb.append("\t\t </selectKey>\n");
