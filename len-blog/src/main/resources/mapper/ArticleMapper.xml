@@ -101,4 +101,53 @@
 	<insert id="insertArticleType" parameterType="com.len.entity.Article">
 		insert into  boke_article_type(articleId,category)values(#{id},#{category})
 	</insert>
+
+
+	<!--点赞信息分页 -->
+	<select id="selectPraiseListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticlePraise">
+		select * from
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName
+		from boke_article_praise t1
+		LEFT JOIN boke_wx_user t2
+		on t1.userId = t2.id
+		LEFT JOIN boke_article t3
+		on t1.articleId = t3.id
+		where t1.userId = #{id}
+		) t
+	</select>
+	<select id="praiseCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+	select count(1) from
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName
+		from boke_article_praise t1
+		LEFT JOIN boke_wx_user t2
+		on t1.userId = t2.id
+		LEFT JOIN boke_article t3
+		on t1.articleId = t3.id
+		where t1.userId = #{id}
+		) t
+	</select>
+
+	<!--收藏信息分页 -->
+	<select id="selectSaveListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticleSave">
+		select * from
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName
+		from boke_article_save t1
+		LEFT JOIN boke_wx_user t2
+		on t1.userId = t2.id
+		LEFT JOIN boke_article t3
+		on t1.articleId = t3.id
+		where t1.userId = #{id}
+		) t
+	</select>
+	<select id="saveCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+	select count(1) from
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName
+		from boke_article_save t1
+		LEFT JOIN boke_wx_user t2
+		on t1.userId = t2.id
+		LEFT JOIN boke_article t3
+		on t1.articleId = t3.id
+		where t1.userId = #{id}
+		) t
+	</select>
 </mapper>

@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.len.base.BaseController;
 import com.len.common.QRCodeUtil;
 import com.len.entity.Article;
+import com.len.entity.ArticlePraise;
+import com.len.entity.ArticleSave;
 import com.len.exception.MyException;
 import com.len.service.ArticleService;
 import com.len.util.JsonUtil;
@@ -175,4 +177,36 @@ public class ArticleController extends BaseController {
             j.setMsg("刪除失败");
         }
         return j;
-    }}
+    }
+    /**
+     * 分页
+     */
+    @GetMapping(value = "/showArticlePraiseList")
+    @ResponseBody
+    public ReType showArticlePraiseList(Integer id, String page, String limit) {
+        List<ArticlePraise> tList = null;
+        try {
+            tList = articleService.selectPraiseListByPage(id);
+        } catch (MyException e) {
+            log.error("class:ArticleController ->method:showArticlePraiseList->message:" + e.getMessage());
+            e.printStackTrace();
+        }
+        return new ReType(articleService.praiseCount(id), tList);
+    }
+
+    /**
+     * 分页
+     */
+    @GetMapping(value = "/showArticleSaveList")
+    @ResponseBody
+    public ReType showArticleSaveList(Integer id, String page, String limit) {
+        List<ArticleSave> tList = null;
+        try {
+            tList = articleService.selectSaveListByPage(id);
+        } catch (MyException e) {
+            log.error("class:ArticleController ->method:showArticleSaveList->message:" + e.getMessage());
+            e.printStackTrace();
+        }
+        return new ReType(articleService.saveCount(id), tList);
+    }
+}

@@ -3,6 +3,8 @@ package com.len.service.impl;
 import com.len.base.BaseMapper;
 import com.len.base.impl.BaseServiceImpl;
 import com.len.entity.Article;
+import com.len.entity.ArticlePraise;
+import com.len.entity.ArticleSave;
 import com.len.mapper.ArticleMapper;
 import com.len.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
@@ -69,4 +71,26 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
         ArticleMapper.deleteByArticleId(id);
         return ArticleMapper.deleteByPrimaryKey(id) >0;
     }
+
+    @Override
+    public List<ArticlePraise> selectPraiseListByPage(Integer id) {
+        return ArticleMapper.selectPraiseListByPage(id);
+    }
+
+    @Override
+    public Integer praiseCount(Integer id) {
+        return  ArticleMapper.praiseCount(id);
+    }
+
+    @Override
+    public List<ArticleSave> selectSaveListByPage(Integer id) {
+        return ArticleMapper.selectSaveListByPage(id);
+    }
+
+    @Override
+    public Integer saveCount(Integer id) {
+        return ArticleMapper.saveCount(id);
+    }
+
+
 }
