@@ -22,7 +22,8 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.len.controller"))
+                //.apis(RequestHandlerSelectors.basePackage("com.len.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.len.intf"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -32,7 +33,7 @@ public class SwaggerConfig {
                 .title("Swagger接口列表")
                 .description("接口")
                 .termsOfServiceUrl("http://localhost:8081/swagger-ui.html")
-                .contact(new Contact("zxm", "http://www.lenosp.cn", "154040976@qq.com"))
+                .contact(new Contact("djl", "http://www.baidu.com", "904118787@qq.com"))
                 .version("1.1.0")
                 .build();
     }

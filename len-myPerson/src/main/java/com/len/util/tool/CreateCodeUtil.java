@@ -17,57 +17,60 @@ import java.util.Properties;
 public class CreateCodeUtil {
     public static void main(String[] args) {
         //在控制台输出DTO
-       saveCode("F://code//","com.len",null,"boke_user_sign","userSign");
-       System.out.println("输出文件成功");
+        saveCode("F://code//", "com.len", null, "boke_user_message", "BoKeUserMessage", false);
+        System.out.println("输出文件成功");
     }
 
     /**
      * 保存自动生成的代码
-     * @param saveDir 代码输出的目录
-     * @param packageName 包名
+     *
+     * @param saveDir      代码输出的目录
+     * @param packageName  包名
      * @param childPackage 子包名：为空表示不生成子包
-     * @param tableName 表名
-     * @param beanName  生成的bean名称
+     * @param tableName    表名
+     * @param beanName     生成的bean名称
+     * @param flag         是否驼峰类型的字段
      */
-    public static void saveCode(String saveDir,String packageName,String childPackage,String tableName,String beanName){
+    public static void saveCode(String saveDir, String packageName, String childPackage, String tableName, String beanName, boolean flag) {
         //获取表结构信息
-        List<ColumnModel> columnModelList = getTableStructure(tableName);
+        List<ColumnModel> columnModelList = getTableStructure(tableName, flag);
         //类全路径
         String classPath = packageName.trim();
-        if(StringUtils.isNotEmpty(childPackage)){
+        if (StringUtils.isNotEmpty(childPackage)) {
             classPath = classPath + "." + childPackage.trim();
         }
-        String dtoStr = CreateJavaCodeUtil.genJavaBeanFromTableStructure(classPath,columnModelList, beanName,tableName);
+        String dtoStr = CreateJavaCodeUtil.genJavaBeanFromTableStructure(classPath, columnModelList, beanName, tableName);
         //System.out.println(dtoStr);
-        String dto = saveDir + toFirstCharUpCase(beanName)+".java";
-        saveAsFile(dto,dtoStr);
+        String dto = saveDir + toFirstCharUpCase(beanName) + ".java";
+        saveAsFile(dto, dtoStr);
         //Mapper.xml文件
-        String  xmlStr= CreateMapperXMLUtil.createMapperXMLUtil(classPath,columnModelList,beanName,tableName);
+        String xmlStr = CreateMapperXMLUtil.createMapperXMLUtil(classPath, columnModelList, beanName, tableName);
         //System.out.println(xmlStr);
-        String xml = saveDir + toFirstCharUpCase(beanName)+"Mapper.xml";
-        saveAsFile(xml,xmlStr);
+        String xml = saveDir + toFirstCharUpCase(beanName) + "Mapper.xml";
+        saveAsFile(xml, xmlStr);
         //mapper.java
-        String mapperStr = CreateJavaCodeUtil.createJavaMapper(classPath,columnModelList,beanName,tableName);
-        String mapper = saveDir + toFirstCharUpCase(beanName)+"Mapper.java";
-        saveAsFile(mapper,mapperStr);
+        String mapperStr = CreateJavaCodeUtil.createJavaMapper(classPath, columnModelList, beanName, tableName);
+        String mapper = saveDir + toFirstCharUpCase(beanName) + "Mapper.java";
+        saveAsFile(mapper, mapperStr);
         //service.java
-        String serviceStr = CreateJavaCodeUtil.createJavaService(classPath,columnModelList,beanName,tableName);
-        String service = saveDir + toFirstCharUpCase(beanName)+"Service.java";
-        saveAsFile(service,serviceStr);
+        String serviceStr = CreateJavaCodeUtil.createJavaService(classPath, columnModelList, beanName, tableName);
+        String service = saveDir + toFirstCharUpCase(beanName) + "Service.java";
+        saveAsFile(service, serviceStr);
         //serviceImpl.java
-        String serviceImplStr = CreateJavaCodeUtil.createJavaServiceImpl(classPath,columnModelList,beanName,tableName);
-        String serviceImpl = saveDir + toFirstCharUpCase(beanName)+"ServiceImpl.java";
-        saveAsFile(serviceImpl,serviceImplStr);
+        String serviceImplStr = CreateJavaCodeUtil.createJavaServiceImpl(classPath, columnModelList, beanName, tableName);
+        String serviceImpl = saveDir + toFirstCharUpCase(beanName) + "ServiceImpl.java";
+        saveAsFile(serviceImpl, serviceImplStr);
         //controller.java
-        String controllerStr = CreateJavaCodeUtil.createJavaController(classPath,columnModelList,beanName,tableName);
-        String controller = saveDir + toFirstCharUpCase(beanName)+"Controller.java";
-        saveAsFile(controller,controllerStr);
+        String controllerStr = CreateJavaCodeUtil.createJavaController(classPath, columnModelList, beanName, tableName);
+        String controller = saveDir + toFirstCharUpCase(beanName) + "Controller.java";
+        saveAsFile(controller, controllerStr);
 
-        String htmlListStr = CreateHtmlCodeUtil.createFtlFile(classPath,columnModelList,beanName,tableName);
-        String articleFtl = saveDir + beanName+".ftl";
-        saveAsFile(articleFtl,htmlListStr);
+        String htmlListStr = CreateHtmlCodeUtil.createFtlFile(classPath, columnModelList, beanName, tableName);
+        String articleFtl = saveDir + beanName + ".ftl";
+        saveAsFile(articleFtl, htmlListStr);
     }
-    private static void saveAsFile(String file ,String cotent){
+
+    private static void saveAsFile(String file, String cotent) {
         byte[] contentInBytes = cotent.getBytes();
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -80,13 +83,14 @@ public class CreateCodeUtil {
 
 
     }
+
     /**
      * 获取表结构
      *
      * @param tableName
      * @return
      */
-    public static List<ColumnModel> getTableStructure(String tableName) {
+    public static List<ColumnModel> getTableStructure(String tableName, boolean flag) {
         List<ColumnModel> columnModelList = new ArrayList<ColumnModel>();
         try {
             //TODO 表相关
@@ -101,8 +105,9 @@ public class CreateCodeUtil {
                 columnModel.setDataType(columnSet.getString("DATA_TYPE"));
                 columnModel.setRemarks(columnSet.getString("REMARKS"));
                 columnModel.setTypeName(columnSet.getString("TYPE_NAME"));
+                System.out.println(columnModel.getTypeName());
                 String columnClassName = ColumnTypeEnum.getColumnTypeEnumByDBType(columnModel.getTypeName());
-                String fieldName = getFieldName(columnModel.getColumnName());
+                String fieldName = getFieldName(columnModel.getColumnName(), flag);
                 String fileOldName = columnModel.getColumnName();
                 String fieldType = Class.forName(columnClassName).getSimpleName();
                 columnModel.setFieldName(fieldName);
@@ -124,9 +129,11 @@ public class CreateCodeUtil {
      * @param columnName
      * @return
      */
-    private static String getFieldName(String columnName) {
-        // char[] columnCharArr = columnName.toLowerCase().toCharArray();
+    private static String getFieldName(String columnName, boolean flag) {
         char[] columnCharArr = columnName.toCharArray();
+        if (flag) {
+            columnCharArr = columnName.toLowerCase().toCharArray();
+        }
         StringBuffer sb = new StringBuffer();
         int ad = -1;
         for (int i = 0; i < columnCharArr.length; i++) {
@@ -201,13 +208,14 @@ public class CreateCodeUtil {
         private String columnDef;//默认值
         private String remarks;//描述
         private String fieldOldName;//数据字段名称
+
         @Override
         public String toString() {
             return "ColumnModel [columnName=" + columnName + ", dataType="
                     + dataType + ", typeName=" + typeName + ", columnClassName="
                     + columnClassName + ", fieldName=" + fieldName + ", fieldType="
                     + fieldType + ", columnSize=" + columnSize + ", columnDef="
-                    + columnDef + ", remarks=" + remarks + "，fieldOldName="+fieldOldName+"]";
+                    + columnDef + ", remarks=" + remarks + "，fieldOldName=" + fieldOldName + "]";
         }
     }
 }

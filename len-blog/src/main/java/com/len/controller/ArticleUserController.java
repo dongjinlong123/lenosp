@@ -7,6 +7,7 @@ import com.len.entity.ArticleComment;
 import com.len.exception.MyException;
 import com.len.service.ArticleCommentService;
 import com.len.util.ReType;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequestMapping("/article")
+@Api(value = "用户文章控制类", description = "用户文章控制类")
 public class ArticleUserController extends BaseController {
     @Autowired
     private ArticleCommentService articleCommentService;

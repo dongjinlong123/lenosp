@@ -7,6 +7,7 @@ import com.len.entity.WxUser;
 import com.len.exception.MyException;
 import com.len.service.WxUserService;
 import com.len.util.ReType;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,10 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequestMapping("/wxUser")
+@Api(value = "微信用户控制类", description = "微信用户控制类")
 public class WxUserController extends BaseController {
     @Autowired
     private WxUserService wxUserService;
-
     /**
      * 展示首页
      */

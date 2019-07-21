@@ -22,5 +22,9 @@
             <groupId>com.len</groupId>
             <artifactId>len-sys</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.len</groupId>
+            <artifactId>len-wx</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -22,13 +22,13 @@ public class ZBeanFactory implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
             throws BeansException {
-        log.info("对象---" + beanName + "---初始化开始");
+       // log.info("对象---" + beanName + "---初始化开始");
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        log.info("对象---" + beanName + "---初始化成功");
+      //  log.info("对象---" + beanName + "---初始化成功");
         return bean;
     }
 }

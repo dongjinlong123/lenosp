@@ -35,7 +35,7 @@
 
     <table id="wxUserList" class="layui-hide" lay-filter="wxUserList"></table>
     <script type="text/html" id="toolBar">
-      <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     </script>
     <div id="userMain" style="display:  none;">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
@@ -47,7 +47,7 @@
                 <li class="layui-this">用户评论</li>
                 <li>用户点赞</li>
                 <li>用户收藏</li>
-                <#--<li>用户消息</li>-->
+            <#--<li>用户消息</li>-->
                 <li>用户签到</li>
             </ul>
             <div class="layui-tab-content" style="height: 400px;">
@@ -69,8 +69,8 @@
                     </div>
 
                 </div>
-                <#--<div class="layui-tab-item">4</div>-->
-                <div class="layui-tab-item"style="width: 70%;">
+            <#--<div class="layui-tab-item">4</div>-->
+                <div class="layui-tab-item" style="width: 70%;">
                     <div class="layui-tab-item layui-show">
                         <table id="userSignList" class="layui-hide" lay-filter="userSignList"></table>
 
@@ -101,18 +101,20 @@
             elem: '#wxUserList'
             , url: '/wxUser/showWxUserList'
             , cols: [[
-                {type:"numbers", title:"序号", width: '5%'}
+                {type: "numbers", title: "序号", width: '5%'}
                 , {field: 'openId', title: '用户openId', width: '10%'}
                 , {field: 'nickName', title: '用户昵称', width: '10%'}
-                , {field: 'gender', title: '性别', width: '10%', templet: function (value) {
-                        if(value == "1"){
+                , {
+                    field: 'gender', title: '性别', width: '10%', templet: function (value) {
+                        if (value == "1") {
                             return "男";
                         }
-                        if(value == "2"){
+                        if (value == "2") {
                             return "女";
                         }
                         return "未知";
-                    }}
+                    }
+                }
                 , {field: 'province', title: '省份', width: '10%'}
                 , {field: 'city', title: '城市', width: '10%'}
                 , {field: 'country', title: '区域', width: '10%'}
@@ -184,13 +186,15 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
-        function showDetail(id){
+
+        function showDetail(id) {
             showCommentDetail(id);
             showPraiseDetail(id);
             showSaveDetail(id);
             showUserSignDetail(id);
         }
-        function showCommentDetail(id){
+
+        function showCommentDetail(id) {
 
             //方法级渲染
             table.render({
@@ -201,25 +205,27 @@
                     {field: 'replyer', title: '用户昵称', width: '10%'}
                     , {field: 'title', title: '文章标题', width: '15%'}
                     , {field: 'excerpt', title: '文章简介', width: '25%'}
-                    , {field: 'createdAt', title: '评论时间', width: '15%', templet: function (value) {
+                    , {
+                        field: 'createdAt', title: '评论时间', width: '15%', templet: function (value) {
                             return formatDateTime(value.createdAt);
-                        }}
+                        }
+                    }
                     , {field: 'userName', title: '被评论者', width: '10%'}
-                    ,{field: 'content', title: '评论内容', width: '25%'}
+                    , {field: 'content', title: '评论内容', width: '25%'}
                 ]]
                 , page: true
                 , height: '315'
             });
             table.reload('articleCommentList', {
                 where: {
-                    replyerId:id,
+                    replyerId: id,
                 }
             });
             $("#userMain").show();
-            window.location.href="#001"
+            window.location.href = "#001"
         }
 
-        function showPraiseDetail(id){
+        function showPraiseDetail(id) {
             //方法级渲染
             table.render({
                 id: 'articlePraiseList',
@@ -228,27 +234,35 @@
                 , cols: [[
                     {field: 'userName', title: '用户昵称', width: '10%'}
                     , {field: 'title', title: '文章标题', width: '15%'}
-                    , {field: 'excerpt', title: '文章简介', width: '25%'}
-                    , {field: 'flag', title: '点赞', width: '15%', templet: function (value) {
-                            if(value == 0){
+                    , {field: 'excerpt', title: '文章简介', width: '15%'}
+                    , {
+                        field: 'createdAt', title: '操作时间', width: '15%', templet: function (value) {
+                            return formatDateTime(value.createdAt);
+                        }
+                    }
+                    , {
+                        field: 'flag', title: '点赞', width: '10%', templet: function (value) {
+                            if (value == 0) {
                                 return "已点赞";
-                            }else{
+                            } else {
                                 return "取消点赞";
                             }
-                        }}
+                        }
+                    }
                 ]]
                 , page: true
                 , height: '315'
             });
             table.reload('articlePraiseList', {
                 where: {
-                    id:id,
+                    id: id,
                 }
             });
             $("#userMain").show();
-            window.location.href="#001"
+            window.location.href = "#001"
         }
-        function showSaveDetail(id){
+
+        function showSaveDetail(id) {
             //方法级渲染
             table.render({
                 id: 'articleSaveList',
@@ -257,28 +271,35 @@
                 , cols: [[
                     {field: 'userName', title: '用户昵称', width: '10%'}
                     , {field: 'title', title: '文章标题', width: '15%'}
-                    , {field: 'excerpt', title: '文章简介', width: '25%'}
-                    , {field: 'flag', title: '收藏', width: '15%', templet: function (value) {
-                            if(value == 0){
+                    , {field: 'excerpt', title: '文章简介', width: '15%'}
+                    , {
+                        field: 'createdAt', title: '操作时间', width: '15%', templet: function (value) {
+                            return formatDateTime(value.createdAt);
+                        }
+                    }
+                    , {
+                        field: 'flag', title: '收藏', width: '10%', templet: function (value) {
+                            if (value == 0) {
                                 return "已收藏";
-                            }else{
+                            } else {
                                 return "取消收藏";
                             }
-                        }}
+                        }
+                    }
                 ]]
                 , page: true
                 , height: '315'
             });
             table.reload('articleSaveList', {
                 where: {
-                    id:id,
+                    id: id,
                 }
             });
             $("#userMain").show();
-            window.location.href="#001"
+            window.location.href = "#001"
         }
 
-        function showUserSignDetail(id){
+        function showUserSignDetail(id) {
             //方法级渲染
             table.render({
                 id: 'userSignList',
@@ -286,20 +307,22 @@
                 , url: '/userSign/showUserSignList'
                 , cols: [[
                     {field: 'userName', title: '用户昵称', width: '10%'}
-                    , {field: 'createdAt', title: '签到时间', width: '25%', templet: function (value) {
+                    , {
+                        field: 'createdAt', title: '签到时间', width: '25%', templet: function (value) {
                             return formatDateTime(value.createdAt);
-                        }}
+                        }
+                    }
                 ]]
                 , page: true
                 , height: '315'
             });
             table.reload('userSignList', {
                 where: {
-                    wxUserId:id,
+                    wxUserId: id,
                 }
             });
             $("#userMain").show();
-            window.location.href="#001"
+            window.location.href = "#001"
         }
 
     });

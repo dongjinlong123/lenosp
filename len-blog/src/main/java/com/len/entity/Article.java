@@ -4,10 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.Date;
 @Table(name="boke_article")
 @Data
-public class Article {
+public class Article implements Serializable {
  //主键 
  @Id
  @Column(name = "id")

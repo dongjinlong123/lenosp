@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.len.mapper.BokeIntfMapper">
+    <select id="getCategoryList" resultType="java.util.HashMap">
+        SELECT
+	@rownum := @rownum + 1 AS objectId,
+	d.category AS `name`
+FROM
+	(
+		SELECT DISTINCT
+			category
+		FROM
+			boke_article_type
+	) d,
+	(SELECT @rownum := 0) r
+    </select>
+
+    <select id="getSignNum" resultType="java.lang.Integer" parameterType="java.lang.String">
+       select count(1) from boke_user_sign t1,boke_wx_user t2
+        where t1.wxUserId = t2.id
+				and t2.openId =#{openId}
+    </select>
+
+    <select id="getAllSignTime" resultType="java.util.HashMap" parameterType="java.lang.String">
+         select DATE_FORMAT(t1.createdAt,'%Y-%m-%d') as createdAt from boke_user_sign t1,boke_wx_user t2
+        where t1.wxUserId = t2.id
+				and t2.openId =#{openId}
+				order by t1.createdAt desc
+
+    </select>
+    <insert id="insertSignDate" parameterType="java.util.HashMap">
+		insert into boke_user_sign(wxUserId,createdAt)values(#{wxUserId},#{createdAt})
+	</insert>
+
+    <select id="getIsCollect" resultType="java.lang.Integer">
+        select count(1) from boke_article_save t1,boke_wx_user t2
+        where t1.articleId = #{id}
+        and t2.openId = #{openId}
+        <if test="flag !=null">
+            and t1.flag = #{flag}
+        </if>
+
+    </select>
+
+
+    <select id="getArticleSaveId" resultType="java.lang.Integer">
+		select t1.id from boke_article_save t1,boke_wx_user t2
+			where t1.articleId = #{id}
+		and t2.openId = #{openId}
+		limit 1
+	</select>
+
+    <insert id="insertArticleSave" parameterType="com.len.entity.ArticleSave">
+		INSERT INTO boke_article_save (
+			articleId,
+			userId,
+			flag,
+			createdAt
+		)
+		VALUE
+		(
+			#{articleId},#{userId},#{flag},#{createdAt}
+		)
+	</insert>
+    <update id="updateArticleSave" parameterType="com.len.entity.ArticleSave">
+		update boke_article_save
+		set flag = #{flag},
+		createdAt = #{createdAt}
+		where id= #{id}
+	</update>
+
+    <select id="getIsLiked" resultType="java.lang.Integer">
+        select count(1) from boke_article_praise t1,boke_wx_user t2
+        where t1.articleId = #{id}
+        and t2.openId = #{openId}
+        <if test="flag !=null">
+            and t1.flag = #{flag}
+        </if>
+    </select>
+
+    <select id="getArticlePraiseId" resultType="java.lang.Integer">
+		select t1.id from boke_article_praise t1,boke_wx_user t2
+			where t1.articleId = #{id}
+		and t2.openId = #{openId}
+		limit 1
+	</select>
+
+
+    <insert id="insertArticlePraise" parameterType="com.len.entity.ArticlePraise">
+		INSERT INTO boke_article_praise (
+			articleId,
+			userId,
+			flag,
+			createdAt
+		)
+		VALUE
+		(
+			#{articleId},#{userId},#{flag},#{createdAt}
+		)
+	</insert>
+    <update id="updateArticlePraise" parameterType="com.len.entity.ArticlePraise">
+		update boke_article_praise
+		set flag = #{flag},
+		createdAt = #{createdAt}
+		where id= #{id}
+	</update>
+
+	<update id="addReadCount" parameterType="java.lang.Integer">
+		update boke_article
+		set readCounts = readCounts +1
+		where id = #{id}
+	</update>
+	
+	<select id="getCollectList" parameterType="java.lang.Integer" resultType="com.len.entity.ArticleSave">
+		select id,articleId,userId,flag,createdAt from boke_article_save
+		where flag = 0
+		and userId = #{userId}
+		order by createdAt desc
+	</select>
+</mapper>

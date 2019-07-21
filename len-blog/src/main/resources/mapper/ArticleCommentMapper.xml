@@ -1,51 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.len.mapper.ArticleCommentMapper">
-	<resultMap id="BaseResultMap" type="com.len.entity.ArticleComment">
-		<id column="id" jdbcType="INTEGER" property="id" />
-		<result column="content" jdbcType="VARCHAR" property="content" />
-		<result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
-		<result column="title" jdbcType="VARCHAR" property="title" />
-		<result column="excerpt" jdbcType="VARCHAR" property="excerpt" />
-		<result column="replyer" jdbcType="VARCHAR" property="replyer" />
-		<result column="userName" jdbcType="VARCHAR" property="userName" />
-	</resultMap>
-	<!--分页 -->
-	 <select id="selectListByPage" parameterType="com.len.entity.ArticleComment" resultMap="BaseResultMap">
-		select * from
-		 (SELECT
-		 t1.id,
-		 t1.content,
-		 t1.createdAt,
-		 t1.replyerId,
-		 t2.title,
-		 t2.excerpt,
-		 t3.nickName AS replyer,
-		 (
-		 SELECT
-		 wx.nickName
-		 FROM
-		 boke_wx_user wx
-		 WHERE
-		 wx.id = t1.userId
-		 ) AS userName
-		 FROM
-		 boke_article_comment t1
-		 LEFT JOIN boke_article t2 ON t1.articleId = t2.id
-		 LEFT JOIN boke_wx_user t3 ON t3.id = t1.replyerId
-		 ) t
-		 <include refid="whereSql" />
-		 order by createdAt desc
-	</select>
-	<select id="count" resultType="java.lang.Integer">
-		select count(1) from boke_article_comment
-		 <include refid="whereSql" />
-	</select>
-	<!--默认查询的sql -->
-	<sql id="whereSql">
-		<where>
-			<if test="id !=null and id !=''"> and id=#{id}</if>
-			<if test="replyerId !=null and replyerId !=''"> and replyerId=#{replyerId}</if>
-		</where>
-	</sql>
+    <resultMap id="BaseResultMap" type="com.len.entity.ArticleComment">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="createdAt" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="excerpt" jdbcType="VARCHAR" property="excerpt"/>
+        <result column="replyer" jdbcType="VARCHAR" property="replyer"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+    </resultMap>
+    <!--分页 -->
+    <select id="selectListByPage" parameterType="com.len.entity.ArticleComment" resultMap="BaseResultMap">
+        select * from
+        (SELECT
+        t1.id,
+        t1.content,
+        t1.createdAt,
+        t1.replyerId,
+        t2.title,
+        t2.excerpt,
+        t3.nickName AS replyer,
+        (
+        SELECT
+        wx.nickName
+        FROM
+        boke_wx_user wx
+        WHERE
+        wx.id = t1.userId
+        ) AS userName
+        FROM
+        boke_article_comment t1
+        LEFT JOIN boke_article t2 ON t1.articleId = t2.id
+        LEFT JOIN boke_wx_user t3 ON t3.id = t1.replyerId
+        ) t
+        <include refid="whereSql"/>
+        order by createdAt desc
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from boke_article_comment
+        <include refid="whereSql"/>
+    </select>
+    <!--默认查询的sql -->
+    <sql id="whereSql">
+        <where>
+            <if test="id !=null and id !=''">and id=#{id}</if>
+            <if test="replyerId !=null and replyerId !=''">and replyerId=#{replyerId}</if>
+        </where>
+    </sql>
+
+    <select id="selectCommentList" parameterType="com.len.entity.ArticleComment"
+            resultType="com.len.entity.ArticleComment">
+        select * from boke_article_comment
+        where articleId = #{articleId}
+        order by createdAt asc
+
+    </select>
 </mapper>

@@ -90,3 +90,10 @@ mail:
   port: 465
   username: 904118787@qq.com
   password: cgumkngftovzbbej
+wx:
+  token: token
+  appId: wxb2575c2a7bc5f239
+  appSecret: 603938c3e390a093ab1162b3fb37f4f3
+  xiaochengxu:
+    appId: wx6959c49a70d52bf6
+    secret: 6cffcf8a55680b88f2079ca02c470a93

@@ -3,6 +3,7 @@
 <mapper namespace="com.len.mapper.WxUserMapper">
 	<resultMap id="BaseResultMap" type="com.len.entity.WxUser">
 		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="userPic" jdbcType="VARCHAR" property="userPic" />
 		<result column="openId" jdbcType="VARCHAR" property="openId" />
 		<result column="nickName" jdbcType="VARCHAR" property="nickName" />
 		<result column="gender" jdbcType="VARCHAR" property="gender" />

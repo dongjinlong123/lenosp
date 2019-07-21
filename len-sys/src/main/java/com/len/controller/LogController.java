@@ -52,6 +52,7 @@ public class LogController extends BaseController {
     @ResponseBody
     public ReType showLog(SysLog sysLog, String page, String limit) {
         List<SysLog> tList = null;
+        log.info(page + "--" + limit);
         Page<SysLog> tPage = PageHelper.startPage(Integer.valueOf(page), Integer.valueOf(limit));
         try {
             tList = logMapper.selectListByPage(sysLog);

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.len.mapper.MenuMapper">
+	<resultMap id="BaseResultMap" type="com.len.entity.Menu">
+		<id column="row_id" jdbcType="INTEGER" property="rowId" />
+		<result column="menu_type" jdbcType="VARCHAR" property="menuType" />
+		<result column="menu_level" jdbcType="VARCHAR" property="menuLevel" />
+		<result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="menu_parent_id" jdbcType="VARCHAR" property="menuParentId" />
+		<result column="menu_order" jdbcType="VARCHAR" property="menuOrder" />
+		<result column="data_create" jdbcType="TIMESTAMP" property="dataCreate" />
+		<result column="create_by" jdbcType="VARCHAR" property="createBy" />
+		<result column="data_last_upd" jdbcType="TIMESTAMP" property="dataLastUpd" />
+		<result column="last_upd_by" jdbcType="VARCHAR" property="lastUpdBy" />
+	</resultMap>
+	<!--分页 -->
+	 <select id="selectListByPage" parameterType="com.len.entity.Menu" resultMap="BaseResultMap">
+		select * from wx_menu_table
+		 <include refid="whereSql" />
+		 order by menu_order asc
+	</select>
+	<select id="count" resultType="java.lang.Integer">
+		select count(1) from wx_menu_table
+		 <include refid="whereSql" />
+	</select>
+	<!--默认查询的sql -->
+	<sql id="whereSql">
+		<where>
+			<if test="rowId !=null and rowId !=''"> and row_id=#{rowId}</if>
+			<if test="menuType !=null and menuType !=''"> and menu_type=#{menuType}</if>
+			<if test="menuLevel !=null and menuLevel !=''"> and menu_level=#{menuLevel}</if>
+			<if test="menuName !=null and menuName !=''"> and menu_name=#{menuName}</if>
+			<if test="url !=null and url !=''"> and url=#{url}</if>
+			<if test="menuParentId !=null and menuParentId !=''"> and menu_parent_id=#{menuParentId}</if>
+			<if test="menuOrder !=null and menuOrder !=''"> and menu_order=#{menuOrder}</if>
+			<if test="dataCreate !=null and dataCreate !=''"> and data_create=#{dataCreate}</if>
+			<if test="createBy !=null and createBy !=''"> and create_by=#{createBy}</if>
+			<if test="dataLastUpd !=null and dataLastUpd !=''"> and data_last_upd=#{dataLastUpd}</if>
+			<if test="lastUpdBy !=null and lastUpdBy !=''"> and last_upd_by=#{lastUpdBy}</if>
+		</where>
+	</sql>
+</mapper>

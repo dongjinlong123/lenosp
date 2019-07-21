@@ -11,6 +11,7 @@ import com.len.exception.MyException;
 import com.len.service.ArticleService;
 import com.len.util.JsonUtil;
 import com.len.util.ReType;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,6 +29,7 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequestMapping("/article")
+@Api(value = "文章控制类", description = "文章控制类")
 public class ArticleController extends BaseController {
     @Autowired
     private ArticleService articleService;
