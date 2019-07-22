@@ -1,17 +1,15 @@
 package com.len.intf;
 
 import com.len.base.BaseController;
-import com.len.common.HttpSendUtil;
 import com.len.entity.Article;
 import com.len.entity.ArticleComment;
 import com.len.entity.BoKeUserMessage;
 import com.len.entity.WxUser;
-import com.len.service.ArticleService;
 import com.len.service.BokeIntfService;
 import com.len.service.WeiXinService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,10 +44,30 @@ public class BokeIntf extends BaseController {
     public Map<String, Object> getUserIdByCode(String code, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
         String openId = weiXinService.getOpenIdByCode(code);
+        if(openId ==null){
+            result.put("success", false);
+            return result;
+        }
         Integer userId = bokeIntfService.getUserIdByOpenId(openId);
+        if(userId == null){
+            result.put("success", false);
+            return result;
+        }
+        result.put("success", true);
         result.put("result", userId);
         return result;
     }
+    @GetMapping("/getUserInfoByUserId")
+    @ResponseBody
+    @ApiOperation(value = "getUserInfoByUserId", notes = "根据code获取用户ID")
+    public Map<String, Object> getUserIdByCode(Integer userId, HttpServletRequest req, HttpServletResponse resp) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        WxUser wxUser = bokeIntfService.getUserIdByCode(userId);
+        result.put("result", wxUser);
+        return result;
+    }
+
+
     /**
      * 获取文章列表
      *
@@ -90,9 +108,9 @@ public class BokeIntf extends BaseController {
         String code = wxUser.getCode();
         String openId = weiXinService.getOpenIdByCode(code);
         wxUser.setOpenId(openId);
-
         bokeIntfService.saveUserInfo(wxUser);
-        result.put("msg", "保存成功");
+
+        result.put("result", bokeIntfService.getUserIdByOpenId(openId));
         return result;
     }
 
@@ -119,19 +137,17 @@ public class BokeIntf extends BaseController {
     @GetMapping("/getSignNum")
     @ResponseBody
     @ApiOperation(value = "getSignNum", notes = "获取签到天数")
-    public Map<String, Object> getSignNum(String code, HttpServletRequest req, HttpServletResponse resp) {
-        String openId = weiXinService.getOpenIdByCode(code);
-        Map<String, Object> ret = bokeIntfService.getSignNum(openId);
+    public Map<String, Object> getSignNum(Integer userId, HttpServletRequest req, HttpServletResponse resp) {
+        Map<String, Object> ret = bokeIntfService.getSignNum(userId);
         return ret;
     }
 
     @GetMapping("/saveSign")
     @ResponseBody
     @ApiOperation(value = "saveSign", notes = "保存签到数据")
-    public Map<String, Object> saveSign(String code, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> saveSign(Integer userId, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        Map<String, Object> ret = bokeIntfService.saveSign(openId);
+        Map<String, Object> ret = bokeIntfService.saveSign(userId);
         result.put("result", true);
         result.put("data", ret);
         return result;
@@ -140,11 +156,10 @@ public class BokeIntf extends BaseController {
     @GetMapping("/getIsCollect")
     @ResponseBody
     @ApiOperation(value = "getIsCollect", notes = "查询是否收藏文章")
-    public Map<String, Object> getIsCollect(Integer id, String code, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> getIsCollect(Integer id, Integer userId, HttpServletRequest req, HttpServletResponse resp) {
 
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        Integer count = bokeIntfService.getIsCollect(id, openId,0);
+        Integer count = bokeIntfService.getIsCollect(id, userId,0);
         result.put("result", count);
         return result;
     }
@@ -152,11 +167,10 @@ public class BokeIntf extends BaseController {
     @GetMapping("/collectAction")
     @ResponseBody
     @ApiOperation(value = "collectAction", notes = "取消/收藏文章")
-    public Map<String, Object> collectAction(Integer id, String code, String action, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> collectAction(Integer id, Integer userId, String action, HttpServletRequest req, HttpServletResponse resp) {
 
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        boolean flag = bokeIntfService.collectAction(id, openId, action);
+        boolean flag = bokeIntfService.collectAction(id, userId, action);
         result.put("result", flag);
         return result;
     }
@@ -164,11 +178,10 @@ public class BokeIntf extends BaseController {
     @GetMapping("/getIsLiked")
     @ResponseBody
     @ApiOperation(value = "getIsLiked", notes = "查询是否点赞文章")
-    public Map<String, Object> getIsLiked(Integer id, String code, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> getIsLiked(Integer id, Integer userId, HttpServletRequest req, HttpServletResponse resp) {
 
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        Integer count = bokeIntfService.getIsLiked(id, openId,0);
+        Integer count = bokeIntfService.getIsLiked(id, userId,0);
         result.put("result", count);
         return result;
     }
@@ -176,10 +189,9 @@ public class BokeIntf extends BaseController {
     @GetMapping("/likeAction")
     @ResponseBody
     @ApiOperation(value = "likeAction", notes = "点赞文章")
-    public Map<String, Object> likeAction(Integer id, String code, String action, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> likeAction(Integer id, Integer userId, String action, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        boolean flag = bokeIntfService.likeAction(id, openId, action);
+        boolean flag = bokeIntfService.likeAction(id, userId, action);
         result.put("result", flag);
         return result;
     }
@@ -226,30 +238,27 @@ public class BokeIntf extends BaseController {
     @GetMapping("/getNewsCount")
     @ResponseBody
     @ApiOperation(value = "getNewsCount", notes = "未读信息数量")
-    public Map<String, Object> getNewsCount(String code, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> getNewsCount(Integer userId, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        Integer count = bokeIntfService.getNewsCount(openId);
+        Integer count = bokeIntfService.getNewsCount(userId);
         result.put("result",count);
         return result;
     }
     @GetMapping("/getNewsList")
     @ResponseBody
     @ApiOperation(value = "getNewsList", notes = "得到未读信息列表")
-    public Map<String, Object> getNewsList(String code, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> getNewsList(Integer userId, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        List<BoKeUserMessage> list = bokeIntfService.getNewsList(openId);
+        List<BoKeUserMessage> list = bokeIntfService.getNewsList(userId);
         result.put("result",list);
         return result;
     }
     @GetMapping("/changeStatus")
     @ResponseBody
     @ApiOperation(value = "changeStatus", notes = "更新信息状态")
-    public Map<String, Object> changeStatus(String code,Integer id, HttpServletRequest req, HttpServletResponse resp) {
+    public Map<String, Object> changeStatus(Integer userId, Integer id, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
-        String openId = weiXinService.getOpenIdByCode(code);
-        boolean flag = bokeIntfService.changeStatus(openId,id);
+        boolean flag = bokeIntfService.changeStatus(userId,id);
         result.put("result",flag);
         return result;
     }

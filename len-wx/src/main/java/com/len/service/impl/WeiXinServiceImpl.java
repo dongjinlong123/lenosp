@@ -103,7 +103,9 @@ public class WeiXinServiceImpl implements WeiXinService {
 		String ret = HttpSendUtil.get(str);
 		try{
 			String openId = JSONObject.parseObject(ret).getString("openid");
-			redisService.set(code,openId,86400l); //默认存储一天
+			if(StringUtils.isNotEmpty(openId)){
+				redisService.set(code,openId,86400l); //默认存储一天
+			}
 			return openId;
 		}catch (Exception e){
 			return null;

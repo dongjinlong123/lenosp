@@ -150,4 +150,11 @@
 		where t1.userId = #{id}
 		) t
 	</select>
+	<select id="selectByCategory" parameterType="java.lang.String"
+			resultType="com.len.entity.Article">
+		select t1.* from boke_article t1,
+		boke_article_type t2
+		where t1.id = t2.articleId
+		and t2.category = #{category}
+	</select>
 </mapper>

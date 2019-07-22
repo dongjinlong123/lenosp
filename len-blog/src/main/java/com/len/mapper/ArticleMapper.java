@@ -32,4 +32,6 @@ public interface ArticleMapper extends BaseMapper<Article, String> {
      */
     List<ArticleSave> selectSaveListByPage(Integer id);
     Integer saveCount(Integer id);
+
+    List<Article> selectByCategory(String category);
 }

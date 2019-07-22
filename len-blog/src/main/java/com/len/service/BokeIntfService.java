@@ -24,17 +24,17 @@ public interface BokeIntfService {
 
     List<Article> getArticleListByCategory(String category);
 
-    Map<String, Object> getSignNum(String openId);
+    Map<String, Object> getSignNum(Integer userId);
 
-    Map<String, Object> saveSign(String openId);
+    Map<String, Object> saveSign(Integer userId);
 
-    Integer getIsCollect(Integer id, String openId, Integer flag);
+    Integer getIsCollect(Integer id, Integer userId, Integer flag);
 
-    boolean collectAction(Integer id, String openId, String action);
+    boolean collectAction(Integer id, Integer userId, String action);
 
-    Integer getIsLiked(Integer id, String openId, Integer flag);
+    Integer getIsLiked(Integer id, Integer userId, Integer flag);
 
-    boolean likeAction(Integer id, String openId, String action);
+    boolean likeAction(Integer id, Integer userId, String action);
 
     List<Map<String, Object>> getComment(Integer id);
 
@@ -44,11 +44,13 @@ public interface BokeIntfService {
 
     boolean sendNew(BoKeUserMessage boKeUserMessage);
 
-    Integer getNewsCount(String openId);
+    Integer getNewsCount(Integer userId);
 
-    List<BoKeUserMessage> getNewsList(String openId);
+    List<BoKeUserMessage> getNewsList(Integer userId);
 
-    boolean changeStatus(String openId, Integer id);
+    boolean changeStatus(Integer userId, Integer id);
 
     List<Map<String, Object>> getCollectList(Integer userId);
+
+    WxUser getUserIdByCode(Integer userId);
 }

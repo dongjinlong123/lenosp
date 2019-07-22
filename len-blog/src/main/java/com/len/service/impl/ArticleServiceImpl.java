@@ -92,5 +92,10 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
         return ArticleMapper.saveCount(id);
     }
 
+    @Override
+    public List<Article> selectByCategory(String category) {
+        return ArticleMapper.selectByCategory(category);
+    }
+
 
 }

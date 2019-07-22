@@ -97,9 +97,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
             return (List<Article>) redisService.getObj("getArticleListByCategory-" + category);
         }
 
-        Article a = new Article();
-        a.setCategory(category);
-        List<Article> list = articleService.select(a);
+        List<Article> list = articleService.selectByCategory(category);
         for (Article article : list) {
             article.setListPic(rootUrl + article.getListPic());
         }
@@ -108,24 +106,23 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     }
 
     @Override
-    public Map<String, Object> getSignNum(String openId) {
+    public Map<String, Object> getSignNum(Integer userId) {
         //获取签到的次数
         Map<String, Object> result = new HashMap<String, Object>();
-        Integer signNum = bokeIntfMapper.getSignNum(openId);
+        Integer signNum = bokeIntfMapper.getSignNum(userId);
         result.put("signNum", signNum);
-        List<Map<String, Object>> createdAtMap = bokeIntfMapper.getAllSignTime(openId);
+        List<Map<String, Object>> createdAtMap = bokeIntfMapper.getAllSignTime(userId);
         result.put("result", createdAtMap);
         return result;
     }
 
     @Override
-    public Map<String, Object> saveSign(String openId) {
+    public Map<String, Object> saveSign(Integer userId) {
         Map<String, Object> result = new HashMap<String, Object>();
-        Integer id = getUserIdByOpenId(openId);
         Map<String, Object> param = new HashMap<String, Object>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String createdAt = sdf.format(new Date());
-        param.put("wxUserId", id);
+        param.put("wxUserId", userId);
         param.put("createdAt", createdAt);
         bokeIntfMapper.insertSignDate(param);
         result.put("createdAt", createdAt);
@@ -133,8 +130,8 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     }
 
     @Override
-    public Integer getIsCollect(Integer id, String openId, Integer flag) {
-        return bokeIntfMapper.getIsCollect(id, openId, flag);
+    public Integer getIsCollect(Integer id, Integer userId, Integer flag) {
+        return bokeIntfMapper.getIsCollect(id, userId, flag);
     }
 
     @Override
@@ -149,11 +146,11 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     }
 
     @Override
-    public boolean collectAction(Integer id, String openId, String action) {
+    public boolean collectAction(Integer id, Integer userId, String action) {
         ArticleSave as = new ArticleSave();
-        as.setUserId(getUserIdByOpenId(openId));
+        as.setUserId(userId);
         as.setArticleId(id);
-        boolean isExist = bokeIntfMapper.getIsCollect(id, openId, null) > 0;
+        boolean isExist = bokeIntfMapper.getIsCollect(id, userId, null) > 0;
 
         if ("collect".equals(action)) {
             //收藏操作
@@ -165,7 +162,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         //判断是否存在数据
         try {
             if (isExist) {
-                as.setId(bokeIntfMapper.getArticleSaveId(id, openId));
+                as.setId(bokeIntfMapper.getArticleSaveId(id, userId));
                 bokeIntfMapper.updateArticleSave(as);
             } else {
                 //不存在则添加
@@ -180,16 +177,16 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     }
 
     @Override
-    public Integer getIsLiked(Integer id, String openId, Integer flag) {
-        return bokeIntfMapper.getIsLiked(id, openId, null);
+    public Integer getIsLiked(Integer id, Integer userId, Integer flag) {
+        return bokeIntfMapper.getIsLiked(id, userId, null);
     }
 
     @Override
-    public boolean likeAction(Integer id, String openId, String action) {
+    public boolean likeAction(Integer id, Integer userId, String action) {
         ArticlePraise ap = new ArticlePraise();
-        ap.setUserId(getUserIdByOpenId(openId));
+        ap.setUserId(userId);
         ap.setArticleId(id);
-        boolean isExist = bokeIntfMapper.getIsLiked(id, openId, null) > 0;
+        boolean isExist = bokeIntfMapper.getIsLiked(id, userId, null) > 0;
 
         if ("like".equals(action)) {
             //点赞操作
@@ -201,7 +198,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         //判断是否存在数据
         try {
             if (isExist) {
-                ap.setId(bokeIntfMapper.getArticlePraiseId(id, openId));
+                ap.setId(bokeIntfMapper.getArticlePraiseId(id, userId));
                 bokeIntfMapper.updateArticlePraise(ap);
             } else {
                 //不存在则添加
@@ -272,8 +269,12 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     @Override
     public boolean sendNew(BoKeUserMessage boKeUserMessage) {
         try {
+            boKeUserMessage.setCreatedAt(new Date());
             if ("回复".equals(boKeUserMessage.getType()) && boKeUserMessage.getUserId() == boKeUserMessage.getReplyerId()) {
                 boKeUserMessage.setType("评论"); //自己评论自己不算是回复信息
+            }
+            if(boKeUserMessage.getUserId() == null ){
+                boKeUserMessage.setUserId(boKeUserMessage.getReplyerId());
             }
             boKeUserMessageService.insertSelective(boKeUserMessage);
         } catch (Exception e) {
@@ -283,35 +284,33 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     }
 
     @Override
-    public Integer getNewsCount(String openId) {
-        Integer userId = getUserIdByOpenId(openId);
+    public Integer getNewsCount(Integer userId) {
         BoKeUserMessage b = new BoKeUserMessage();
         b.setType("回复");
         b.setStatus(0);
         b.setUserId(userId);
-        b.setCreatedAt(new Date());
         return boKeUserMessageService.getNewsCount(b);
     }
 
     @Override
-    public List<BoKeUserMessage> getNewsList(String openId) {
-        Integer userId = getUserIdByOpenId(openId);
+    public List<BoKeUserMessage> getNewsList(Integer userId) {
         BoKeUserMessage b = new BoKeUserMessage();
         b.setType("回复");
         b.setStatus(0);
         b.setUserId(userId);
         List<BoKeUserMessage> messages = boKeUserMessageService.select(b);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        for (BoKeUserMessage mes : messages) {
-            mes.setCreatedAtStr(sdf.format(mes.getCreatedAt()));
+        if(messages != null){
+            for (BoKeUserMessage mes : messages) {
+                mes.setCreatedAtStr(sdf.format(mes.getCreatedAt()));
+            }
         }
         return messages;
     }
 
     @Override
-    public boolean changeStatus(String openId, Integer id) {
+    public boolean changeStatus(Integer userId, Integer id) {
         try {
-            Integer userId = getUserIdByOpenId(openId);
             BoKeUserMessage b = new BoKeUserMessage();
             b.setUserId(userId);
             b.setId(id);
@@ -340,5 +339,10 @@ public class BokeIntfServiceImpl implements BokeIntfService {
             retList.add(saveMap);
         }
         return retList;
+    }
+
+    @Override
+    public WxUser getUserIdByCode(Integer userId) {
+        return wxUserService.selectByPrimaryKey(userId);
     }
 }

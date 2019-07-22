@@ -3,28 +3,19 @@
 <mapper namespace="com.len.mapper.BokeIntfMapper">
     <select id="getCategoryList" resultType="java.util.HashMap">
         SELECT
-	@rownum := @rownum + 1 AS objectId,
-	d.category AS `name`
-FROM
-	(
-		SELECT DISTINCT
-			category
-		FROM
-			boke_article_type
-	) d,
-	(SELECT @rownum := 0) r
+			distinct category AS `name`
+			FROM
+		boke_article_type
     </select>
 
-    <select id="getSignNum" resultType="java.lang.Integer" parameterType="java.lang.String">
-       select count(1) from boke_user_sign t1,boke_wx_user t2
-        where t1.wxUserId = t2.id
-				and t2.openId =#{openId}
+    <select id="getSignNum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+       select count(1) from boke_user_sign t1
+        where t1.wxUserId = #{userId}
     </select>
 
-    <select id="getAllSignTime" resultType="java.util.HashMap" parameterType="java.lang.String">
-         select DATE_FORMAT(t1.createdAt,'%Y-%m-%d') as createdAt from boke_user_sign t1,boke_wx_user t2
-        where t1.wxUserId = t2.id
-				and t2.openId =#{openId}
+    <select id="getAllSignTime" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+         select DATE_FORMAT(t1.createdAt,'%Y-%m-%d') as createdAt from boke_user_sign t1
+        where t1.wxUserId = #{userId}
 				order by t1.createdAt desc
 
     </select>
@@ -33,9 +24,9 @@ FROM
 	</insert>
 
     <select id="getIsCollect" resultType="java.lang.Integer">
-        select count(1) from boke_article_save t1,boke_wx_user t2
+        select count(1) from boke_article_save t1
         where t1.articleId = #{id}
-        and t2.openId = #{openId}
+        and t1.userId = #{userId}
         <if test="flag !=null">
             and t1.flag = #{flag}
         </if>
@@ -44,9 +35,9 @@ FROM
 
 
     <select id="getArticleSaveId" resultType="java.lang.Integer">
-		select t1.id from boke_article_save t1,boke_wx_user t2
+		select t1.id from boke_article_save t1
 			where t1.articleId = #{id}
-		and t2.openId = #{openId}
+		 and t1.userId = #{userId}
 		limit 1
 	</select>
 
@@ -70,18 +61,18 @@ FROM
 	</update>
 
     <select id="getIsLiked" resultType="java.lang.Integer">
-        select count(1) from boke_article_praise t1,boke_wx_user t2
+        select count(1) from boke_article_praise t1
         where t1.articleId = #{id}
-        and t2.openId = #{openId}
+        and t1.userId = #{userId}
         <if test="flag !=null">
             and t1.flag = #{flag}
         </if>
     </select>
 
     <select id="getArticlePraiseId" resultType="java.lang.Integer">
-		select t1.id from boke_article_praise t1,boke_wx_user t2
+		select t1.id from boke_article_praise t1
 			where t1.articleId = #{id}
-		and t2.openId = #{openId}
+		and t1.userId = #{userId}
 		limit 1
 	</select>
 

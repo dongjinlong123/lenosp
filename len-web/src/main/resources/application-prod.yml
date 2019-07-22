@@ -1,66 +1,99 @@
 server:
-  port: 8088
+  port: 8081
 spring:
+  devtools:
+    restart:
+      enabled: true
   datasource:
-        url: jdbc:mysql://localhost:3306/lenos?useUnicode=true&characterEncoding=UTF-8
-        username: root
-#        password: 123456
-#        password: 1234
-        password: root
-        # 使用druid数据源
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        filters: stat
-        maxActive: 20
-        initialSize: 1
-        maxWait: 60000
-        minIdle: 1
-        timeBetweenEvictionRunsMillis: 60000
-        minEvictableIdleTimeMillis: 300000
-        validationQuery: select 'x'
-        testWhileIdle: true
-        testOnBorrow: false
-        testOnReturn: false
-        poolPreparedStatements: true
-        maxOpenPreparedStatements: 20
+    url: jdbc:mysql://localhost:3306/boke?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
   http:
-      encoding:
-        force: true
+    encoding:
+      force: true
   boot:
     admin:
       client:
-        prefer-ip: true
-      url: http://localhost:8082
+        url: http://localhost:8082
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
   redis:
-      host: 127.0.0.1
-      port: 6379
+    host: 127.0.0.1
+    port: 6379
 
 mybatis:
-    type-aliases-package: com.len.entity
-    mapper-locations: classpath*:mapper/*.xml
-    check-config-location: true
+  type-aliases-package: com.len.entity
+  mapper-locations: classpath*:mapper/*.xml
+  check-config-location: true
 
 mapper:
-    mappers:
-        - com.len.base.BaseMapper
-    not-empty: false
-    identity: MYSQL
+  mappers:
+  - com.len.base.BaseMapper
+  - tk.mybatis.mapper.common.Mapper
+  not-empty: true
+  identity: mysql
 
 
 # PageHelperConfig 可以替代此方案
 pagehelper:
-    helperDialect: mysql
-    reasonable: true
-    supportMethodsArguments: true
-    params: count=countSql
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+lenosp:
+  uploadPath: /opt/boke/file/
+  isDayType: false
+  imagePath: /opt/boke/image/
+  rootUrl: http://dongjinlong123.xyz/image/
 logging:
+  file: /opt/boke/logs/lenosp-log.log
   level:
-      com.len.mapper: debug
-  config: classpath:log4j2.yml
+    com.len.mapper: debug
 
-filePath: ./file/
-
-imagePath: ./image/
+dataType: mysql
 
 redis:
   prefix: len_
+
+mail:
+  protocol: smtps
+  host: smtp.qq.com
+  port: 465
+  username: 904118787@qq.com
+  password: cgumkngftovzbbej
+wx:
+  token: token
+  appId: wxb2575c2a7bc5f239
+  appSecret: 603938c3e390a093ab1162b3fb37f4f3
+  xiaochengxu:
+    appId: wx6959c49a70d52bf6
+    secret: 6cffcf8a55680b88f2079ca02c470a93
