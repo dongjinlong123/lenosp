@@ -106,7 +106,7 @@
 	<!--点赞信息分页 -->
 	<select id="selectPraiseListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticlePraise">
 		select * from
-		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName,t1.createdAt
 		from boke_article_praise t1
 		LEFT JOIN boke_wx_user t2
 		on t1.userId = t2.id
@@ -117,7 +117,7 @@
 	</select>
 	<select id="praiseCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 	select count(1) from
-		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName,t1.createdAt
 		from boke_article_praise t1
 		LEFT JOIN boke_wx_user t2
 		on t1.userId = t2.id
@@ -130,7 +130,7 @@
 	<!--收藏信息分页 -->
 	<select id="selectSaveListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticleSave">
 		select * from
-		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName,t1.createdAt
 		from boke_article_save t1
 		LEFT JOIN boke_wx_user t2
 		on t1.userId = t2.id
@@ -141,7 +141,7 @@
 	</select>
 	<select id="saveCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 	select count(1) from
-		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName
+		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName,t1.createdAt
 		from boke_article_save t1
 		LEFT JOIN boke_wx_user t2
 		on t1.userId = t2.id

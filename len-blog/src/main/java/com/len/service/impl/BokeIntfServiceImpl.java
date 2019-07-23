@@ -120,7 +120,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     public Map<String, Object> saveSign(Integer userId) {
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Object> param = new HashMap<String, Object>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createdAt = sdf.format(new Date());
         param.put("wxUserId", userId);
         param.put("createdAt", createdAt);

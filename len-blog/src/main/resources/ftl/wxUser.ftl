@@ -168,7 +168,6 @@
         //监听行单击事件
         table.on('rowDouble(wxUserList)', function (obj) {
             var d = obj.data;
-            console.log(d)
             showDetail(d.id);
         });
         table.on('tool(wxUserList)', function (obj) {
@@ -193,29 +192,28 @@
             showSaveDetail(id);
             showUserSignDetail(id);
         }
-
+        table.render({
+            id: 'articleCommentList',
+            elem: '#articleCommentList'
+            , url: '/article/showArticleCommentList'
+            , cols: [[
+                {field: 'replyer', title: '用户昵称', width: '10%'}
+                , {field: 'title', title: '文章标题', width: '15%'}
+                , {field: 'excerpt', title: '文章简介', width: '25%'}
+                , {
+                    field: 'createdAt', title: '评论时间', width: '15%', templet: function (value) {
+                        return formatDateTime(value.createdAt);
+                    }
+                }
+                , {field: 'userName', title: '被评论者', width: '10%'}
+                , {field: 'content', title: '评论内容', width: '25%'}
+            ]]
+            , page: true
+            , height: '315'
+        });
         function showCommentDetail(id) {
 
             //方法级渲染
-            table.render({
-                id: 'articleCommentList',
-                elem: '#articleCommentList'
-                , url: '/article/showArticleCommentList'
-                , cols: [[
-                    {field: 'replyer', title: '用户昵称', width: '10%'}
-                    , {field: 'title', title: '文章标题', width: '15%'}
-                    , {field: 'excerpt', title: '文章简介', width: '25%'}
-                    , {
-                        field: 'createdAt', title: '评论时间', width: '15%', templet: function (value) {
-                            return formatDateTime(value.createdAt);
-                        }
-                    }
-                    , {field: 'userName', title: '被评论者', width: '10%'}
-                    , {field: 'content', title: '评论内容', width: '25%'}
-                ]]
-                , page: true
-                , height: '315'
-            });
             table.reload('articleCommentList', {
                 where: {
                     replyerId: id,
@@ -224,35 +222,35 @@
             $("#userMain").show();
             window.location.href = "#001"
         }
-
+        table.render({
+            id: 'articlePraiseList',
+            elem: '#articlePraiseList'
+            , url: '/article/showArticlePraiseList'
+            , cols: [[
+                {field: 'userName', title: '用户昵称', width: '10%'}
+                , {field: 'title', title: '文章标题', width: '15%'}
+                , {field: 'excerpt', title: '文章简介', width: '15%'}
+                , {
+                    field: 'createdAt', title: '操作时间', width: '15%', templet: function (value) {
+                        return formatDateTime(value.createdAt);
+                    }
+                }
+                , {
+                    field: 'flag', title: '点赞', width: '10%', templet: function (value) {
+                        if (value == 0) {
+                            return "已点赞";
+                        } else {
+                            return "取消点赞";
+                        }
+                    }
+                }
+            ]]
+            , page: true
+            , height: '315'
+        });
         function showPraiseDetail(id) {
             //方法级渲染
-            table.render({
-                id: 'articlePraiseList',
-                elem: '#articlePraiseList'
-                , url: '/article/showArticlePraiseList'
-                , cols: [[
-                    {field: 'userName', title: '用户昵称', width: '10%'}
-                    , {field: 'title', title: '文章标题', width: '15%'}
-                    , {field: 'excerpt', title: '文章简介', width: '15%'}
-                    , {
-                        field: 'createdAt', title: '操作时间', width: '15%', templet: function (value) {
-                            return formatDateTime(value.createdAt);
-                        }
-                    }
-                    , {
-                        field: 'flag', title: '点赞', width: '10%', templet: function (value) {
-                            if (value == 0) {
-                                return "已点赞";
-                            } else {
-                                return "取消点赞";
-                            }
-                        }
-                    }
-                ]]
-                , page: true
-                , height: '315'
-            });
+
             table.reload('articlePraiseList', {
                 where: {
                     id: id,
@@ -261,35 +259,35 @@
             $("#userMain").show();
             window.location.href = "#001"
         }
-
+        table.render({
+            id: 'articleSaveList',
+            elem: '#articleSaveList'
+            , url: '/article/showArticleSaveList'
+            , cols: [[
+                {field: 'userName', title: '用户昵称', width: '10%'}
+                , {field: 'title', title: '文章标题', width: '15%'}
+                , {field: 'excerpt', title: '文章简介', width: '15%'}
+                , {
+                    field: 'createdAt', title: '操作时间', width: '15%', templet: function (value) {
+                        return formatDateTime(value.createdAt);
+                    }
+                }
+                , {
+                    field: 'flag', title: '收藏', width: '10%', templet: function (value) {
+                        if (value == 0) {
+                            return "已收藏";
+                        } else {
+                            return "取消收藏";
+                        }
+                    }
+                }
+            ]]
+            , page: true
+            , height: '315'
+        });
         function showSaveDetail(id) {
             //方法级渲染
-            table.render({
-                id: 'articleSaveList',
-                elem: '#articleSaveList'
-                , url: '/article/showArticleSaveList'
-                , cols: [[
-                    {field: 'userName', title: '用户昵称', width: '10%'}
-                    , {field: 'title', title: '文章标题', width: '15%'}
-                    , {field: 'excerpt', title: '文章简介', width: '15%'}
-                    , {
-                        field: 'createdAt', title: '操作时间', width: '15%', templet: function (value) {
-                            return formatDateTime(value.createdAt);
-                        }
-                    }
-                    , {
-                        field: 'flag', title: '收藏', width: '10%', templet: function (value) {
-                            if (value == 0) {
-                                return "已收藏";
-                            } else {
-                                return "取消收藏";
-                            }
-                        }
-                    }
-                ]]
-                , page: true
-                , height: '315'
-            });
+
             table.reload('articleSaveList', {
                 where: {
                     id: id,
@@ -298,24 +296,24 @@
             $("#userMain").show();
             window.location.href = "#001"
         }
-
+        table.render({
+            id: 'userSignList',
+            elem: '#userSignList'
+            , url: '/userSign/showUserSignList'
+            , cols: [[
+                {field: 'userName', title: '用户昵称', width: '10%'}
+                , {
+                    field: 'createdAt', title: '签到时间', width: '25%', templet: function (value) {
+                        return formatDateTime(value.createdAt);
+                    }
+                }
+            ]]
+            , page: true
+            , height: '315'
+        });
         function showUserSignDetail(id) {
             //方法级渲染
-            table.render({
-                id: 'userSignList',
-                elem: '#userSignList'
-                , url: '/userSign/showUserSignList'
-                , cols: [[
-                    {field: 'userName', title: '用户昵称', width: '10%'}
-                    , {
-                        field: 'createdAt', title: '签到时间', width: '25%', templet: function (value) {
-                            return formatDateTime(value.createdAt);
-                        }
-                    }
-                ]]
-                , page: true
-                , height: '315'
-            });
+
             table.reload('userSignList', {
                 where: {
                     wxUserId: id,
