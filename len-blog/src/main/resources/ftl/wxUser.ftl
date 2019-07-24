@@ -120,7 +120,7 @@
                 , {field: 'country', title: '区域', width: '10%'}
                 ,{
                     field: 'createTime', title: '创建时间', width: '15%', templet: function (value) {
-                        return formatDateTime(value.createdAt);
+                        return formatDateTime(value.createTime);
                     }
                 }
                 , {field: 'remark', title: '操作', width: '10%', toolbar: "#toolBar"}
