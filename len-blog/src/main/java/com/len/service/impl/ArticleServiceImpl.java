@@ -69,7 +69,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
     @Override
     public boolean deleteByKey(Integer id) {
         ArticleMapper.deleteByArticleId(id);
-        return ArticleMapper.deleteByPrimaryKey(id) >0;
+        return ArticleMapper.deleteByPrimaryKey(id) > 0;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
 
     @Override
     public Integer praiseCount(Integer id) {
-        return  ArticleMapper.praiseCount(id);
+        return ArticleMapper.praiseCount(id);
     }
 
     @Override
@@ -95,6 +95,11 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
     @Override
     public List<Article> selectByCategory(String category) {
         return ArticleMapper.selectByCategory(category);
+    }
+
+    @Override
+    public List<Article> selectListByPage(Article article, Integer pageSize, Integer pagination) {
+        return ArticleMapper.selectListByMyPage(article, pageSize, pagination);
     }
 
 

@@ -3,6 +3,7 @@ import com.len.base.BaseMapper;
 import com.len.entity.Article;
 import com.len.entity.ArticlePraise;
 import com.len.entity.ArticleSave;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -34,4 +35,13 @@ public interface ArticleMapper extends BaseMapper<Article, String> {
     Integer saveCount(Integer id);
 
     List<Article> selectByCategory(String category);
+
+    /**
+     * 自定義分頁
+     * @param article
+     * @param pageSize
+     * @param pagination
+     * @return
+     */
+    List<Article> selectListByMyPage(@Param("article") Article article, @Param("pageSize") Integer pageSize, @Param("pagination")Integer pagination);
 }

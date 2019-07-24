@@ -9,7 +9,6 @@ import com.len.service.BokeIntfService;
 import com.len.service.WeiXinService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -100,7 +99,7 @@ public class BokeIntf extends BaseController {
 
     @PostMapping("/saveUserInfo")
     @ResponseBody
-    @ApiOperation(value = "saveUserInfo", notes = "获取文章详情")
+    @ApiOperation(value = "saveUserInfo", notes = "保存用户信息")
     public Map<String, Object> saveUserInfo(@RequestBody WxUser wxUser, HttpServletRequest req, HttpServletResponse resp) {
         log.info("得到的信息" + wxUser);
 

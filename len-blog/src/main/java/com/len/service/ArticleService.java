@@ -38,4 +38,6 @@ public interface ArticleService extends BaseService<Article, String> {
     Integer saveCount(Integer id);
 
     List<Article> selectByCategory(String category);
+
+    List<Article> selectListByPage(Article article, Integer pageSize, Integer pagination);
 }

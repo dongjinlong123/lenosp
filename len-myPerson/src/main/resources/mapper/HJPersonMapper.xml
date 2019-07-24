@@ -56,7 +56,7 @@
             <if test="lastUpdateBy !=null and lastUpdateBy !=''"> and last_update_by=#{lastUpdateBy}</if>
             <if test="lastUpdateDate !=null and lastUpdateDate !=''"> and last_update_date=#{lastUpdateDate}</if>
             <if test="isWantliaisonMan !=null and isWantliaisonMan !=''"> and is_wantLiaison_man=#{isWantliaisonMan}</if>
-            <if test="useName !=null and useName !=''"> and use_name=#{useName}</if>
+            <if test="useName !=null and useName !=''"> and use_name like '%${useName}%'</if>
             <if test="sex !=null and sex !=''"> and sex=#{sex}</if>
             <if test="studyYear !=null and studyYear !=''"> and study_year=#{studyYear}</if>
             <if test="classNum !=null and classNum !=''"> and class_num=#{classNum}</if>

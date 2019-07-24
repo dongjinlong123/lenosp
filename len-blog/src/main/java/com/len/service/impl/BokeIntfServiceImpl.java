@@ -1,13 +1,10 @@
 package com.len.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.len.entity.*;
 import com.len.exception.MyException;
 import com.len.mapper.BokeIntfMapper;
 import com.len.redis.RedisService;
 import com.len.service.*;
-import com.len.util.ReType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,15 +35,11 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     @Override
     public List<Article> getArticleList(Article article, Integer pageSize, Integer pagination) {
         List<Article> tList = null;
-        Page<Article> tPage = PageHelper.startPage(Integer.valueOf(pageSize + 1), Integer.valueOf(pagination));
-        ReType r = null;
         try {
-            tList = articleService.selectListByPage(article);
+            tList = articleService.selectListByPage(article,pageSize,pagination * pageSize);
             for (Article a : tList) {
                 a.setListPic(rootUrl + a.getListPic());
             }
-            r = new ReType(tPage.getTotal(), tList);
-            tList = (List<Article>) r.getData();
         } catch (MyException e) {
             e.printStackTrace();
         }
