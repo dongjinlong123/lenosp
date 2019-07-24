@@ -36,6 +36,10 @@ public class WxUser {
     //区域
     @Column(name = "country")
     private String country;
+
+    @Column(name = "createTime")
+    private Date createTime;
+
     @Transient
     private String rawData;
     @Transient

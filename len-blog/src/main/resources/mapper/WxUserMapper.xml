@@ -10,6 +10,7 @@
 		<result column="province" jdbcType="VARCHAR" property="province" />
 		<result column="city" jdbcType="VARCHAR" property="city" />
 		<result column="country" jdbcType="VARCHAR" property="country" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
 	</resultMap>
 	<!--分页 -->
 	<select id="selectListByPage" parameterType="com.len.entity.WxUser" resultMap="BaseResultMap">

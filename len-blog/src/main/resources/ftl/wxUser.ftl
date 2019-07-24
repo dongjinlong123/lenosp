@@ -118,6 +118,11 @@
                 , {field: 'province', title: '省份', width: '10%'}
                 , {field: 'city', title: '城市', width: '10%'}
                 , {field: 'country', title: '区域', width: '10%'}
+                ,{
+                    field: 'createTime', title: '创建时间', width: '15%', templet: function (value) {
+                        return formatDateTime(value.createdAt);
+                    }
+                }
                 , {field: 'remark', title: '操作', width: '10%', toolbar: "#toolBar"}
             ]]
             , page: true

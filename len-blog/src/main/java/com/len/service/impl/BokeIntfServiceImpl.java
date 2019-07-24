@@ -36,7 +36,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     public List<Article> getArticleList(Article article, Integer pageSize, Integer pagination) {
         List<Article> tList = null;
         try {
-            tList = articleService.selectListByPage(article,pageSize,pagination * pageSize);
+            tList = articleService.selectListByPage(article, pageSize, pagination * pageSize);
             for (Article a : tList) {
                 a.setListPic(rootUrl + a.getListPic());
             }
@@ -132,7 +132,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         WxUser wx = new WxUser();
         wx.setOpenId(openId);
         WxUser user = wxUserService.selectOne(wx);
-        if(user == null){
+        if (user == null) {
             return null;
         }
         return user.getId();
@@ -211,7 +211,9 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         ArticleComment ac = new ArticleComment();
         ac.setArticleId(id);
         List<ArticleComment> list = articleCommentService.selectCommentList(ac);
-
+        if (list == null || list.size() == 0) {
+            return retList;
+        }
         for (ArticleComment articleComment : list) {
             Map<String, Object> retMap = new HashMap<String, Object>();
 
@@ -222,17 +224,19 @@ public class BokeIntfServiceImpl implements BokeIntfService {
             Map<String, Object> replyerMap = new HashMap<String, Object>();
             Integer replyer = articleComment.getReplyerId();
             WxUser wxUser = wxUserService.selectByPrimaryKey(replyer);
-            //获取用户信息根据用户id获取
-            replyerMap.put("userPic", wxUser.getUserPic());
-            replyerMap.put("nickName", wxUser.getNickName());
-            replyerMap.put("replyerId", replyer);
-            retMap.put("replyer", replyerMap);
-
+            if (wxUser != null) {
+                //获取用户信息根据用户id获取
+                replyerMap.put("userPic", wxUser.getUserPic());
+                replyerMap.put("nickName", wxUser.getNickName());
+                replyerMap.put("replyerId", replyer);
+                retMap.put("replyer", replyerMap);
+            }
             //得到回复的用户信息
             Map<String, Object> userMap = new HashMap<String, Object>();
             Integer userId = articleComment.getUserId();
-            if (userId != null) {
-                WxUser user = wxUserService.selectByPrimaryKey(userId);
+
+            WxUser user = wxUserService.selectByPrimaryKey(userId);
+            if (user != null) {
                 userMap.put("userPic", user.getUserPic());
                 userMap.put("nickName", user.getNickName());
                 userMap.put("userId", userId);
@@ -266,7 +270,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
             if ("回复".equals(boKeUserMessage.getType()) && boKeUserMessage.getUserId() == boKeUserMessage.getReplyerId()) {
                 boKeUserMessage.setType("评论"); //自己评论自己不算是回复信息
             }
-            if(boKeUserMessage.getUserId() == null ){
+            if (boKeUserMessage.getUserId() == null) {
                 boKeUserMessage.setUserId(boKeUserMessage.getReplyerId());
             }
             boKeUserMessageService.insertSelective(boKeUserMessage);
@@ -293,7 +297,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         b.setUserId(userId);
         List<BoKeUserMessage> messages = boKeUserMessageService.select(b);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if(messages != null){
+        if (messages != null) {
             for (BoKeUserMessage mes : messages) {
                 mes.setCreatedAtStr(sdf.format(mes.getCreatedAt()));
             }
