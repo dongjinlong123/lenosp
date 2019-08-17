@@ -297,7 +297,7 @@
           // },
           mdcontent: function (value) {
               if (value.trim() == "") {
-                  return "请上传主图";
+                  return "内容不能为空";
               }
           }
       })
@@ -335,6 +335,10 @@
 
       });
 
+      $('#close').click(function(){
+          var index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+      });
       //生成二维码
       $("#getErWeiMa").click(function () {
           var text = $("#shareCodeText").val();

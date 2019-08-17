@@ -384,6 +384,13 @@ layui.config({
 
     //监听提交
     form.on('submit(add)', function(data){
+        if(data.field.liveCity && data.field.liveCity.split("-").length >=2){
+            data.field.province = data.field.liveCity.split("-")[0];
+            data.field.city = data.field.liveCity.split("-")[1];
+            if(data.field.liveCity.split("-").length == 3){
+                data.field.area = data.field.liveCity.split("-")[2];
+            }
+        }
         layerAjax('/hjPerson/addHjPerson', data.field, 'personList');
         return false;
     });

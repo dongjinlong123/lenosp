@@ -55,13 +55,10 @@ public class HJPersonController extends BaseController {
     @GetMapping(value = "/showHjPersonList")
     @ResponseBody
     @RequiresPermissions("hjPerson:show")
-    public ReType showHjPersonList(String userName, String studyYear, String page, String limit) {
+    public ReType showHjPersonList(@ModelAttribute  HJPerson hjPerson, String page, String limit) {
         List<HJPerson> tList = null;
         Page<HJPerson> tPage = PageHelper.startPage(Integer.valueOf(page), Integer.valueOf(limit));
         try {
-            HJPerson hjPerson = new HJPerson();
-            hjPerson.setUseName(userName);
-            hjPerson.setStudyYear(studyYear);
             tList = hJPersonService.selectListByPage(hjPerson);
         } catch (MyException e) {
             log.error("class:HJPersonController ->method:showHjPersonList->message:" + e.getMessage());
@@ -158,6 +155,26 @@ public class HJPersonController extends BaseController {
             j.setFlag(false);
             j.setMsg("刪除失败");
         }
+        return j;
+    }
+
+    @GetMapping(value = "/getAllProvince")
+    @ResponseBody
+    @RequiresPermissions("hjPerson:show")
+    public JsonUtil getAllProvince() {
+        JsonUtil j = new JsonUtil();
+        List<String> provinceList = hJPersonService.getAllProvince();
+        j.setData(provinceList);
+        return j;
+    }
+
+    @GetMapping(value = "/getAllCityByProvince")
+    @ResponseBody
+    @RequiresPermissions("hjPerson:show")
+    public JsonUtil getAllCityByProvince(@RequestParam(required = false,name = "province") String province) {
+        JsonUtil j = new JsonUtil();
+        List<String> cityList = hJPersonService.getAllCityByProvince(province);
+        j.setData(cityList);
         return j;
     }
 }

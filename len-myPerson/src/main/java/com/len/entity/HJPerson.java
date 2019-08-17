@@ -108,4 +108,13 @@ public class HJPerson {
     @Column(name = "idea")
     private String idea;
 
+    //省市区
+    @Column(name = "province")
+    private String province;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "area")
+    private String area;
 }

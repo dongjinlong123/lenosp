@@ -65,8 +65,12 @@ public class KindEditorController extends BaseController {
 
 			}
 		}
+		//编辑器返回值
 		obj.put("error", 0);
 		obj.put("url",url);
+		//md返回值
+		obj.put("success", 0);
+		obj.put("message", "传成功");
 		return obj.toJSONString();
 	}
 

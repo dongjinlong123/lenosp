@@ -26,4 +26,14 @@ public class HJPersonServiceImpl extends BaseServiceImpl<HJPerson, String>
     public List<String> getAllStudyYear() {
         return hPersonMapper.getAllStudyYear();
     }
+
+    @Override
+    public List<String> getAllProvince() {
+        return hPersonMapper.getAllProvince();
+    }
+
+    @Override
+    public List<String> getAllCityByProvince(String province) {
+        return hPersonMapper.getAllCityByProvince(province);
+    }
 }

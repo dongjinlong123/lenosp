@@ -35,6 +35,9 @@
         <result column="doctor_master_degree" jdbcType="VARCHAR" property="doctorMasterDegree" />
         <result column="doctor_guide" jdbcType="VARCHAR" property="doctorGuide" />
         <result column="idea" jdbcType="VARCHAR" property="idea" />
+        <result column="province" jdbcType="VARCHAR" property="province" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="area" jdbcType="VARCHAR" property="area" />
     </resultMap>
     <!--分页 -->
     <select id="selectListByPage" parameterType="com.len.entity.HJPerson" resultMap="BaseResultMap">
@@ -83,10 +86,26 @@
             <if test="doctorMasterDegree !=null and doctorMasterDegree !=''"> and doctor_master_degree=#{doctorMasterDegree}</if>
             <if test="doctorGuide !=null and doctorGuide !=''"> and doctor_guide=#{doctorGuide}</if>
             <if test="idea !=null and idea !=''"> and idea=#{idea}</if>
+            <if test="province !=null and province !=''"> and province=#{province}</if>
+            <if test="city !=null and city !=''"> and city=#{city}</if>
+            <if test="area !=null and area !=''"> and area=#{area}</if>
         </where>
     </sql>
 
     <select id="getAllStudyYear" resultType="java.lang.String">
        select DISTINCT study_year from ecjtu_ie_user_info
+    </select>
+
+    <select id="getAllProvince" resultType="java.lang.String">
+       select DISTINCT province from ecjtu_ie_user_info
+    </select>
+
+    <select id="getAllCityByProvince" resultType="java.lang.String" parameterType="java.lang.String">
+       select DISTINCT city from ecjtu_ie_user_info
+       <where>
+           <if test="province  !=null and province  != ''">
+             and  province = #{province}
+           </if>
+       </where>
     </select>
 </mapper>

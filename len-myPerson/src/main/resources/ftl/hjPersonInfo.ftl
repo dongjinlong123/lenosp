@@ -29,12 +29,32 @@
         <div class="layui-inline">
             <label class="">入学年份：</label>
             <div class="layui-input-inline">
-                <select name="studyYear"  id="studyYear" class="layui-input">
+                <select name="studyYear"  id="studyYear" class="layui-input"  lay-filter="search">
                     <option value=""></option>
 
                 </select>
             </div>
         </div>
+        <div class="layui-inline">
+            <label class="">省份：</label>
+            <div class="layui-input-inline">
+                <select name="province"  id="province" class="layui-input"  lay-filter="cityChange">
+                    <option value=""></option>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="">城市：</label>
+            <div class="layui-input-inline">
+                <select name="city"  id="city" class="layui-input"  lay-filter="search">
+                    <option value=""></option>
+
+                </select>
+            </div>
+        </div>
+
 
         <button class="select-on layui-btn layui-btn-sm"  data-type="select"><i class="layui-icon"></i>
         </button>
@@ -52,7 +72,10 @@
         <button class="layui-btn layui-btn-normal" data-type="add">
             <i class="layui-icon">&#xe608;</i>新增
         </button>
-<   </div>
+        <button class="layui-btn layui-btn-warm" data-type="showMap">
+            <i class="layui-icon layui-icon-location"></i>查看人员分布
+        </button>
+   </div>
 </div>
 </@shiro.hasPermission>
 
@@ -73,10 +96,14 @@
 <script>
     $(function () {
         initStudyYear();
-    })
+        initAllProvince();
+        initAllCity("");
+    });
+
     layui.use(['form','table'], function () {
         var table = layui.table;
         var form = layui.form;
+
         //方法级渲染
         table.render({
             id: 'personList',
@@ -126,10 +153,14 @@
             select: function () {
                 var userName = $('#userName').val();
                 var studyYear = $('#studyYear').val();
+                var province = $("#province").val();
+                var city = $("#city").val();
                 table.reload('personList', {
                     where: {
                         userName: userName,
-                        studyYear: studyYear
+                        studyYear: studyYear,
+                        province:province,
+                        city:city
                     }
                 });
             },
@@ -150,18 +181,59 @@
                         layer.full(index);
                     }
                 });
+            },
+            showMap:function () {
+                layer.open({
+                    id:"showMap-hjPerson",
+                    type: 2,
+                    fix: false,
+                    area: ["80%","80%"],
+                    maxmin: true,
+                    shadeClose: false,
+                    shade: 0.4,
+                    title: '添加人员',
+                    content: "/hjPerson/showAddHjPerson",
+                    success: function(layero,index){
+                        //在回调方法中的第2个参数“index”表示的是当前弹窗的索引。
+                        //通过layer.full方法将窗口放大。
+                       // layer.full(index);
+
+                    }
+                });
             }
             ,reload:function(){
                 $('#userName').val('');
                 $('#studyYear').val('');
+                $('#province').val('');
+                $('#city').val('');
                 table.reload('personList', {
                     where: {
                         userName: null,
-                        studyYear: null
+                        studyYear: null,
+                        province:null,
+                        city:null
                     }
                 });
+                //重新渲染一下
+                layui.form.render('select');
             },
         };
+
+        form.on('select(search)',function (data) {
+            active.select();
+        })
+
+        form.on('select(cityChange)',function(data){
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
+            console.log(data.othis); //得到美化后的DOM对象
+            initAllCity(data.value);
+
+            //重新渲染一下
+            $('#city').val('');
+            active.select();
+        })
+
         $('.layui-row .layui-btn').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
@@ -170,6 +242,7 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
+
         //监听工具条
         table.on('tool(hjPerson)', function (obj) {
             var data = obj.data;
@@ -257,6 +330,44 @@
                 var arr = data.data;
                 for(var i =0;i<arr.length;i++){
                     $("#studyYear")[0].options.add(new Option(arr[i],arr[i]));
+                }
+                //渲染select
+                layui.form.render('select');
+            }
+        });
+    }
+    function initAllProvince(){
+        $.ajax({
+            url: "/hjPerson/getAllProvince",
+            type: "get",
+            data: null,
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+                console.log(data)
+                var arr = data.data;
+                for(var i =0;i<arr.length;i++){
+                    $("#province")[0].options.add(new Option(arr[i],arr[i]));
+                }
+                //渲染select
+                layui.form.render('select');
+            }
+        });
+    }
+
+    function initAllCity(province){
+        console.log("加载省份")
+        $.ajax({
+            url: "/hjPerson/getAllCityByProvince?province="+ province,
+            type: "get",
+            data: null,
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+                $("#city")[0].options.length = 1;
+                var arr = data.data;
+                for(var i =0;i<arr.length;i++){
+                    $("#city")[0].options.add(new Option(arr[i],arr[i]));
                 }
                 //渲染select
                 layui.form.render('select');

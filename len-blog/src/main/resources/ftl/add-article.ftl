@@ -20,7 +20,10 @@
     <link rel="stylesheet" href="${re.contextPath}/plugin/edit/plugins/code/prettify.css"/>
     <script charset="utf-8" src="${re.contextPath}/plugin/edit/kindeditor-all-min.js"></script>
     <script charset="utf-8" src="${re.contextPath}/plugin/edit/lang/zh-CN.js"></script>
+
     <script charset="utf-8" src="${re.contextPath}/plugin/edit/plugins/code/prettify.js"></script>
+    <link rel="stylesheet" href="${re.contextPath}/plugin/markdown/css/editormd.css" />
+    <script src="${re.contextPath}/plugin/markdown/editormd.js"></script>
     <style>
         /*重写label 的宽度*/
 
@@ -33,6 +36,9 @@
              width: 50%;
              transform: translate(-50%);
          }
+        .hidden{
+            display: none;
+        }
     </style>
 </head>
 
@@ -122,15 +128,29 @@
             </div>
         </div>
 
-        <textarea id="editor_id" name="mdcontent" style="width:99%;height:300px;"></textarea>
+        <input type="hidden" id="editor-flag" value="KindEditor">
+
+        <div id="editor_div">
+
+            <textarea id="editor_id" name="mdcontent" style="width:99%;height:300px;"></textarea>
+        </div>
+
+
+        <div id="md-editor" class="hidden">
+                <textarea style="display:none;"></textarea>
+        </div>
+
+
         <div class="layui-form-item">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
                 <legend style="font-size:16px;">操作</legend>
             </fieldset>
             <div style="width: 100%;height: 55px;background-color: white;border-top:1px solid #e6e6e6;
-    position: fixed;bottom: 1px;margin-left:-20px;">
+    position: fixed;bottom: 1px;margin-left:-20px;z-index:999">
                 <div class="layui-form-item" style=" float: right;margin-right: 30px;margin-top: 8px">
-
+                    <button  class="layui-btn layui-btn-normal" id="changeMd" >
+                        切换编辑器
+                    </button>
                     <button  class="layui-btn layui-btn-normal" lay-filter="add" lay-submit>
                         增加
                     </button>
@@ -178,7 +198,74 @@
         });
     });
 </script>
+<script type="text/javascript">
+    var mdEditor ;
+    $(function() {
+        mdEditor = editormd("md-editor", {
+            width: "100%",
+            height: 300,
+            theme : "dark",
+            previewTheme : "dark",
+            editorTheme : "pastel-on-dark",
+            //markdown : "初始值",
+            codeFold : true,
+            saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+            searchReplace : true,
+            path   : "${re.contextPath}/plugin/markdown/lib/",
+            //watch : false,                // 关闭实时预览
+            htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+            //toolbar  : false,             //关闭工具栏
+            //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
+            emoji : true,
+            taskList : true,
+            tocm            : true,         // Using [TOCM]
+            tex : true,                   // 开启科学公式TeX语言支持，默认关闭
+            flowChart : true,             // 开启流程图支持，默认关闭
+            sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+            //dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为true
+            //dialogShowMask : false,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为true
+            //dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为true
+            //dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为0.1
+            //dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "../editor/upload/file",
+            onload : function() {
+                console.log('onload', this);
+                //this.fullscreen();
+                //this.unwatch();
+                //this.watch().fullscreen();
 
+                //this.setMarkdown("#PHP");
+                //this.width("100%");
+                //this.height(480);
+                //this.resize("100%", 640);
+            }
+        });
+
+        $('#changeMd').click(function(){
+            if($("#editor_div").hasClass("hidden")){
+                $("#editor_div").removeClass("hidden");
+                $("#md-editor").addClass("hidden");
+                //使用KindEditor
+                var content = mdEditor.getHTML();
+                editor.html(content);
+                $("#editor-flag").val("KindEditor");
+            }else{
+                $("#editor_div").addClass("hidden");
+                $("#md-editor").removeClass("hidden");
+                // 取得HTML内容
+                var html = editor.html();
+                mdEditor.setValue(html)
+                $("#editor-flag").val("MdEditor");
+            }
+
+            return false;
+        });
+    });
+
+
+</script>
 <script>
 
   layui.use(['form','layer','jquery', 'upload'], function(){
@@ -253,7 +340,7 @@
           // },
           mdcontent: function (value) {
               if (value.trim() == "") {
-                  return "请上传主图";
+                  return "内容不能为空";
               }
           }
       })
@@ -291,6 +378,12 @@
 
       });
 
+
+
+      $('#close').click(function(){
+          var index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+      });
       //生成二维码
       $("#getErWeiMa").click(function () {
           var text = $("#shareCodeText").val();
@@ -317,10 +410,11 @@
       });
         //监听提交
       form.on('submit(add)', function(data){
-          console.log(data.field)
+
           var html = editor.html();
-          $('#editor_id').val();
-          console.log(html)
+          if("MdEditor" ==  $("#editor-flag").val()){
+              html = mdEditor.getMarkdown();
+          }
           data.field.mdcontent = html;
           layerAjax('/article/addArticle', data.field, 'articleList');
           return false;
