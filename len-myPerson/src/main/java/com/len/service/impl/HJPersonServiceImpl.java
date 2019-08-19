@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HJPersonServiceImpl extends BaseServiceImpl<HJPerson, String>
@@ -35,5 +36,10 @@ public class HJPersonServiceImpl extends BaseServiceImpl<HJPerson, String>
     @Override
     public List<String> getAllCityByProvince(String province) {
         return hPersonMapper.getAllCityByProvince(province);
+    }
+
+    @Override
+    public List<Map<String, Object>> getHjPersonMap() {
+        return hPersonMapper.getHjPersonMap();
     }
 }

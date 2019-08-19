@@ -53,4 +53,28 @@ public interface BokeIntfService {
     List<Map<String, Object>> getCollectList(Integer userId);
 
     WxUser getUserIdByCode(Integer userId);
+
+    /**
+     * 点击推荐列表 10 个
+     * @return
+     */
+    List<Map<String, Object>> getClickRecommendList();
+
+    /**
+     * 评论推荐列表 10 个
+     * @return
+     */
+    List<Map<String, Object>> getCommentRecommendList();
+
+    /**
+     * 评论用户列表 5 个
+     * @return
+     */
+    List<Map<String, Object>> getCommentUserList();
+
+    /**
+     * 最新评论 10 个
+     * @return
+     */
+    List<Map<String, Object>> getCommentList();
 }

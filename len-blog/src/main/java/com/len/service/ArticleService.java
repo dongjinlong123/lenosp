@@ -5,6 +5,7 @@ import com.len.entity.ArticlePraise;
 import com.len.entity.ArticleSave;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ArticleService extends BaseService<Article, String> {
     public List<String> getAllCategory();
@@ -40,4 +41,12 @@ public interface ArticleService extends BaseService<Article, String> {
     List<Article> selectByCategory(String category);
 
     List<Article> selectListByPage(Article article, Integer pageSize, Integer pagination);
+
+    List<Map<String, Object>> getClickRecommendList();
+
+    List<Map<String, Object>> getCommentRecommendList();
+
+    List<Map<String, Object>> getCommentUserList();
+
+    List<Map<String, Object>> getCommentList();
 }

@@ -12,6 +12,9 @@
 		<result column="listPic" jdbcType="VARCHAR" property="listPic" />
 		<result column="mdcontent" jdbcType="VARCHAR" property="mdcontent" />
 		<result column="shareCode" jdbcType="VARCHAR" property="shareCode" />
+		<result column="topFlag" jdbcType="INTEGER" property="topFlag" />
+		<result column="commentCounts" jdbcType="INTEGER" property="commentCounts" />
+
 	</resultMap>
 	<select id="selectByKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
 		select * from  (select t.id,
@@ -23,17 +26,24 @@
 		t.listPic,
 		t.mdcontent,
 		t.shareCode,
-		GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category
-		from boke_article t,boke_article_type t2
-		where t.id = t2.articleId
-		and t.id = #{id}
-		GROUP BY  t.id,t.title,
+		t.topFlag,
+		GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category,
+		 (select count(1) from boke_article_comment t3 where t3.articleId = t.id) as commentCounts
+		from boke_article t join boke_article_type t2
+		 on t.id = t2.articleId
+		where t.id = #{id}
+		GROUP BY
+		t.id,
+		t.title,
 		t.readCounts,
 		t.excerpt,
 		t.author,
 		t.createdAt,
 		t.listPic,
-		t.mdcontent) t
+		t.mdcontent,
+		t.shareCode,
+		t.topFlag) t
+
 
 	</select>
 
@@ -46,21 +56,25 @@
 		 t.author,
 		 t.createdAt,
 		 t.listPic,
-		 t.mdcontent,
 		 t.shareCode,
-		 GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category
-		 from boke_article t,boke_article_type t2
-		 where t.id = t2.articleId
+		 t.topFlag,
+		 GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category,
+		 (select count(1) from boke_article_comment t3 where t3.articleId = t.id) as commentCounts
+		 from boke_article t join boke_article_type t2
+		 on t.id = t2.articleId
+		 where 1=1
 		 <include refid="whereSql" />
-		 GROUP BY  t.id,t.title,
+		 GROUP BY  t.id,
+		 t.title,
 		 t.readCounts,
 		 t.excerpt,
 		 t.author,
 		 t.createdAt,
 		 t.listPic,
-		 t.mdcontent) t
-
-	</select>
+		 t.shareCode,
+		 t.topFlag) t
+		 order by topFlag desc, createdAt desc
+	 </select>
 	<select id="count" resultType="java.lang.Integer">
 		select count(1) from  boke_article t,boke_article_type t2
 		where t.id = t2.articleId
@@ -77,9 +91,9 @@
 			<if test="createdAt !=null and createdAt !=''"> and t.createdAt=#{createdAt}</if>
 			<if test="category !=null and category !=''"> and t2.category=#{category}</if>
 			<if test="listPic !=null and listPic !=''"> and t.listPic=#{listPic}</if>
-			<if test="mdcontent !=null and mdcontent !=''"> and t.mdcontent=#{mdcontent}</if>
 			<if test="shareCode !=null and shareCode !=''"> and t.shareCode=#{sharecode}</if>
 	</sql>
+	<!-- 前端接口调用自定义分页 -->
 	<select id="selectListByMyPage" resultType="com.len.entity.Article">
 		select t.id,
 		 t.title,
@@ -87,8 +101,12 @@
 		 t.excerpt,
 		 t.author,
 		 t.createdAt,
-		 t.listPic
+		 t.listPic,
+		 t.topFlag,
+		 (select GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')  from boke_article_type t2 where t2.articleId = t.id) as category,
+		 (select count(1) from boke_article_comment t3 where t3.articleId = t.id) as commentCounts
 		 from boke_article t
+		 order by topFlag desc, createdAt desc
 		limit #{pagination},#{pageSize}
 
 	</select>
@@ -175,5 +193,28 @@
 		boke_article_type t2
 		where t1.id = t2.articleId
 		and t2.category = #{category}
+	</select>
+	<!-- 点击推荐列表 10 个 -->
+	<select id="getClickRecommendList" resultType="java.util.HashMap">
+		select t.id, t.title from boke_article t order by t.readCounts limit 10
+	</select>
+	<select id="getCommentRecommendList" resultType="java.util.HashMap">
+		select t.id, t.title ,count(1) as commentNum from boke_article t join boke_article_comment t2
+		on t.id = t2.articleId
+		GROUP BY t.id,t.title
+		order by commentNum desc
+		limit 10
+	</select>
+	<select id="getCommentUserList" resultType="java.util.HashMap">
+		select count(1) commentNum, t1.userPic,t1.nickName  from boke_wx_user t1 join boke_article_comment t2
+		on t1.id = t2.replyerId
+		GROUP BY t1.userPic,t1.nickName
+		limit 5
+	</select>
+	<select id="getCommentList" resultType="java.util.HashMap">
+		select t1.userPic,t1.nickName,t2.content  from boke_wx_user t1 join boke_article_comment t2
+			on t1.id = t2.replyerId
+			GROUP BY t1.userPic,t1.nickName
+			limit 10
 	</select>
 </mapper>

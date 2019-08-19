@@ -99,7 +99,10 @@
         initAllProvince();
         initAllCity("");
     });
-
+    layui.config({
+        base: '${re.contextPath}/plugin/build/js/',
+        version: '1.0.1'
+    })
     layui.use(['form','table'], function () {
         var table = layui.table;
         var form = layui.form;
@@ -183,23 +186,9 @@
                 });
             },
             showMap:function () {
-                layer.open({
-                    id:"showMap-hjPerson",
-                    type: 2,
-                    fix: false,
-                    area: ["80%","80%"],
-                    maxmin: true,
-                    shadeClose: false,
-                    shade: 0.4,
-                    title: '添加人员',
-                    content: "/hjPerson/showAddHjPerson",
-                    success: function(layero,index){
-                        //在回调方法中的第2个参数“index”表示的是当前弹窗的索引。
-                        //通过layer.full方法将窗口放大。
-                       // layer.full(index);
-
-                    }
-                });
+                //添加选项卡
+                var t =  {url: "/hjPerson/showHjPersonMap", icon: "", title: "人员分布", id: "999"}
+                parent.tab.tabAdd(t)
             }
             ,reload:function(){
                 $('#userName').val('');

@@ -342,4 +342,24 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     public WxUser getUserIdByCode(Integer userId) {
         return wxUserService.selectByPrimaryKey(userId);
     }
+
+    @Override
+    public List<Map<String, Object>> getClickRecommendList() {
+        return articleService.getClickRecommendList();
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommentRecommendList() {
+        return articleService.getCommentRecommendList();
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommentUserList() {
+        return articleService.getCommentUserList();
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommentList() {
+        return articleService.getCommentList();
+    }
 }

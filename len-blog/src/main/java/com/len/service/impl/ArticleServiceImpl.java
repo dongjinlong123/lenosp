@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.beans.Transient;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -100,6 +101,26 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
     @Override
     public List<Article> selectListByPage(Article article, Integer pageSize, Integer pagination) {
         return ArticleMapper.selectListByMyPage(article, pageSize, pagination);
+    }
+
+    @Override
+    public List<Map<String, Object>> getClickRecommendList() {
+        return ArticleMapper.getClickRecommendList();
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommentRecommendList() {
+        return ArticleMapper.getCommentRecommendList();
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommentUserList() {
+        return ArticleMapper.getCommentUserList();
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommentList() {
+        return ArticleMapper.getCommentList();
     }
 
 

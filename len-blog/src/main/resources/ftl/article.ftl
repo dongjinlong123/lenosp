@@ -18,7 +18,7 @@
 <body>
 <div class="lenos-search">
     <div class="select">
-
+        <div class="layui-form" >
         文章标题：
         <div class="layui-inline">
             <input class="layui-input" height="20px" id="title" autocomplete="off">
@@ -30,7 +30,7 @@
 
         类别：
         <div class="layui-inline">
-            <select name="category"  id="category" class="layui-input">
+            <select name="category"  id="category" class="layui-input"  lay-filter="search">
                 <option value=""></option>
                 <#list categoryList as category>
                  <option value="${category}">${category}</option>
@@ -46,7 +46,7 @@
             <i class="layui-icon">ဂ</i>
         </button>
     </div>
-
+    </div>
 </div>
 <div class="layui-row" style="height:40px;margin-top:3px;">
     <div class="layui-btn-group">
@@ -78,9 +78,10 @@
             $(".select .select-on").click();
         }
     };
-    layui.use(['table', "layer", "jquery"], function () {
+    layui.use(['table', "layer", "jquery","form"], function () {
         var table = layui.table;
         var $ = layui.jquery,
+                form = layui.form,
                 layer = layui.layer;
 
         //方法级渲染
@@ -177,6 +178,10 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
+        form.on('select(search)',function (data) {
+            active.select();
+        })
+        form.render('select');
     });
 
     function del(id) {

@@ -4,15 +4,18 @@
  */
 /**框架*/
 var message;
+var tab;
 layui.config({
   base: 'plugin/build/js/',
   version: '1.0.1'
-}).use(['app', 'message'], function() {
+}).use(['app', 'message','tab'], function() {
   var app = layui.app,
       $ = layui.jquery,
       layer = layui.layer;
+
   //将message设置为全局以便子页面调用
   message = layui.message;
+  tab = layui.tab;
   //主入口
   app.set({
     type: 'iframe'

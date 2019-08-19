@@ -1,6 +1,7 @@
 package com.len.controller;
 
 import com.len.base.BaseController;
+import com.len.entity.SysArea;
 import com.len.service.SysAreaService;
 import com.len.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.awt.geom.Area;
 import java.util.List;
 
 /**
@@ -29,7 +29,7 @@ public class SysAreaController extends BaseController {
     public JsonUtil getProvince() {
         JsonUtil j = new JsonUtil();
         j.setFlag(true);
-        List<Area> list = SysAreaService.selectByLevel(1, -1);
+        List<SysArea> list = SysAreaService.selectByLevel(1, -1);
         j.setData(list);
         return j;
     }
@@ -39,7 +39,7 @@ public class SysAreaController extends BaseController {
     public JsonUtil getCity(Integer provinceId) {
         JsonUtil j = new JsonUtil();
         j.setFlag(true);
-        List<Area> list = SysAreaService.selectByLevel(2, provinceId);
+        List<SysArea> list = SysAreaService.selectByLevel(2, provinceId);
         j.setData(list);
         return j;
     }
@@ -49,7 +49,7 @@ public class SysAreaController extends BaseController {
     public JsonUtil getArea(Integer cityId) {
         JsonUtil j = new JsonUtil();
         j.setFlag(true);
-        List<Area> list = SysAreaService.selectByLevel(3, cityId);
+        List<SysArea> list = SysAreaService.selectByLevel(3, cityId);
         j.setData(list);
         return j;
     }

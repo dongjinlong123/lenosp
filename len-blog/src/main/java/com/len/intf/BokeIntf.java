@@ -270,4 +270,27 @@ public class BokeIntf extends BaseController {
         result.put("result",collectList);
         return result;
     }
+
+    @GetMapping("/getArticleRecommend")
+    @ResponseBody
+    @ApiOperation(value = "getArticleRecommend", notes = "获取推荐列表")
+    public Map<String, Object> getArticleRecommend(HttpServletRequest req, HttpServletResponse resp) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        //点击推荐列表 10 个
+        List<Map<String, Object>> clickRecommendList = bokeIntfService.getClickRecommendList();
+        result.put("clickRecommendList",clickRecommendList);
+        //评论推荐列表 10 个
+        List<Map<String, Object>> commentRecommendList = bokeIntfService.getCommentRecommendList();
+        result.put("commentRecommendList",commentRecommendList);
+
+        //评论用户列表 5 个
+        List<Map<String, Object>> commentUserList = bokeIntfService.getCommentUserList();
+        result.put("commentUserList",commentUserList);
+
+        //最新评论 10 个
+        List<Map<String, Object>> commentList = bokeIntfService.getCommentList();
+        result.put("commentList",commentList);
+
+        return result;
+    }
 }

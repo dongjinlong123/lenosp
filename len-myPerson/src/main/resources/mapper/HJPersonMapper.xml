@@ -108,4 +108,8 @@
            </if>
        </where>
     </select>
+    <select id="getHjPersonMap" resultType="java.util.HashMap">
+        select t.province as name, count(1) as value from ecjtu_ie_user_info t
+        group by t.province order by count(1) desc
+    </select>
 </mapper>

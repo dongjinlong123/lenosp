@@ -5,8 +5,10 @@ import com.github.pagehelper.PageHelper;
 import com.len.base.BaseController;
 import com.len.core.shiro.Principal;
 import com.len.entity.HJPerson;
+import com.len.entity.SysArea;
 import com.len.exception.MyException;
 import com.len.service.HJPersonService;
+import com.len.service.SysAreaService;
 import com.len.util.JsonUtil;
 import com.len.util.ReType;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文章管理（后台）
@@ -40,6 +44,8 @@ public class HJPersonController extends BaseController {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Autowired
     private HJPersonService hJPersonService;
+    @Autowired
+    private SysAreaService sysAreaService;
 
     @GetMapping("/showHjPerson")
     @RequiresPermissions("hjPerson:show")
@@ -55,7 +61,7 @@ public class HJPersonController extends BaseController {
     @GetMapping(value = "/showHjPersonList")
     @ResponseBody
     @RequiresPermissions("hjPerson:show")
-    public ReType showHjPersonList(@ModelAttribute  HJPerson hjPerson, String page, String limit) {
+    public ReType showHjPersonList(@ModelAttribute HJPerson hjPerson, String page, String limit) {
         List<HJPerson> tList = null;
         Page<HJPerson> tPage = PageHelper.startPage(Integer.valueOf(page), Integer.valueOf(limit));
         try {
@@ -171,10 +177,41 @@ public class HJPersonController extends BaseController {
     @GetMapping(value = "/getAllCityByProvince")
     @ResponseBody
     @RequiresPermissions("hjPerson:show")
-    public JsonUtil getAllCityByProvince(@RequestParam(required = false,name = "province") String province) {
+    public JsonUtil getAllCityByProvince(@RequestParam(required = false, name = "province") String province) {
         JsonUtil j = new JsonUtil();
         List<String> cityList = hJPersonService.getAllCityByProvince(province);
         j.setData(cityList);
         return j;
     }
+
+
+    @GetMapping("/showHjPersonMap")
+    @RequiresPermissions("hjPerson:show")
+    public String showHjPersonMap(HttpServletRequest req, HttpServletResponse resp) {
+        return "/hjPersonMap";
+    }
+
+    @GetMapping(value = "/getHjPersonMap")
+    @ResponseBody
+    @RequiresPermissions("hjPerson:show")
+    public JsonUtil getHjPersonMap() {
+        JsonUtil j = new JsonUtil();
+        Map<String, Object> ret = new HashMap<String, Object>();
+        //城市:[经度,纬度]
+        Map<String, Object> jingdu = new HashMap<String, Object>();
+
+        //得到所有城市以及对应的经度和纬度
+        List<SysArea> list = sysAreaService.selectByLevel(1,-1);
+        for (SysArea a:list ) {
+            jingdu.put(a.getAreaName(),a.getCenter().split(","));
+        }
+        ret.put("geoCoordMap",jingdu);
+
+        //得到人员省份分布
+        List<Map<String,Object>> dataList = hJPersonService.getHjPersonMap();
+        ret.put("data",dataList);
+        j.setData(ret);
+        return j;
+    }
+
 }

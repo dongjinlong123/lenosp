@@ -1,8 +1,8 @@
 package com.len.service;
+
 import com.len.base.BaseService;
 import com.len.entity.SysArea;
 
-import java.awt.geom.Area;
 import java.util.List;
 
 public interface SysAreaService extends BaseService<SysArea, String> {
@@ -11,5 +11,5 @@ public interface SysAreaService extends BaseService<SysArea, String> {
      * @param i
      * @return
      */
-    List<Area> selectByLevel(Integer i,Integer parentId);
+    List<SysArea> selectByLevel(Integer i,Integer parentId);
 }

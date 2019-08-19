@@ -6,6 +6,7 @@ import com.len.entity.ArticleSave;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ArticleMapper extends BaseMapper<Article, String> {
     List<String> getAllCategory();
@@ -44,4 +45,12 @@ public interface ArticleMapper extends BaseMapper<Article, String> {
      * @return
      */
     List<Article> selectListByMyPage(@Param("article") Article article, @Param("pageSize") Integer pageSize, @Param("pagination")Integer pagination);
+
+    List<Map<String, Object>> getClickRecommendList();
+
+    List<Map<String, Object>> getCommentRecommendList();
+
+    List<Map<String, Object>> getCommentUserList();
+
+    List<Map<String, Object>> getCommentList();
 }
