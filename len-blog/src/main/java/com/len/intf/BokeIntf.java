@@ -7,6 +7,7 @@ import com.len.entity.BoKeUserMessage;
 import com.len.entity.WxUser;
 import com.len.service.BokeIntfService;
 import com.len.service.WeiXinService;
+import com.len.util.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +50,6 @@ public class BokeIntf extends BaseController {
             return result;
         }
         Integer userId = bokeIntfService.getUserIdByOpenId(openId);
-        //根据openId 获取用户信息，更新用户信息（可能用户存在更新）
-        weiXinService.getUserInfoByOpenId(openId);
         if(userId == null){
             result.put("success", false);
             return result;
@@ -64,7 +64,14 @@ public class BokeIntf extends BaseController {
     public Map<String, Object> getUserIdByCode(Integer userId, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
         WxUser wxUser = bokeIntfService.getUserIdByCode(userId);
-        result.put("result", wxUser);
+        Date createTime = wxUser.getCreateTime();
+        //超过7天重新登录，避免用户更新了信息
+       if(DateUtil.differentDays(new Date(),createTime)>=7){
+           result.put("flag", true);
+       }else{
+           result.put("flag", false);
+       }
+       result.put("result", wxUser);
         return result;
     }
 

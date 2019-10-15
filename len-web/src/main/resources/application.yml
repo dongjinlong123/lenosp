@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod
+    active: mysql-dev
 len-blog:
   roles: blogAdmin
 #    可切换sqlserver

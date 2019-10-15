@@ -105,6 +105,8 @@ public class WxMessageUtil {
 		XCX_ACCESS_TOKEN = jb.getString("access_token");
 		if(StringUtils.isEmpty(XCX_ACCESS_TOKEN)) {
 			logger.info("获取 access_token 异常");
+		}else{
+			logger.info("得到的token ：" + XCX_ACCESS_TOKEN);
 		}
 	}
 	/**

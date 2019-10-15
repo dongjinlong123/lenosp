@@ -113,17 +113,6 @@ public class WeiXinServiceImpl implements WeiXinService {
 
 	}
 
-	@Override
-	public Map<String, Object> getUserInfoByOpenId(String openId) {
-		String str  = "https://api.weixin.qq.com/sns/userinfo?access_token="+WxMessageUtil.XCX_ACCESS_TOKEN+"&openid="+openId+"&lang=zh_CN";
-		String ret = HttpSendUtil.get(str);
-		try{
-			logger.info("得到的结果信息" + ret);
-		}catch (Exception e){
-			return null;
-		}
-		return null;
-	}
 
 	/**
 	 * 根据用户的信息返回对应的内容及类型
