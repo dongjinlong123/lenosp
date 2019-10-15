@@ -49,4 +49,8 @@ public interface ArticleService extends BaseService<Article, String> {
     List<Map<String, Object>> getCommentUserList();
 
     List<Map<String, Object>> getCommentList();
+
+    int getArticleCount(Article article);
+
+    boolean updateById(Article article);
 }

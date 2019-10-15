@@ -18,7 +18,7 @@ public interface ArticleMapper extends BaseMapper<Article, String> {
     Article selectByKey(Integer id);
 
     void deleteByArticleId(Integer articleId);
-
+    void deleteAllByArticleId(Integer articleId);
     /**
      * 获取文章点赞信息
      * @param id
@@ -53,4 +53,6 @@ public interface ArticleMapper extends BaseMapper<Article, String> {
     List<Map<String, Object>> getCommentUserList();
 
     List<Map<String, Object>> getCommentList();
+
+    int getArticleCount(@Param("article") Article article);
 }

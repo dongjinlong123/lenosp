@@ -48,6 +48,8 @@ public class BokeIntf extends BaseController {
             return result;
         }
         Integer userId = bokeIntfService.getUserIdByOpenId(openId);
+        //根据openId 获取用户信息，更新用户信息（可能用户存在更新）
+        weiXinService.getUserInfoByOpenId(openId);
         if(userId == null){
             result.put("success", false);
             return result;
@@ -82,8 +84,9 @@ public class BokeIntf extends BaseController {
         //  Integer pagination = Integer.valueOf(req.getParameter("pagination"));//页次
         log.info("传递的参数" + pageSize + "--" + pagination);
         List<Article> list = bokeIntfService.getArticleList(article, pageSize, pagination);
-
+        int count = bokeIntfService.getArticleCount(article);
         result.put("result", list);
+        result.put("count", count);
         return result;
     }
 

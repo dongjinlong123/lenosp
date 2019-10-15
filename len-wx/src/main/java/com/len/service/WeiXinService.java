@@ -29,4 +29,12 @@ public interface WeiXinService {
 	 * @return
 	 */
 	public String getOpenIdByCode(String code);
+
+	/**
+	 * 根据openId获取用户信息
+	 * @param openId
+	 * @return
+	 */
+	public Map<String,Object> getUserInfoByOpenId(String openId);
+
 }

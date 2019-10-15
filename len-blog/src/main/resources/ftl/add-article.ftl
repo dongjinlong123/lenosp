@@ -46,6 +46,9 @@
 
 <div class="x-body">
     <form class="layui-form layui-form-pane">
+
+
+
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
             <legend style="font-size:16px;">文章标题</legend>
         </fieldset>
@@ -55,6 +58,22 @@
                        lay-verify="title">
             </div>
         </div>
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+            <legend style="font-size:16px;">文章内容</legend>
+        </fieldset>
+        <input type="hidden" id="editor-flag" value="KindEditor">
+
+        <div id="editor_div">
+
+            <textarea id="editor_id" name="mdcontent" style="width:99%;height:968px;"></textarea>
+        </div>
+        <div id="md-editor" class="hidden">
+            <textarea style="display:none;"></textarea>
+        </div>
+
+
+
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
             <legend style="font-size:16px;">文章信息</legend>
         </fieldset>
@@ -105,7 +124,7 @@
                 <input id="listPic" name="listPic" type="hidden" lay-verify="listPic"  class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" style="margin-bottom: 100px;">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
                 <legend style="font-size:16px;">海报分享二维码</legend>
             </fieldset>
@@ -128,23 +147,12 @@
             </div>
         </div>
 
-        <input type="hidden" id="editor-flag" value="KindEditor">
-
-        <div id="editor_div">
-
-            <textarea id="editor_id" name="mdcontent" style="width:99%;height:300px;"></textarea>
-        </div>
-
-
-        <div id="md-editor" class="hidden">
-                <textarea style="display:none;"></textarea>
-        </div>
 
 
         <div class="layui-form-item">
-            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+           <#-- <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
                 <legend style="font-size:16px;">操作</legend>
-            </fieldset>
+            </fieldset>-->
             <div style="width: 100%;height: 55px;background-color: white;border-top:1px solid #e6e6e6;
     position: fixed;bottom: 1px;margin-left:-20px;z-index:999">
                 <div class="layui-form-item" style=" float: right;margin-right: 30px;margin-top: 8px">
@@ -202,11 +210,11 @@
     var mdEditor ;
     $(function() {
         mdEditor = editormd("md-editor", {
-            width: "100%",
-            height: 300,
-            theme : "dark",
-            previewTheme : "dark",
-            editorTheme : "pastel-on-dark",
+            width: "99%",
+            height: 968,
+           // theme : "dark",
+           // previewTheme : "dark",
+          //  editorTheme : "pastel-on-dark",
             //markdown : "初始值",
             codeFold : true,
             saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
@@ -214,7 +222,7 @@
             path   : "${re.contextPath}/plugin/markdown/lib/",
             //watch : false,                // 关闭实时预览
             htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
-            //toolbar  : false,             //关闭工具栏
+            toolbar  : true,             //关闭工具栏
             //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
             emoji : true,
             taskList : true,
@@ -248,7 +256,7 @@
                 $("#editor_div").removeClass("hidden");
                 $("#md-editor").addClass("hidden");
                 //使用KindEditor
-                var content = mdEditor.getHTML();
+                var content = mdEditor.getMarkdown();
                 editor.html(content);
                 $("#editor-flag").val("KindEditor");
             }else{
@@ -413,8 +421,13 @@
 
           var html = editor.html();
           if("MdEditor" ==  $("#editor-flag").val()){
+              //markDown 格式
               html = mdEditor.getMarkdown();
+              data.field.editType = 1; //markdown编辑器
+          }else{
+              data.field.editType = 0;
           }
+          data.field.status = 0; //状态默认草稿状态
           data.field.mdcontent = html;
           layerAjax('/article/addArticle', data.field, 'articleList');
           return false;

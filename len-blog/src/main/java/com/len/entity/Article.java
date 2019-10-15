@@ -47,7 +47,17 @@ public class Article implements Serializable {
     //0:取消置頂,1:置頂
     @Column(name = "topFlag")
     private Integer topFlag;
+
+    //编辑器类型:0表示KE 1 表示MD
+    @Column(name = "editType")
+    private Integer editType;
+
+    //0:草稿,1:发布,2:下架
+    @Column(name = "status")
+    private Integer status;
+
     @Transient
     private Integer commentCounts;
-
+    @Transient
+    private String search;
 }

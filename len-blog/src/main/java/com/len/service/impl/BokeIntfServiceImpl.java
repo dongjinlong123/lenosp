@@ -362,4 +362,9 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     public List<Map<String, Object>> getCommentList() {
         return articleService.getCommentList();
     }
+
+    @Override
+    public int getArticleCount(Article article) {
+        return articleService.getArticleCount(article);
+    }
 }

@@ -69,8 +69,8 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
     @Transactional
     @Override
     public boolean deleteByKey(Integer id) {
-        ArticleMapper.deleteByArticleId(id);
-        return ArticleMapper.deleteByPrimaryKey(id) > 0;
+        ArticleMapper.deleteAllByArticleId(id);
+        return true;
     }
 
     @Override
@@ -121,6 +121,19 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
     @Override
     public List<Map<String, Object>> getCommentList() {
         return ArticleMapper.getCommentList();
+    }
+
+    @Override
+    public int getArticleCount(Article article) {
+        return ArticleMapper.getArticleCount(article);
+    }
+
+    @Override
+    public boolean updateById(Article article) {
+        if(ArticleMapper.updateByPrimaryKeySelective(article) >0){
+            return true;
+        }
+        return false;
     }
 
 

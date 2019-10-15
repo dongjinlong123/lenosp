@@ -14,30 +14,54 @@
     <script type="text/javascript" src="${re.contextPath}/plugin/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${re.contextPath}/plugin/layui/layui.all.js" charset="utf-8"></script>
     <script type="text/javascript"  src="${re.contextPath}/plugin/common.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${re.contextPath}/plugin/tools/tool.js"></script>
 </head>
 <body>
 <div class="lenos-search">
     <div class="select">
         <div class="layui-form" >
-        文章标题：
+
+
         <div class="layui-inline">
-            <input class="layui-input" height="20px" id="title" autocomplete="off">
-        </div>
-        作者：
-        <div class="layui-inline">
-            <input class="layui-input" height="20px" id="author" autocomplete="off">
+            <label>  文章标题：</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" height="20px" id="title" autocomplete="off">
+            </div>
         </div>
 
-        类别：
         <div class="layui-inline">
+            <label> 作者：</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" height="20px" id="author" autocomplete="off">
+            </div>
+        </div>
+
+
+        <div class="layui-inline">
+             <label>类别：</label>
+            <div class="layui-input-inline">
             <select name="category"  id="category" class="layui-input"  lay-filter="search">
                 <option value=""></option>
                 <#list categoryList as category>
                  <option value="${category}">${category}</option>
                 </#list>
             </select>
-
+            </div>
         </div>
+
+
+        <div class="layui-inline">
+            <label> 状态：</label>
+            <div class="layui-input-inline">
+            <select name="status"  id="status" class="layui-input"  lay-filter="search">
+                <option value="">全部</option>
+                <option value="0">草稿</option>
+                <option value="1">发布</option>
+                <option value="2">下架</option>
+            </select>
+            </div>
+        </div>
+
 
         <button class="select-on layui-btn layui-btn-sm" data-type="select"><i class="layui-icon"></i>
         </button>
@@ -69,6 +93,21 @@
 <@shiro.hasPermission name="article:del">
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </@shiro.hasPermission>
+
+    <@shiro.hasPermission name="article:update">
+    {{# if(d.status == 0 || d.status == 2 ){ }}
+        <a class="layui-btn layui-btn-xs  layui-bg-orange" lay-event="up">上架</a>
+    {{# } else if(d.status == 1){ }}
+        <a class="layui-btn layui-btn-xs  layui-bg-cyan" lay-event="down">下架</a>
+    {{# } }}
+
+     {{# if(d.topFlag == 0 ){ }}
+     <a class="layui-btn layui-btn-xs  layui-bg-blue" lay-event="top">置顶</a>
+    {{# } else if(d.topFlag == 1){ }}
+        <a class="layui-btn layui-btn-xs  layui-bg-black" lay-event="unTop">取消置顶</a>
+    {{# } }}
+
+    </@shiro.hasPermission>
 </script>
 <script>
     document.onkeydown = function (e) { // 回车提交表单
@@ -91,17 +130,39 @@
             , url: '/article/showArticleList'
             , cols: [[
                 {field: 'id', title: '主键', width: '8%', sort: true, hide: true}
-                , {field: 'title', title: '文章标题', width: '15%'}
+                , {field: 'title', title: '文章标题', width: '8%'}
                 , {field: 'readCounts', title: '阅读量', width: '8%', sort: true}
                 , {field: 'excerpt', title: '简介', width: '15%'}
-                , {field: 'author', title: '作者', width: '15%'}
+                , {field: 'author', title: '作者', width: '8%'}
                 , {
                     field: 'createdAt', title: '发布日期', width: '15%', sort: true, templet: function (value) {
                         return formatDateTime(value.createdAt);
                     }
+                }, {
+                    field: 'status', title: '状态', width: '8%', sort: true, templet: function (value) {
+                        if(value.status == 0){
+                            return "草稿";
+                        }
+                        if(value.status == 1){
+                            return "<span style='color:#FFB800'>发布</span>";
+                        }
+                        if(value.status == 2){
+                            return "<span style='color:#2F4056'>下架</span>";
+                        }
+                    }
                 }
+                , {field: 'topFlag', title: '置顶', width: '8%', templet: function (value) {
+                        if(value.topFlag == 0){
+                            return "普通";
+                        }
+                        if(value.topFlag == 1){
+                            return "<span style='color:lightseagreen'>置顶</span>";
+                        }
+
+                    }}
+
                 , {field: 'category', title: '类别', width: '8%'}
-                , {field: 'remark', title: '操作', width: '20%', toolbar: "#toolBar"}
+                , {field: 'remark', title: '操作', width: '22%', toolbar: "#toolBar"}
             ]]
             , page: true
             , height: '315'
@@ -121,6 +182,8 @@
                 var author = $('#author').val();
                 var createdAt = $('#createdAt').val();
                 var category = $('#category').val();
+                var status = $('#status').val();
+                console.log(status);
                 table.reload('articleList', {
                     where: {
                         id: id,
@@ -130,6 +193,7 @@
                         author: author,
                         createdAt: createdAt,
                         category: category,
+                        status:status
                     }
                 });
             },
@@ -140,6 +204,8 @@
                 $('#excerpt').val('');
                 $('#author').val('');
                 $('#createdAt').val('');
+                $('#category').val('');
+                $('#status').val('');
                 table.reload('articleList', {
                     where: {
                         id: null,
@@ -147,9 +213,12 @@
                         readCounts: null,
                         excerpt: null,
                         author: null,
-                        createdAt: null
+                        createdAt: null,
+                        status:null
                     }
                 });
+                //重新渲染一下
+                layui.form.render('select');
             },
             add: function () {
                 add('添加文章', '/article/showArticleAdd');
@@ -168,6 +237,18 @@
                 });
             } else if (obj.event === 'edit') {
                 update('编辑', '/article/showArticleDetail?detail=false&id=' + data.id);
+            }else if(obj.event === 'up'){
+                var param = {"id":data.id,"status":1};
+                postAjaxre('/article/updateArticleStatus', param, 'articleList');
+            }else if(obj.event === 'down'){
+                var param = {"id":data.id,"status":2};
+                postAjaxre('/article/updateArticleStatus', param, 'articleList');
+            }else if(obj.event === 'top'){
+                var param = {"id":data.id,"topFlag":1};
+                postAjaxre('/article/updateArticleStatus', param, 'articleList');
+            }else if(obj.event === 'unTop'){
+                var param = {"id":data.id,"topFlag":0};
+                postAjaxre('/article/updateArticleStatus', param, 'articleList');
             }
         });
         $('.layui-row .layui-btn').on('click', function () {

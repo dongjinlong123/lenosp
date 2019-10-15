@@ -28,7 +28,7 @@ function popup(title, url, w, h,id) {
 }
 
 /**
- * 父窗口弹出
+ * 父窗口发送请求
  * @param url
  * @param data
  * @param tableId
@@ -44,15 +44,26 @@ function postAjaxre(url,data,tableId){
       if(data.flag){
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
-        window.parent.layui.table.reload(tableId);
+        layui.table.reload(tableId);
         window.top.layer.msg(data.msg,{icon:6,offset: 'rb',area:['120px','80px'],anim:2});
       }else{
         layer.msg(data.msg,{icon:5,offset: 'rb',area:['120px','80px'],anim:2});
       }
-    }
+    },error:function(e){
+          layer.alert("发生错误", {icon: 6},function () {
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+          });
+      }
   });
 }
 
+/**
+ * 子窗口发送请求
+ * @param url
+ * @param data
+ * @param tableId
+ */
 function layerAjax(url,data,tableId){
   $.ajax({
     url:url,

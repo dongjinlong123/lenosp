@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.len.mapper.ArticleMapper">
-	<resultMap id="BaseResultMap" type="com.len.entity.Article">
-		<id column="id" jdbcType="INTEGER" property="id" />
-		<result column="title" jdbcType="VARCHAR" property="title" />
-		<result column="readCounts" jdbcType="INTEGER" property="readCounts" />
-		<result column="excerpt" jdbcType="VARCHAR" property="excerpt" />
-		<result column="author" jdbcType="VARCHAR" property="author" />
-		<result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
-		<result column="category" jdbcType="VARCHAR" property="category" />
-		<result column="listPic" jdbcType="VARCHAR" property="listPic" />
-		<result column="mdcontent" jdbcType="VARCHAR" property="mdcontent" />
-		<result column="shareCode" jdbcType="VARCHAR" property="shareCode" />
-		<result column="topFlag" jdbcType="INTEGER" property="topFlag" />
-		<result column="commentCounts" jdbcType="INTEGER" property="commentCounts" />
-
-	</resultMap>
-	<select id="selectByKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <resultMap id="BaseResultMap" type="com.len.entity.Article">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="readCounts" jdbcType="INTEGER" property="readCounts"/>
+        <result column="excerpt" jdbcType="VARCHAR" property="excerpt"/>
+        <result column="author" jdbcType="VARCHAR" property="author"/>
+        <result column="createdAt" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="category" jdbcType="VARCHAR" property="category"/>
+        <result column="listPic" jdbcType="VARCHAR" property="listPic"/>
+        <result column="mdcontent" jdbcType="VARCHAR" property="mdcontent"/>
+        <result column="shareCode" jdbcType="VARCHAR" property="shareCode"/>
+        <result column="topFlag" jdbcType="INTEGER" property="topFlag"/>
+        <result column="commentCounts" jdbcType="INTEGER" property="commentCounts"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="editType" jdbcType="INTEGER" property="editType"/>
+    </resultMap>
+    <select id="selectByKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
 		select * from  (select t.id,
 		t.title,
 		t.readCounts,
@@ -27,7 +28,9 @@
 		t.mdcontent,
 		t.shareCode,
 		t.topFlag,
-		GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category,
+		t.status,
+		t.editType,
+		GROUP_CONCAT(distinct  t2.category order by t2.category SEPARATOR ',')   as category,
 		 (select count(1) from boke_article_comment t3 where t3.articleId = t.id) as commentCounts
 		from boke_article t join boke_article_type t2
 		 on t.id = t2.articleId
@@ -42,99 +45,192 @@
 		t.listPic,
 		t.mdcontent,
 		t.shareCode,
-		t.topFlag) t
+		t.topFlag,
+		t.status,
+		t.editType) t
 
 
 	</select>
 
-	<!--分页 -->
-	 <select id="selectListByPage" parameterType="com.len.entity.Article" resultMap="BaseResultMap">
-		select * from  (select t.id,
-		 t.title,
-		 t.readCounts,
-		 t.excerpt,
-		 t.author,
-		 t.createdAt,
-		 t.listPic,
-		 t.shareCode,
-		 t.topFlag,
-		 GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')   as category,
-		 (select count(1) from boke_article_comment t3 where t3.articleId = t.id) as commentCounts
-		 from boke_article t join boke_article_type t2
-		 on t.id = t2.articleId
-		 where 1=1
-		 <include refid="whereSql" />
-		 GROUP BY  t.id,
-		 t.title,
-		 t.readCounts,
-		 t.excerpt,
-		 t.author,
-		 t.createdAt,
-		 t.listPic,
-		 t.shareCode,
-		 t.topFlag) t
-		 order by topFlag desc, createdAt desc
-	 </select>
-	<select id="count" resultType="java.lang.Integer">
-		select count(1) from  boke_article t,boke_article_type t2
-		where t.id = t2.articleId
-		<include refid="whereSql" />
+    <!--分页 -->
+    <select id="selectListByPage" parameterType="com.len.entity.Article" resultMap="BaseResultMap">
+        select * from (select t.id,
+        t.title,
+        t.readCounts,
+        t.excerpt,
+        t.author,
+        t.createdAt,
+        t.listPic,
+        t.shareCode,
+        t.topFlag,
+        t.status,
+        t.editType,
+        GROUP_CONCAT(distinct t2.category order by t2.category SEPARATOR ',') as category,
+        (select count(1) from boke_article_comment t3 where t3.articleId = t.id) as commentCounts
+        from boke_article t join boke_article_type t2
+        on t.id = t2.articleId
+        where 1=1
+        <include refid="whereSql"/>
+        GROUP BY t.id,
+        t.title,
+        t.readCounts,
+        t.excerpt,
+        t.author,
+        t.createdAt,
+        t.listPic,
+        t.shareCode,
+        t.topFlag,
+        t.status,
+        t.editType) t
+        order by topFlag desc,status desc, createdAt desc
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from boke_article t,boke_article_type t2
+        where t.id = t2.articleId
+        <include refid="whereSql"/>
 
-	</select>
-	<!--默认查询的sql -->
-	<sql id="whereSql">
-			<if test="id !=null and id !=''"> and t.id=#{id}</if>
-			<if test="title !=null and title !=''"> and t.title like '%${title}%'</if>
-			<if test="readCounts !=null and readCounts !=''"> and t.readCounts=#{readCounts}</if>
-			<if test="excerpt !=null and excerpt !=''"> and t.excerpt=#{excerpt}</if>
-			<if test="author !=null and author !=''"> and t.author like '%${author}%'</if>
-			<if test="createdAt !=null and createdAt !=''"> and t.createdAt=#{createdAt}</if>
-			<if test="category !=null and category !=''"> and t2.category=#{category}</if>
-			<if test="listPic !=null and listPic !=''"> and t.listPic=#{listPic}</if>
-			<if test="shareCode !=null and shareCode !=''"> and t.shareCode=#{sharecode}</if>
-	</sql>
-	<!-- 前端接口调用自定义分页 -->
-	<select id="selectListByMyPage" resultType="com.len.entity.Article">
-		select t.id,
-		 t.title,
-		 t.readCounts,
-		 t.excerpt,
-		 t.author,
-		 t.createdAt,
-		 t.listPic,
-		 t.topFlag,
-		 (select GROUP_CONCAT(t2.category order by t2.category SEPARATOR ',')  from boke_article_type t2 where t2.articleId = t.id) as category,
-		 (select count(1) from boke_article_comment t3 where t3.articleId = t.id) as commentCounts
-		 from boke_article t
-		 order by topFlag desc, createdAt desc
-		limit #{pagination},#{pageSize}
+    </select>
+    <!--默认查询的sql -->
+    <sql id="whereSql">
+        <if test="id !=null and id !=''">and t.id=#{id}</if>
+        <if test="title !=null and title !=''">and t.title like '%${title}%'</if>
+        <if test="readCounts !=null and readCounts !=''">and t.readCounts=#{readCounts}</if>
+        <if test="excerpt !=null and excerpt !=''">and t.excerpt=#{excerpt}</if>
+        <if test="author !=null and author !=''">and t.author like '%${author}%'</if>
+        <if test="createdAt !=null and createdAt !=''">and t.createdAt=#{createdAt}</if>
+        <if test="category !=null and category !=''">and t2.category=#{category}</if>
+        <if test="listPic !=null and listPic !=''">and t.listPic=#{listPic}</if>
+        <if test="shareCode !=null and shareCode !=''">and t.shareCode=#{sharecode}</if>
+        <if test="status !=null">and t.status=#{status}</if>
+    </sql>
+    <!-- 前端接口调用自定义分页 -->
+    <select id="selectListByMyPage" resultType="com.len.entity.Article">
 
-	</select>
+        select * from (
+        select t.id,
+        t.title,
+        t.readCounts,
+        t.excerpt,
+        t.author,
+        t.createdAt,
+        t.listPic,
+        t.topFlag,
+        t.status,
+        t.editType,
+        GROUP_CONCAT( distinct t2.category order by t2.category SEPARATOR ',') as category,
+        max((select count(1) from boke_article_comment t3 where t3.articleId = t.id)) as commentCounts
+        from boke_article t
+        join boke_article_type t2
+        on t.id = t2.articleId
+        where t.status =1
+        <if test="article.search !=null and article.search !=''">
+            and ( author like '%${article.search}%' or
+            excerpt like '%${article.search}%' or
+            title like '%${article.search}%'
+            )
+        </if>
+        <if test="article.category !=null and article.category !=''">
+            and
+            <foreach collection="article.category.split(',')" item="item" index="index" separator="or" open="("
+                     close=")">
+                t2.category = #{item}
+            </foreach>
+        </if>
+        GROUP BY
+        t.id,
+        t.title,
+        t.readCounts,
+        t.excerpt,
+        t.author,
+        t.createdAt,
+        t.listPic,
+        t.shareCode,
+        t.topFlag,
+        t.status,
+        t.editType
+        order by topFlag desc, createdAt desc
 
-	<select id="getAllCategory"  resultType="java.lang.String">
+        ) t
+        limit #{pagination},#{pageSize}
+
+    </select>
+    <select id="getArticleCount" resultType="java.lang.Integer">
+        select count(1) from (
+        select t.id,
+        t.title,
+        t.readCounts,
+        t.excerpt,
+        t.author,
+        t.createdAt,
+        t.listPic,
+        t.topFlag,
+        t.status,
+        t.editType,
+        GROUP_CONCAT( distinct t2.category order by t2.category SEPARATOR ',') as category,
+        max((select count(1) from boke_article_comment t3 where t3.articleId = t.id)) as commentCounts
+        from boke_article t
+        join boke_article_type t2
+        on t.id = t2.articleId
+        where t.status =1
+        <if test="article.search !=null and article.search !=''">
+            and ( author like '%${article.search}%' or
+            excerpt like '%${article.search}%' or
+            title like '%${article.search}%'
+            )
+        </if>
+        <if test="article.category !=null and article.category !=''">
+            and
+            <foreach collection="article.category.split(',')" item="item" index="index" separator="or" open="("
+                     close=")">
+                t2.category = #{item}
+            </foreach>
+        </if>
+        GROUP BY
+        t.id,
+        t.title,
+        t.readCounts,
+        t.excerpt,
+        t.author,
+        t.createdAt,
+        t.listPic,
+        t.shareCode,
+        t.topFlag,
+        t.status,
+        t.editType
+        order by topFlag desc, createdAt desc
+
+        ) t
+
+    </select>
+
+    <select id="getAllCategory" resultType="java.lang.String">
 		select distinct category from  boke_article_type
 
 	</select>
-	<insert id="insertArticle" parameterType="com.len.entity.Article" >
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
-		insert into boke_article(id,title,readCounts,excerpt,author,createdAt,listPic,mdcontent,shareCode)
-		values
-		(#{id},#{title},0,#{excerpt},#{author},now(),#{listPic},#{mdcontent},#{shareCode})
+    <insert id="insertArticle" parameterType="com.len.entity.Article">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into
+        boke_article(id,title,readCounts,excerpt,author,createdAt,listPic,mdcontent,shareCode,status,editType)
+        values
+        (#{id},#{title},0,#{excerpt},#{author},now(),#{listPic},#{mdcontent},#{shareCode},#{status},#{editType})
 
-	</insert>
-	<delete id="deleteByArticleId" parameterType="java.lang.Integer">
+    </insert>
+    <delete id="deleteByArticleId" parameterType="java.lang.Integer">
 		delete from boke_article_type where articleId = #{articleId}
 
 	</delete>
-	<insert id="insertArticleType" parameterType="com.len.entity.Article">
+    <delete id="deleteAllByArticleId" parameterType="java.lang.Integer" statementType="CALLABLE">
+           {call BOKE_DELETE_ARTICLE(#{articleId,mode=IN})}
+    </delete>
+    <insert id="insertArticleType" parameterType="com.len.entity.Article">
 		insert into  boke_article_type(articleId,category)values(#{id},#{category})
 	</insert>
 
 
-	<!--点赞信息分页 -->
-	<select id="selectPraiseListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticlePraise">
+    <!--点赞信息分页 -->
+    <select id="selectPraiseListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticlePraise">
 		select * from
 		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName,t1.createdAt
 		from boke_article_praise t1
@@ -143,9 +239,10 @@
 		LEFT JOIN boke_article t3
 		on t1.articleId = t3.id
 		where t1.userId = #{id}
+		and t3.status =1
 		) t
 	</select>
-	<select id="praiseCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    <select id="praiseCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 	select count(1) from
 		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName,t1.createdAt
 		from boke_article_praise t1
@@ -154,11 +251,12 @@
 		LEFT JOIN boke_article t3
 		on t1.articleId = t3.id
 		where t1.userId = #{id}
+		and t3.status =1
 		) t
 	</select>
 
-	<!--收藏信息分页 -->
-	<select id="selectSaveListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticleSave">
+    <!--收藏信息分页 -->
+    <select id="selectSaveListByPage" parameterType="java.lang.Integer" resultType="com.len.entity.ArticleSave">
 		select * from
 		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName  AS userName,t1.createdAt
 		from boke_article_save t1
@@ -167,9 +265,10 @@
 		LEFT JOIN boke_article t3
 		on t1.articleId = t3.id
 		where t1.userId = #{id}
+		and t3.status =1
 		) t
 	</select>
-	<select id="saveCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    <select id="saveCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 	select count(1) from
 		(select t1.id,t1.articleId,t1.userId,t1.flag,t3.title,t3.excerpt,t2.nickName AS userName,t1.createdAt
 		from boke_article_save t1
@@ -178,10 +277,11 @@
 		LEFT JOIN boke_article t3
 		on t1.articleId = t3.id
 		where t1.userId = #{id}
+		and t3.status =1
 		) t
 	</select>
-	<select id="selectByCategory" parameterType="java.lang.String"
-			resultType="com.len.entity.Article">
+    <select id="selectByCategory" parameterType="java.lang.String"
+            resultType="com.len.entity.Article">
 		select t1.id,
 		 t1.title,
 		 t1.readCounts,
@@ -193,25 +293,27 @@
 		boke_article_type t2
 		where t1.id = t2.articleId
 		and t2.category = #{category}
+		and t1.status =1
 	</select>
-	<!-- 点击推荐列表 10 个 -->
-	<select id="getClickRecommendList" resultType="java.util.HashMap">
-		select t.id, t.title from boke_article t order by t.readCounts limit 10
+    <!-- 点击推荐列表 10 个 -->
+    <select id="getClickRecommendList" resultType="java.util.HashMap">
+		select t.id, t.title from boke_article t where t.status =1 order by t.readCounts limit 10
 	</select>
-	<select id="getCommentRecommendList" resultType="java.util.HashMap">
+    <select id="getCommentRecommendList" resultType="java.util.HashMap">
 		select t.id, t.title ,count(1) as commentNum from boke_article t join boke_article_comment t2
 		on t.id = t2.articleId
+		where t.status =1
 		GROUP BY t.id,t.title
 		order by commentNum desc
 		limit 10
 	</select>
-	<select id="getCommentUserList" resultType="java.util.HashMap">
+    <select id="getCommentUserList" resultType="java.util.HashMap">
 		select count(1) commentNum, t1.userPic,t1.nickName  from boke_wx_user t1 join boke_article_comment t2
 		on t1.id = t2.replyerId
 		GROUP BY t1.userPic,t1.nickName
 		limit 5
 	</select>
-	<select id="getCommentList" resultType="java.util.HashMap">
+    <select id="getCommentList" resultType="java.util.HashMap">
 		select t1.userPic,t1.nickName,t2.content  from boke_wx_user t1 join boke_article_comment t2
 			on t1.id = t2.replyerId
 			GROUP BY t1.userPic,t1.nickName

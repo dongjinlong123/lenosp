@@ -77,4 +77,11 @@ public interface BokeIntfService {
      * @return
      */
     List<Map<String, Object>> getCommentList();
+
+    /**
+     * 得到文章总数
+     * @param article
+     * @return
+     */
+    int getArticleCount(Article article);
 }

@@ -56,6 +56,7 @@ public class ArticleController extends BaseController {
     @ResponseBody
     @RequiresPermissions("article:show")
     public ReType showArticleList(Article article, String page, String limit) {
+        log.info("传递的参数为："+article.getStatus());
         List<Article> tList = null;
         Page<Article> tPage = PageHelper.startPage(Integer.valueOf(page), Integer.valueOf(limit));
         try {
@@ -161,6 +162,27 @@ public class ArticleController extends BaseController {
         }
         return j;
     }
+    /**
+     * 更新状态
+     */
+    @PostMapping(value = "/updateArticleStatus")
+    @ResponseBody
+    @RequiresPermissions("article:update")
+    public JsonUtil updateArticleStatus(Article article) {
+        JsonUtil j = new JsonUtil();
+
+        if (articleService.updateById(article)) {
+            j.setFlag(true);
+            j.setMsg("更新成功");
+        } else {
+            j.setFlag(false);
+            j.setMsg("更新失败");
+        }
+        return j;
+    }
+
+
+
     @PostMapping("/del")
     @ResponseBody
     @RequiresPermissions("article:del")

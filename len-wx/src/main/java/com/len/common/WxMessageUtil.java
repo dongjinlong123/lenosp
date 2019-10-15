@@ -31,7 +31,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * 微信信息转换工具类
- * @author 瓜宝
+ * 针对微信公众号
+ * @author
  *
  */
 @Component
@@ -91,7 +92,21 @@ public class WxMessageUtil {
 			logger.info("获取 access_token 异常");
 		}
 	}
-	
+	//获取小程序的ACCESS_TOKEN 方法
+	public static String XCX_ACCESS_TOKEN;
+	public static void getXCXAccessToken() {
+		StringBuffer sb = new StringBuffer(AT_URL);
+		sb.append("&appid=").append("wx6959c49a70d52bf6").append("&secret=")
+				.append("6cffcf8a55680b88f2079ca02c470a93");
+		String url =sb.toString();
+		logger.info("获取的链接"+url);
+		String result = HttpSendUtil.get(url);
+		JSONObject jb = JSON.parseObject(result);
+		XCX_ACCESS_TOKEN = jb.getString("access_token");
+		if(StringUtils.isEmpty(XCX_ACCESS_TOKEN)) {
+			logger.info("获取 access_token 异常");
+		}
+	}
 	/**
 	 * 将request 接收到的XML格式数据转化为Map
 	 * @param inputStream

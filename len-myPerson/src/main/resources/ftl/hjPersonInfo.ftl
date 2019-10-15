@@ -89,7 +89,7 @@
       <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">编辑</a>
     </@shiro.hasPermission>
     <@shiro.hasPermission name="hjPerson:del">
-      <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="delete"> <i class="layui-icon">&#xe640;</i>删除</a>
+      <a class="layui-btn layui-btn-xs  layui-btn-danger" lay-event="delete"> <i class="layui-icon">&#xe640;</i>删除</a>
     </@shiro.hasPermission>
 </script>
 

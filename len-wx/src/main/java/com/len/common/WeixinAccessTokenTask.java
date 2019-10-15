@@ -2,10 +2,11 @@ package com.len.common;
 
 import com.len.service.WxMenuService;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 
@@ -15,7 +16,8 @@ import java.text.SimpleDateFormat;
  *
  */
 @Slf4j
-public class WeixinAccessTokenTask implements Job {
+@Component
+public class WeixinAccessTokenTask{
 
 
 	@Autowired
@@ -24,14 +26,10 @@ public class WeixinAccessTokenTask implements Job {
 	private WxMenuService wxMenuService;
 	
 	// 第一次延迟1秒执行，当执行完后7100秒再执行
-	//@Scheduled(initialDelay = 1000, fixedDelay = 7000 * 1000)
-	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+	@Scheduled(initialDelay = 1000, fixedDelay = 7000 * 1000)
+	public void execute() {
 		System.out.println("getWeixinAccessToken：启动任务=======================");
 		run();
-		System.out.println("getWeixinAccessToken：下次执行时间====="+
-				new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-						.format(context.getNextFireTime())+"==============");
 	}
 	public void run(){
 		getWeixinAccessToken();
@@ -41,16 +39,18 @@ public class WeixinAccessTokenTask implements Job {
 	public void getWeixinAccessToken() {
 
 		try {
+			wxMessageUtil.getXCXAccessToken();//小程序的token
+
 			//获取accessToken
 			wxMessageUtil.getAccessToken();
 			
 			//获取菜单信息
-			String menuStr = wxMenuService.initMenu();
+			//String menuStr = wxMenuService.initMenu();
 			//菜单初始化
-			wxMessageUtil.initMenu(menuStr);
+			//wxMessageUtil.initMenu(menuStr);
 			
 			//获取JSAPI_TICKET
-			wxMessageUtil.getJsapiTicket();
+			//wxMessageUtil.getJsapiTicket();
 		} catch (Exception e) {
 			log.error("获取微信adcessToken出错，信息如下");
 		}
