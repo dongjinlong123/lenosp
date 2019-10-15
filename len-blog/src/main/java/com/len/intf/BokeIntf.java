@@ -66,7 +66,7 @@ public class BokeIntf extends BaseController {
         WxUser wxUser = bokeIntfService.getUserIdByCode(userId);
         Date createTime = wxUser.getCreateTime();
         //超过7天重新登录，避免用户更新了信息
-       if(DateUtil.differentDays(new Date(),createTime)>=7){
+       if(DateUtil.differentDays(createTime,new Date())>=7){
            result.put("flag", true);
        }else{
            result.put("flag", false);
