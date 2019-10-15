@@ -68,6 +68,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
             wxUserService.insertSelective(wxUser);
         } else {
             wxUser.setId(user.getId());
+            wxUser.setCreateTime(new Date());
             wxUserService.updateByPrimaryKeySelective(wxUser);
         }
 
