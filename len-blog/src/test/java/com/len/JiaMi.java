@@ -16,7 +16,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 public class JiaMi {
-    private static final String IV_STRING = "sdf4ddfsFD86Vdf2";
+    /*private static final String IV_STRING = "sdf4ddfsFD86Vdf2";
     private static final String encoding = "gbk";
 
     public static void main(String[] args) {
@@ -93,5 +93,5 @@ public class JiaMi {
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
         byte[] result = cipher.doFinal(encryptedBytes);
         return new String(result, encoding);
-    }
+    }*/
 }

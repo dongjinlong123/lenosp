@@ -6,6 +6,7 @@ import com.len.entity.Article;
 import com.len.entity.ArticlePraise;
 import com.len.entity.ArticleSave;
 import com.len.mapper.ArticleMapper;
+import com.len.redis.RedisService;
 import com.len.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ import java.util.UUID;
 public class ArticleServiceImpl extends BaseServiceImpl<Article, String> implements ArticleService {
     @Autowired
     private ArticleMapper ArticleMapper;
-
+    @Autowired
+    private RedisService redisService;
     @Override
     public BaseMapper<Article, String> getMappser() {
         return ArticleMapper;
@@ -63,12 +65,16 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
             article.setCategory(category);
             ArticleMapper.insertArticleType(article);
         }
+        //删除缓存
+        redisService.delObj("article-" + article.getId());
         return ArticleMapper.updateByPrimaryKeySelective(article) > 0;
     }
 
     @Transactional
     @Override
     public boolean deleteByKey(Integer id) {
+        //删除缓存
+        redisService.delObj("article-" + id);
         ArticleMapper.deleteAllByArticleId(id);
         return true;
     }

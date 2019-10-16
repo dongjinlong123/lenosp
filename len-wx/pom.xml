@@ -25,6 +25,12 @@
             <groupId>com.len</groupId>
             <artifactId>len-sys</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/net.gplatform/Sdk4J -->
+        <dependency>
+            <groupId>net.gplatform</groupId>
+            <artifactId>Sdk4J</artifactId>
+            <version>2.0</version>
+        </dependency>
         <!-- XML操作jar包 -->
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>

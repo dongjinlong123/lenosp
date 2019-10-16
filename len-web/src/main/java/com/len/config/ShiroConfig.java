@@ -144,6 +144,7 @@ public class ShiroConfig {
         filterMap.put("/blog/**", "anon");
         filterMap.put("/intf/**", "anon"); //对外接口
         filterMap.put("/weixin/**", "anon"); //对外接口
+        filterMap.put("/qq/**", "anon"); //对外接口
         filterMap.put("/hjPerson/**", "anon");
         filterMap.put("/**", "authc");
 
