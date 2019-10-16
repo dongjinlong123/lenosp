@@ -36,7 +36,7 @@ public class QQController {
         }
     }
 
-    @GetMapping(value = "/callback")
+    @RequestMapping(value = "/callback")
     public String callback(HttpServletRequest req, HttpServletResponse resp) {
         try {
             log.info("--------开始回调-----------");
