@@ -42,6 +42,10 @@ public class QQController {
     public Map<String, Object> checkSession(HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
         HttpSession session =  req.getSession();
+
+        String url = req.getParameter("callBackUrl");
+        //得到参数中跳转的url
+        session.setAttribute("callBackUrl",url);
         //判断会话中是否存在用户的登录信息
         SysUser user = (SysUser) session.getAttribute("qqUser");
         if(user != null){
@@ -57,10 +61,7 @@ public class QQController {
     @GetMapping(value = "/qqLogin")
     public void qqLogin(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session =  req.getSession();
-        String url = req.getParameter("callBackUrl");
-        //得到参数中跳转的url
-        session.setAttribute("callBackUrl",url);
-
+        String url =  (String) session.getAttribute("callBackUrl");
         //判断会话中是否存在用户的登录信息
         SysUser user = (SysUser) session.getAttribute("qqUser");
         try {
@@ -85,12 +86,13 @@ public class QQController {
             //得到参数中跳转的url
             url =  (String) session.getAttribute("callBackUrl");
 
-            log.info("--------开始回调-----------");
+            log.info("--------开始回调-----------" + url);
             AccessToken accessTokenObj = new Oauth().getAccessTokenByRequest(req);
             String accessToken = null;
             String openID = null;
             long tokenExpireIn = 0L;
-            if (accessTokenObj.getAccessToken().equals("")) {
+            log.info("--------token信息-----------" + accessTokenObj.getAccessToken());
+            if ("".equals(accessTokenObj.getAccessToken())) {
                 log.info("用户未登录--------");
                 return url;
             }
