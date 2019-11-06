@@ -60,16 +60,16 @@ public class QQController {
 
     @GetMapping(value = "/qqLogin")
     public void qqLogin(HttpServletRequest req, HttpServletResponse resp) {
-        HttpSession session =  req.getSession();
-        String url =  (String) session.getAttribute("callBackUrl");
+       // HttpSession session =  req.getSession();
+       // String url =  (String) session.getAttribute("callBackUrl");
         //判断会话中是否存在用户的登录信息
-        SysUser user = (SysUser) session.getAttribute("qqUser");
+       // SysUser user = (SysUser) session.getAttribute("qqUser");
         try {
             resp.setContentType("text/html;charset=utf-8");
-            if(user != null){
+           /* if(user != null){
                 resp.sendRedirect(url);
                 return;
-            }
+            }*/
             resp.sendRedirect(new Oauth().getAuthorizeURL(req));
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,11 +80,11 @@ public class QQController {
 
     @RequestMapping(value = "/callback")
     public String callback(HttpServletRequest req, HttpServletResponse resp) {
-        String url = "";
+        String url = "404";
         try {
-            HttpSession session =  req.getSession();
+          /*  HttpSession session =  req.getSession();
             //得到参数中跳转的url
-            url =  (String) session.getAttribute("callBackUrl");
+            url =  (String) session.getAttribute("callBackUrl");*/
 
             log.info("--------开始回调-----------" + url);
             AccessToken accessTokenObj = new Oauth().getAccessTokenByRequest(req);
@@ -94,7 +94,7 @@ public class QQController {
             log.info("--------token信息-----------" + accessTokenObj.getAccessToken());
             if ("".equals(accessTokenObj.getAccessToken())) {
                 log.info("用户未登录--------");
-                return url;
+                return "303";
             }
             accessToken = accessTokenObj.getAccessToken();
 
@@ -117,13 +117,13 @@ public class QQController {
                 icon = userInfoBean.getAvatar().getAvatarURL100();
 
             }
-            WxUser user = new WxUser();
+           /* WxUser user = new WxUser();
             user.setOpenId(openID);
             user.setUserPic(icon);
             user.setNickName(nickName);
             user.setGender(sex);
             wxUserService.insertSelective(user);
-            session.setAttribute("qqUser",user);
+            session.setAttribute("qqUser",user);*/
 
             log.info("获得的信息"+ userInfoBean);
         } catch (QQConnectException e) {
