@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -79,14 +81,14 @@ public class QQController {
     }
 
     @GetMapping(value = "/callback")
-    public String callback(HttpServletRequest req, HttpServletResponse resp) {
+    public String callback(ServletRequest req, ServletResponse resp) {
         String url = "";
         try {
-            HttpSession session =  req.getSession();
+            HttpSession session =  ((HttpServletRequest)req).getSession();
             //得到参数中跳转的url
             url =  (String) session.getAttribute("callBackUrl");
 
-            log.info("--------开始回调-----------" + url);
+            log.info((req instanceof ServletRequest) +  "--------开始回调-----------" + url);
             AccessToken accessTokenObj = new Oauth().getAccessTokenByRequest(req);
             String accessToken = null;
             String openID = null;
