@@ -59,6 +59,7 @@ public class QQController {
         HttpSession session =  req.getSession();
         String url = req.getParameter("callBackUrl");
         //得到参数中跳转的url
+        log.info("得到的参数url:"+ url);
         session.setAttribute("callBackUrl",url);
 
         //判断会话中是否存在用户的登录信息
@@ -77,7 +78,7 @@ public class QQController {
         }
     }
 
-    @RequestMapping(value = "/callback")
+    @GetMapping(value = "/callback")
     public String callback(HttpServletRequest req, HttpServletResponse resp) {
         String url = "";
         try {
