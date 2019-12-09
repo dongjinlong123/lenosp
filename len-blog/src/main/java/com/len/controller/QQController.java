@@ -42,10 +42,6 @@ public class QQController {
     public Map<String, Object> checkSession(HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
         HttpSession session =  req.getSession();
-
-        String url = req.getParameter("callBackUrl");
-        //得到参数中跳转的url
-        session.setAttribute("callBackUrl",url);
         //判断会话中是否存在用户的登录信息
         SysUser user = (SysUser) session.getAttribute("qqUser");
         if(user != null){
@@ -60,16 +56,19 @@ public class QQController {
 
     @GetMapping(value = "/qqLogin")
     public void qqLogin(HttpServletRequest req, HttpServletResponse resp) {
-       // HttpSession session =  req.getSession();
-       // String url =  (String) session.getAttribute("callBackUrl");
+        HttpSession session =  req.getSession();
+        String url = req.getParameter("callBackUrl");
+        //得到参数中跳转的url
+        session.setAttribute("callBackUrl",url);
+
         //判断会话中是否存在用户的登录信息
-       // SysUser user = (SysUser) session.getAttribute("qqUser");
+        SysUser user = (SysUser) session.getAttribute("qqUser");
         try {
             resp.setContentType("text/html;charset=utf-8");
-           /* if(user != null){
+            if(user != null){
                 resp.sendRedirect(url);
                 return;
-            }*/
+            }
             resp.sendRedirect(new Oauth().getAuthorizeURL(req));
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,25 +79,25 @@ public class QQController {
 
     @RequestMapping(value = "/callback")
     public String callback(HttpServletRequest req, HttpServletResponse resp) {
-        String url = "404";
+        String url = "";
         try {
-          /*  HttpSession session =  req.getSession();
+            HttpSession session =  req.getSession();
             //得到参数中跳转的url
-            url =  (String) session.getAttribute("callBackUrl");*/
+            url =  (String) session.getAttribute("callBackUrl");
 
             log.info("--------开始回调-----------" + url);
             AccessToken accessTokenObj = new Oauth().getAccessTokenByRequest(req);
             String accessToken = null;
             String openID = null;
             long tokenExpireIn = 0L;
-            log.info("--------token信息-----------" + accessTokenObj.getAccessToken());
             if ("".equals(accessTokenObj.getAccessToken())) {
                 log.info("用户未登录--------");
-                return "303";
+                return url;
             }
             accessToken = accessTokenObj.getAccessToken();
 
             tokenExpireIn = accessTokenObj.getExpireIn();
+
             // 利用获取到的accessToken 去获取当前用的openid
             OpenID openIDObj = new OpenID(accessToken);
             openID = openIDObj.getUserOpenID();
@@ -117,13 +116,13 @@ public class QQController {
                 icon = userInfoBean.getAvatar().getAvatarURL100();
 
             }
-           /* WxUser user = new WxUser();
+            WxUser user = new WxUser();
             user.setOpenId(openID);
             user.setUserPic(icon);
             user.setNickName(nickName);
             user.setGender(sex);
             wxUserService.insertSelective(user);
-            session.setAttribute("qqUser",user);*/
+            session.setAttribute("qqUser",user);
 
             log.info("获得的信息"+ userInfoBean);
         } catch (QQConnectException e) {
