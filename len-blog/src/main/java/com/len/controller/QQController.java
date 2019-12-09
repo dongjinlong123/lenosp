@@ -72,7 +72,9 @@ public class QQController {
                 resp.sendRedirect(url);
                 return;
             }
-            resp.sendRedirect(new Oauth().getAuthorizeURL(req));
+            String authorizeURL = new Oauth().getAuthorizeURL(req);
+            log.info("authorizeURL:{}", authorizeURL);
+            resp.sendRedirect(authorizeURL);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (QQConnectException e) {
@@ -81,14 +83,16 @@ public class QQController {
     }
 
     @GetMapping(value = "/callback")
-    public String callback(ServletRequest req, ServletResponse resp) {
+    public String callback(HttpServletRequest req,HttpServletResponse resp) {
         String url = "";
         try {
-            HttpSession session =  ((HttpServletRequest)req).getSession();
+            log.info("query:"+((HttpServletRequest)req).getQueryString());
+
+            HttpSession session = req.getSession();
             //得到参数中跳转的url
             url =  (String) session.getAttribute("callBackUrl");
 
-            log.info((req instanceof ServletRequest) +  "--------开始回调-----------" + url);
+            log.info("--------开始回调-----------" + url);
             AccessToken accessTokenObj = new Oauth().getAccessTokenByRequest(req);
             String accessToken = null;
             String openID = null;
