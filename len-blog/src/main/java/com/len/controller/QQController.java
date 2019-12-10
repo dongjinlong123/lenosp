@@ -2,6 +2,7 @@ package com.len.controller;
 
 import com.len.entity.SysUser;
 import com.len.entity.WxUser;
+import com.len.redis.RedisService;
 import com.len.service.BokeIntfService;
 import com.len.service.WxUserService;
 import com.qq.connect.QQConnectException;
@@ -13,6 +14,7 @@ import com.qq.connect.utils.QQConnectConfig;
 import com.qq.connect.utils.http.PostParameter;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,6 +43,8 @@ import java.util.regex.Pattern;
 public class QQController {
     @Autowired
     private WxUserService wxUserService;
+    @Autowired
+    private RedisService redisService;
 
     @GetMapping(value = "/checkSession")
     @ResponseBody
@@ -48,7 +52,7 @@ public class QQController {
         Map<String, Object> result = new HashMap<String, Object>();
         HttpSession session = req.getSession();
         //判断会话中是否存在用户的登录信息
-        SysUser user = (SysUser) session.getAttribute("qqUser");
+        WxUser user = (WxUser) session.getAttribute("qqUser");
         if (user != null) {
             result.put("userInfo", user);
             result.put("login", true);
@@ -64,11 +68,11 @@ public class QQController {
         HttpSession session = req.getSession();
         String url = req.getParameter("callBackUrl");
         //得到参数中跳转的url
-        log.info("得到的参数url:" + url);
+        log.info("得到的参数url:" + url + " == sessionId" + session.getId());
         session.setAttribute("callBackUrl", url);
 
         //判断会话中是否存在用户的登录信息
-        SysUser user = (SysUser) session.getAttribute("qqUser");
+        WxUser user = (WxUser) session.getAttribute("qqUser");
         try {
             resp.setContentType("text/html;charset=utf-8");
             if (user != null) {
@@ -76,6 +80,9 @@ public class QQController {
                 return;
             }
             String authorizeURL = new Oauth().getAuthorizeURL(req);
+            String state = (String) session.getAttribute("qq_connect_state");
+            redisService.set(state,url,3600l);
+
             log.info("authorizeURL:{}", authorizeURL);
             resp.sendRedirect(authorizeURL);
         } catch (IOException e) {
@@ -85,7 +92,7 @@ public class QQController {
         }
     }
 
-    private String[] extractionAuthCodeFromUrl(String url) throws QQConnectException {
+    private static String[] extractionAuthCodeFromUrl(String url) throws QQConnectException {
         if (url == null) {
             throw new QQConnectException("you pass a null String object");
         } else {
@@ -112,8 +119,10 @@ public class QQController {
             HttpSession session = req.getSession();
             //得到参数中跳转的url
             url = (String) session.getAttribute("callBackUrl");
-
-            log.info("--------开始回调-----------" + url);
+            if(StringUtils.isEmpty(url)){
+                url = redisService.get(state);
+            }
+            log.info( "sessionId" + session.getId() + "--------开始回调-----------" + url);
             Oauth oauth = new Oauth();
             AccessToken accessTokenObj = oauth.getAccessTokenByRequest(req);
             String accessToken = null;
