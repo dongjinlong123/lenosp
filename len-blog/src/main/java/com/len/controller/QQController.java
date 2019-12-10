@@ -109,7 +109,7 @@ public class QQController {
     }
 
     @GetMapping(value = "/callback")
-    public String callback(HttpServletRequest req, HttpServletResponse resp) {
+    public void callback(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         String url = "";
         try {
             log.info(req.getSession().getAttribute("qq_connect_state")+"==query:" + req.getQueryString());
@@ -130,7 +130,8 @@ public class QQController {
             long tokenExpireIn = 0L;
             if ("".equals(accessTokenObj.getAccessToken())) {
                 log.info("用户未登录--------");
-                return url;
+                resp.sendRedirect(url);
+                return;
             }
             accessToken = accessTokenObj.getAccessToken();
 
@@ -166,7 +167,7 @@ public class QQController {
         } catch (QQConnectException e) {
             e.printStackTrace();
         }
-        return url;
+        resp.sendRedirect(url);
     }
 
 }
