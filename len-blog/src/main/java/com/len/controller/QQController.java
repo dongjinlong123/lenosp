@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 /**
  * qq互联接入
  */
-@CrossOrigin
 @Controller
 @Slf4j
 @RequestMapping("/qq")
