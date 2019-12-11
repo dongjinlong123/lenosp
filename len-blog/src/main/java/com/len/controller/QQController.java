@@ -53,7 +53,8 @@ public class QQController {
         Map<String, Object> result = new HashMap<String, Object>();
         HttpSession session = req.getSession();
         //判断会话中是否存在用户的登录信息
-        WxUser user = (WxUser) session.getAttribute("qqUser");
+        //WxUser user = (WxUser) session.getAttribute("qqUser");
+        WxUser user = wxUserService.selectByPrimaryKey(13);
         if (user != null) {
             result.put("userInfo", user);
             result.put("login", true);

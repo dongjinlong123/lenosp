@@ -244,7 +244,7 @@
     $(function() {
         mdEditor = editormd("md-editor", {
             width: "99%",
-            height: 968,
+            autoHeight      : true,
            // theme : "dark",
             <#if detail>
             readOnly:true,
