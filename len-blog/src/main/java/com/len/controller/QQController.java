@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 /**
  * qq互联接入
  */
+@CrossOrigin
 @Controller
 @Slf4j
 @RequestMapping("/qq")
@@ -92,22 +93,6 @@ public class QQController {
         }
     }
 
-    private static String[] extractionAuthCodeFromUrl(String url) throws QQConnectException {
-        if (url == null) {
-            throw new QQConnectException("you pass a null String object");
-        } else {
-            Matcher m = Pattern.compile("code=(\\w+)&state=(\\w+)&?").matcher(url);
-            String authCode = "";
-            String state = "";
-            if (m.find()) {
-                authCode = m.group(1);
-                state = m.group(2);
-            }
-
-            return new String[]{authCode, state};
-        }
-    }
-
     @GetMapping(value = "/callback")
     public void callback(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         String url = "";
@@ -133,6 +118,7 @@ public class QQController {
                 resp.sendRedirect(url);
                 return;
             }
+
             accessToken = accessTokenObj.getAccessToken();
 
             tokenExpireIn = accessTokenObj.getExpireIn();
@@ -141,33 +127,32 @@ public class QQController {
             OpenID openIDObj = new OpenID(accessToken);
             openID = openIDObj.getUserOpenID();
 
-            String icon = null, nickName = null, sex = null;
-            // 去获取用户在Qzone的昵称等信息
-            com.qq.connect.api.qzone.UserInfo qzoneUserInfo =
-                    new com.qq.connect.api.qzone.UserInfo(accessToken, openID);
-            UserInfoBean userInfoBean = qzoneUserInfo.getUserInfo();
-            if (userInfoBean.getRet() == 0) {
-                nickName = userInfoBean.getNickname();
-                sex = userInfoBean.getGender();
-                if (userInfoBean.getAvatar().getAvatarURL100() == null) {
-                    icon = userInfoBean.getAvatar().getAvatarURL50();
-                }
-                icon = userInfoBean.getAvatar().getAvatarURL100();
+            //根据OpenId 和 accsessToken 封装用户信息
 
-            }
-            WxUser user = new WxUser();
-            user.setOpenId(openID);
-            user.setUserPic(icon);
-            user.setNickName(nickName);
-            user.setGender(sex);
-            wxUserService.insertSelective(user);
+            WxUser user = wxUserService.getQQUserInfo(accessToken, openID);
+
+            wxUserService.addUser(user);
             session.setAttribute("qqUser", user);
 
-            log.info("获得的信息" + userInfoBean);
         } catch (QQConnectException e) {
             e.printStackTrace();
         }
         resp.sendRedirect(url);
+    }
+    private  String[] extractionAuthCodeFromUrl(String url) throws QQConnectException {
+        if (url == null) {
+            throw new QQConnectException("you pass a null String object");
+        } else {
+            Matcher m = Pattern.compile("code=(\\w+)&state=(\\w+)&?").matcher(url);
+            String authCode = "";
+            String state = "";
+            if (m.find()) {
+                authCode = m.group(1);
+                state = m.group(2);
+            }
+
+            return new String[]{authCode, state};
+        }
     }
 
 }
