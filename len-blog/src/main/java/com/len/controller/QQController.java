@@ -156,8 +156,7 @@ public class QQController {
         } catch (QQConnectException e) {
             e.printStackTrace();
         }
-        //resp.sendRedirect(url);
-        req.getRequestDispatcher(url).forward(req,resp);
+        resp.sendRedirect(url);
     }
     private  String[] extractionAuthCodeFromUrl(String url) throws QQConnectException {
         if (url == null) {
