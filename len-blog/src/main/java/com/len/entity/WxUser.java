@@ -6,11 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.Date;
 
 @Table(name = "boke_wx_user")
 @Data
-public class WxUser {
+public class WxUser implements Serializable {
     //主键
     @Id
     @Column(name = "id")
