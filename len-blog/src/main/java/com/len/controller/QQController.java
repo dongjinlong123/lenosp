@@ -56,10 +56,6 @@ public class QQController {
         //判断会话中是否存在用户的登录信息
         WxUser user = (WxUser) session.getAttribute("qqUser");
 
-        String cookieId = getJSESSIONID(req);
-        if(StringUtils.isNotEmpty(cookieId)){
-            user = (WxUser) redisService.getObj(cookieId);
-        }
         log.info("得到会话信息" + session.getId() + "session user" + user);
        // WxUser user = wxUserService.selectByPrimaryKey(13);
         if (user != null) {
@@ -112,10 +108,13 @@ public class QQController {
             HttpSession session = req.getSession();
             //得到参数中跳转的url
             url = (String) session.getAttribute("callBackUrl");
+
+            log.info( "sessionId" + session.getId() + "--------开始回调-----------" + url);
+
             if(StringUtils.isEmpty(url)){
                 url = redisService.get(state);
             }
-            log.info( "sessionId" + session.getId() + "--------开始回调-----------" + url);
+
             Oauth oauth = new Oauth();
             AccessToken accessTokenObj = oauth.getAccessTokenByRequest(req);
             String accessToken = null;
@@ -141,11 +140,6 @@ public class QQController {
 
             wxUserService.addUser(user);
             session.setAttribute("qqUser", user); //前后端分离session无效
-            String cookieId = getJSESSIONID(req);
-            if(StringUtils.isNotEmpty(cookieId)){
-                redisService.setObj(cookieId,user,3600l);
-            }
-
 
             log.info("保存会话信息" + session.getId() + "session user" + user);
         } catch (QQConnectException e) {
@@ -168,13 +162,5 @@ public class QQController {
             return new String[]{authCode, state};
         }
     }
-    private String getJSESSIONID(HttpServletRequest req){
-        Cookie[] cookies = req.getCookies();
-        for (Cookie c:cookies) {
-            if("JSESSIONID".equals(c.getName())){
-                return c.getValue();
-            }
-        }
-        return null;
-    }
+
 }
