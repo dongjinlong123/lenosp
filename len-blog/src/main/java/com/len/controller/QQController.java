@@ -47,6 +47,23 @@ public class QQController {
     @Autowired
     private RedisService redisService;
 
+    @GetMapping(value = "/addSession")
+    @ResponseBody
+    public String addSession(HttpServletRequest req){
+        HttpSession session = req.getSession();
+        session.setAttribute("add","123456");
+        return "add success";
+    }
+    @GetMapping(value = "/getSession")
+    @ResponseBody
+    public String getSession(HttpServletRequest req){
+        HttpSession session = req.getSession();
+        String value = (String) session.getAttribute("add");
+        return "get success" + value;
+    }
+
+
+
     @GetMapping(value = "/checkSession")
     @ResponseBody
     public Map<String, Object> checkSession(HttpServletRequest req, HttpServletResponse resp) {
@@ -54,6 +71,7 @@ public class QQController {
         HttpSession session = req.getSession();
         //判断会话中是否存在用户的登录信息
         WxUser user = (WxUser) session.getAttribute("qqUser");
+        System.out.println("得到会话信息" + session.getId() + "session user" + user);
        // WxUser user = wxUserService.selectByPrimaryKey(13);
         if (user != null) {
             result.put("userInfo", user);
@@ -134,11 +152,12 @@ public class QQController {
 
             wxUserService.addUser(user);
             session.setAttribute("qqUser", user);
-
+            System.out.println("保存会话信息" + session.getId() + "session user" + user);
         } catch (QQConnectException e) {
             e.printStackTrace();
         }
-        resp.sendRedirect(url);
+        //resp.sendRedirect(url);
+        req.getRequestDispatcher(url).forward(req,resp);
     }
     private  String[] extractionAuthCodeFromUrl(String url) throws QQConnectException {
         if (url == null) {
