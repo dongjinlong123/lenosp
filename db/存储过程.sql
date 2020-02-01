@@ -2,7 +2,7 @@ drop PROCEDURE if EXISTS BOKE_DELETE_ARTICLE;
 CREATE PROCEDURE BOKE_DELETE_ARTICLE(IN p_articleId INTEGER)
 BEGIN
 	/**
-		删除文章及相关
+		删除文章及相关  aa
 	**/
 	delete from boke_article where id = p_articleId;
 	delete from boke_article_comment where articleId= p_articleId;
