@@ -1,36 +1,25 @@
 package com.len.controller;
 
-import com.len.entity.SysUser;
 import com.len.entity.WxUser;
 import com.len.redis.RedisService;
-import com.len.service.BokeIntfService;
 import com.len.service.WxUserService;
 import com.qq.connect.QQConnectException;
 import com.qq.connect.api.OpenID;
 import com.qq.connect.javabeans.AccessToken;
-import com.qq.connect.javabeans.qzone.UserInfoBean;
 import com.qq.connect.oauth.Oauth;
-import com.qq.connect.utils.QQConnectConfig;
-import com.qq.connect.utils.http.PostParameter;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

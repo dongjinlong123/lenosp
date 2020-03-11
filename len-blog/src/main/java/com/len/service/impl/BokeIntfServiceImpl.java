@@ -7,6 +7,7 @@ import com.len.redis.RedisService;
 import com.len.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -46,14 +47,11 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         return tList;
     }
 
+    @Cacheable(value = "article",key = "#id")
     @Override
     public Article getArticleDetail(Integer id) {
-        if (redisService.getObj("article-" + id) != null) {
-            return (Article) redisService.getObj("article-" + id);
-        }
         Article a = articleService.selectByKey(id);
         a.setListPic(rootUrl + a.getListPic());
-        redisService.setObj("article-" + id, a, redisSaveTime);
         return a;
     }
 
@@ -73,29 +71,20 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         }
 
     }
-
+    @Cacheable(value = "category",key = "getCategoryList")
     @Override
     public List<Map<String, Object>> getCategoryList() {
-        if (redisService.getObj("getCategoryList") != null) {
-            return (List<Map<String, Object>>) redisService.getObj("getCategoryList");
-        }
         List<Map<String, Object>> ret = bokeIntfMapper.getCategoryList();
-        redisService.setObj("getCategoryList", ret, redisSaveTime);
         return ret;
     }
-
+    @Cacheable(value = "category",key = "#category")
     @Override
     public List<Article> getArticleListByCategory(String category) {
-
-        if (redisService.getObj("getArticleListByCategory-" + category) != null) {
-            return (List<Article>) redisService.getObj("getArticleListByCategory-" + category);
-        }
 
         List<Article> list = articleService.selectByCategory(category);
         for (Article article : list) {
             article.setListPic(rootUrl + article.getListPic());
         }
-        redisService.setObj("getArticleListByCategory-" + category, list, redisSaveTime);
         return list;
     }
 

@@ -1,5 +1,7 @@
 server:
   port: 8081
+  tomcat:
+    basedir: /opt/temp
 spring:
   devtools:
     restart:
@@ -60,7 +62,6 @@ mapper:
   - tk.mybatis.mapper.common.Mapper
   not-empty: true
   identity: mysql
-
 
 # PageHelperConfig 可以替代此方案
 pagehelper:

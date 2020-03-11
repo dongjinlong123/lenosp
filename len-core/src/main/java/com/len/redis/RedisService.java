@@ -16,17 +16,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisService {
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    @Resource(name = "stringRedisTemplate")
-    private ValueOperations<String, String> valueOps;
-
-    @Resource(name = "redisTemplate")
-    private ValueOperations<Object, Object> valOpsObj;
 
     @Value("${redis.prefix}")
     private String prefix;
@@ -39,7 +32,7 @@ public class RedisService {
      */
     public String get(String key) {
         key = prefix + key;
-        return valueOps.get(key);
+        return (String) redisTemplate.opsForValue().get(key);
     }
 
     /**
@@ -51,7 +44,7 @@ public class RedisService {
      */
     public void set(String key, String value, Long second) {
         key = prefix + key;
-        valueOps.set(key, value, second,TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, value, second,TimeUnit.SECONDS);
     }
 
     /**
@@ -62,7 +55,7 @@ public class RedisService {
      */
     public Object getObj(Object key) {
         key = prefix + key.toString();
-        return valOpsObj.get(key);
+        return redisTemplate.opsForValue().get(key);
     }
 
     /**
@@ -74,16 +67,7 @@ public class RedisService {
      */
     public void setObj(Object key, Object value, Long second) {
         key = prefix + key.toString();
-        valOpsObj.set(key, value, second,TimeUnit.SECONDS);
-    }
-
-    /**
-     * delete by key
-     *
-     * @param key key
-     */
-    public void del(String key) {
-        stringRedisTemplate.delete(prefix + key);
+        redisTemplate.opsForValue().set(key, value, second,TimeUnit.SECONDS);
     }
 
     /**

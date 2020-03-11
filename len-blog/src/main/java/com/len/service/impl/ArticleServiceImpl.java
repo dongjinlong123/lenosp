@@ -10,13 +10,12 @@ import com.len.redis.RedisService;
 import com.len.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -57,6 +56,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
 
     @Transactional
     @Override
+    @CacheEvict(value = "article" , key = "#p0.id")
     public boolean updateByKey(Article article) {
         //先删除之前的类别
         ArticleMapper.deleteByArticleId(article.getId());
@@ -66,15 +66,16 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
             ArticleMapper.insertArticleType(article);
         }
         //删除缓存
-        redisService.delObj("article-" + article.getId());
+        //redisService.delObj("article-" + article.getId());
         return ArticleMapper.updateByPrimaryKeySelective(article) > 0;
     }
 
     @Transactional
+    @CacheEvict(value = "article" , key = "#id")
     @Override
     public boolean deleteByKey(Integer id) {
         //删除缓存
-        redisService.delObj("article-" + id);
+        //redisService.delObj("article-" + id);
         ArticleMapper.deleteAllByArticleId(id);
         return true;
     }
