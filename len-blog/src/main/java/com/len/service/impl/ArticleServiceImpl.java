@@ -143,5 +143,27 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
         return false;
     }
 
+    /**
+     * 通过类别名称删除类别
+     *
+     * @param category
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean deleteCategoryByCategoryName(String category) {
+        List<Article> articles = this.ArticleMapper.selectByCategory(category);
+        if(articles != null && articles.size() > 0){
+            for (Article a: articles
+                 ) {
+                ArticleMapper.deleteByArticleId(a.getId());
+            }
+
+        }
+        //再删除类别
+        ArticleMapper.deleteCategoryByCategoryName(category);
+        return true;
+    }
+
 
 }

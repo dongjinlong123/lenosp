@@ -271,7 +271,7 @@
             type: "post",
             data: {id: id},
             success: function (d) {
-                if (d.msg) {
+                if (d.flag) {
                     layer.msg(d.msg, {icon: 6, offset: 'rb', area: ['120px', '80px'], anim: 2});
                     layui.table.reload('articleList');
                 } else {

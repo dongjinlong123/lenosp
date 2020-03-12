@@ -53,4 +53,11 @@ public interface ArticleService extends BaseService<Article, String> {
     int getArticleCount(Article article);
 
     boolean updateById(Article article);
+
+    /**
+     * 通过类别名称删除类别
+     * @param category
+     * @return
+     */
+    boolean deleteCategoryByCategoryName(String category);
 }

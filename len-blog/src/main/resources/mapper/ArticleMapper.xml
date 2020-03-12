@@ -319,4 +319,7 @@
 			GROUP BY t1.userPic,t1.nickName
 			limit 10
 	</select>
+    <delete id="deleteCategoryByCategoryName" parameterType="java.lang.String">
+        delete from boke_article_type where category = #{category}
+    </delete>
 </mapper>

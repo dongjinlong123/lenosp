@@ -202,6 +202,39 @@ public class ArticleController extends BaseController {
         }
         return j;
     }
+
+    @PostMapping("/delCategory")
+    @ResponseBody
+    @RequiresPermissions("article:del")
+    public JsonUtil updateArticle(String category,boolean flag) {
+        JsonUtil j = new JsonUtil();
+        //判断当前类别是否关联存在强制删除标识
+        if(flag == false){
+            //不存在，判断是否存在关联的文章
+            List<Article> articles = articleService.selectByCategory(category);
+            if(articles != null && articles.size() > 0){
+                //存在文章
+                j.setFlag(false);
+                j.setMsg("该类别存在关联的文章");
+                j.setData(true); //表示存在关联的文章
+                return j;
+            }
+        }
+        if (category == null) {
+            j.setFlag(false);
+            j.setMsg("刪除数据失败");
+            return j;
+        }
+        if (articleService.deleteCategoryByCategoryName(category)) {
+            j.setFlag(true);
+            j.setMsg("刪除成功");
+        } else {
+            j.setFlag(false);
+            j.setMsg("刪除失败");
+        }
+        return j;
+    }
+
     /**
      * 分页
      */

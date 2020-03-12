@@ -55,4 +55,6 @@ public interface ArticleMapper extends BaseMapper<Article, String> {
     List<Map<String, Object>> getCommentList();
 
     int getArticleCount(@Param("article") Article article);
+
+    void deleteCategoryByCategoryName(String category);
 }

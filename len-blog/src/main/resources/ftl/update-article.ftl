@@ -41,6 +41,19 @@
         .hidden{
             display: none;
         }
+        .category-delete{
+            position: relative;
+            top: 4px;
+            left: 0px;
+            z-index: 999;
+            width: 35px;
+            height: 28px;
+            border: 1px solid #d2d2d2;
+            border-left: none;
+            border-radius: 0 2px 2px 0;
+            font-size: 20px;
+            text-align: center;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -116,14 +129,16 @@
                 <input type="hidden"  lay-verify="category" class="layui-input" name="category" id="category" value="${article.category}">
                 <div class="layui-input-block" id="categoryList">
                 <#list categoryList as c>
-
-                    <input type="checkbox" class="category" title="${c}" lay-filter="category" value="${c}"
-                     <#list "${article.category}"?split(",") as name>
-                         <#if name =c>
-                            checked=""
-                         </#if>
-                     </#list>
-                    >
+                    <div class="parentCategory" style="display: inline">
+                        <input type="checkbox" class="category" title="${c}" lay-filter="category" value="${c}"
+                         <#list "${article.category}"?split(",") as name>
+                             <#if name =c>
+                                checked=""
+                             </#if>
+                         </#list>
+                        >
+                        <span class="layui-icon layui-icon-delete category-delete" onclick="deleteCategory(this,'${c}');"></span>
+                    </div>
                 </#list>
                 <#if !detail>
                     <button style=" margin-left: 10px;" class="layui-btn layui-btn-radius"
@@ -408,7 +423,13 @@
                               return false;
                           }
                       }
-                      $("#addCategory").before('<input type="checkbox"  class="category" value="'+categoryInput+'" checked name="category"  lay-filter="category"  title="' + categoryInput + '">');
+                      var str ='<div class="parentCategory" style="display: inline">'+
+                              '<input type="checkbox"  class="category" value="'+categoryInput+'" checked name="category"  ' +
+                              'lay-filter="category"  title="' + categoryInput + '">' +
+                              ' <span class="layui-icon layui-icon-delete category-delete" onclick="deleteCategory(this,\''+categoryInput+'\');"></span>' +
+                              '</div>';
+
+                      $("#addCategory").before(str);
                       form.render();
                       layer.close(index);
                       $("#categoryInput").val("");
@@ -478,6 +499,45 @@
       });
 
   });
+  /**
+   * 删除类别
+   * @param c
+   */
+  function deleteCategory(e,category){
+      var category = category.trim();
+      layer.confirm('确定删除?', function () {
+          $.ajax({
+              url: "/article/delCategory",
+              type: "post",
+              data: {"category": category,"flag":false},
+              success: function (d) {
+                  console.log(d)
+                  if (d.flag) {
+
+                      layer.msg(d.msg);
+                      $(e).parent().remove();
+
+                  } else {
+                      if(d.data){
+                          //存在关联的
+                          layer.confirm('存在关联的文章，是否强制删除?', function () {
+                              $.ajax({
+                                  url: "/article/delCategory",
+                                  type: "post",
+                                  data: {"category": category,"flag":true},
+                                  success: function (d) {
+                                      layer.msg(d.msg);
+                                      $(e).parent().remove();
+                                  }})
+                          })
+                          return;
+                      }
+                      layer.msg(d.msg);
+                  }
+              }
+          });
+      });
+  }
 </script>
 </body>
 
