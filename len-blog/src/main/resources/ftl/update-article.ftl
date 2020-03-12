@@ -173,7 +173,10 @@
              </#if>
                 <div class="layui-input-inline">
                     <div id="shareCodePng" style="margin: 10px">
-                        <img src="${article.shareCode}" width="100px" height="100px" class="layui-upload-img">
+                        <#if article.shareCode != null>
+                            <img src="${article.shareCode}" width="100px" height="100px" class="layui-upload-img">
+                        </#if>
+
                     </div>
                     <input id="shareCode" name="shareCode" type="hidden" lay-verify="shareCode"  class="layui-input"
                            value="${article.shareCode}">

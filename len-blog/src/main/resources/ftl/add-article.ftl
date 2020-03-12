@@ -89,7 +89,7 @@
                 <label class="layui-form-label">作者</label>
                 <div class="layui-input-inline">
                     <input type="text" name="author" lay-verify="author" autocomplete="off"
-                           class="layui-input">
+                           class="layui-input" value="董小飒">
                 </div>
             </div>
             <div class="layui-inline">
@@ -211,7 +211,7 @@
     $(function() {
         mdEditor = editormd("md-editor", {
             width: "99%",
-            height: 968,
+            height: 720,
            // theme : "dark",
            // previewTheme : "dark",
           //  editorTheme : "pastel-on-dark",

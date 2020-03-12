@@ -71,7 +71,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         }
 
     }
-    @Cacheable(value = "category",key = "getCategoryList")
+    @Cacheable(value = "category",key = "methodName")
     @Override
     public List<Map<String, Object>> getCategoryList() {
         List<Map<String, Object>> ret = bokeIntfMapper.getCategoryList();
