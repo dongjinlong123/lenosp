@@ -11,6 +11,7 @@ import com.len.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,7 @@ import java.util.Map;
 public class ArticleServiceImpl extends BaseServiceImpl<Article, String> implements ArticleService {
     @Autowired
     private ArticleMapper ArticleMapper;
-    @Autowired
-    private RedisService redisService;
+
     @Override
     public BaseMapper<Article, String> getMappser() {
         return ArticleMapper;
@@ -151,6 +151,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
      */
     @Override
     @Transactional
+    @CacheEvict(value = "category")
     public boolean deleteCategoryByCategoryName(String category) {
         List<Article> articles = this.ArticleMapper.selectByCategory(category);
         if(articles != null && articles.size() > 0){
