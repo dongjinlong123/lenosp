@@ -151,7 +151,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article, String> impleme
      */
     @Override
     @Transactional
-    @CacheEvict(value = "category")
+    @CacheEvict(value = "category",allEntries=true)
     public boolean deleteCategoryByCategoryName(String category) {
         List<Article> articles = this.ArticleMapper.selectByCategory(category);
         if(articles != null && articles.size() > 0){
