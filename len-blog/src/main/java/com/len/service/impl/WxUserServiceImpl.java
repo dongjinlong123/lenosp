@@ -50,7 +50,8 @@ public class WxUserServiceImpl extends BaseServiceImpl<WxUser, String> implement
 
         //根据openId获取用户信息
         String url = QQConnectConfig.getValue("getUserInfoURL");
-        String getUrl = url +"?access_token="+accessToken+"&oauth_consumer_key=12345&openid="+openID;
+        String client_id = QQConnectConfig.getValue("app_ID");
+        String getUrl = url +"?access_token="+accessToken+"&oauth_consumer_key="+client_id+"&openid="+openID;
         String ret = HttpSendUtil.get(getUrl);
         log.info("getQQUserInfo得到数据为：" + ret);
         JSONObject retJosn = JSONObject.parseObject(ret);
