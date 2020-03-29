@@ -54,6 +54,9 @@
             font-size: 20px;
             text-align: center;
         }
+        .CodeMirror-scroll{
+            margin-top: 2%;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function() {

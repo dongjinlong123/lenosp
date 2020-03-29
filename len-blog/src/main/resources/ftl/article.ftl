@@ -132,7 +132,7 @@
                 {field: 'id', title: '主键', width: '8%', sort: true, hide: true}
                 , {field: 'title', title: '文章标题', width: '8%'}
                 , {field: 'readCounts', title: '阅读量', width: '8%', sort: true}
-                , {field: 'excerpt', title: '简介', width: '15%'}
+                , {field: 'excerpt', title: '简介', width: '13%'}
                 , {field: 'author', title: '作者', width: '8%'}
                 , {
                     field: 'createdAt', title: '发布日期', width: '15%', sort: true, templet: function (value) {
@@ -162,7 +162,7 @@
                     }}
 
                 , {field: 'category', title: '类别', width: '8%'}
-                , {field: 'remark', title: '操作', width: '22%', toolbar: "#toolBar"}
+                , {field: 'remark', title: '操作', width: '24%', toolbar: "#toolBar"}
             ]]
             , page: true
             , height: '315'

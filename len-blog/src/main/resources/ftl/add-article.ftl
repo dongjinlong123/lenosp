@@ -52,6 +52,9 @@
             font-size: 20px;
             text-align: center;
         }
+        .CodeMirror-scroll{
+            margin-top: 6%;
+        }
     </style>
 </head>
 
