@@ -41,7 +41,7 @@ public class QQController {
     }
     @GetMapping(value = "/getQQUserInfo")
     @ResponseBody
-    public JsonUtil getQQUserInfo(HttpServletRequest req, HttpServletResponse resp) {
+    public JsonUtil qQUserInfo(HttpServletRequest req, HttpServletResponse resp) {
         JsonUtil ret = new JsonUtil();
         try{
             ret.setFlag(true);
