@@ -56,7 +56,7 @@ public class WxUserServiceImpl extends BaseServiceImpl<WxUser, String> implement
         log.info("getQQUserInfo得到数据为：" + ret);
         JSONObject retJosn = JSONObject.parseObject(ret);
         nickName = retJosn.getString("nickname");
-        icon = retJosn.getString("figureurl");
+        icon = retJosn.getString("figureurl_qq");
         sex = retJosn.getString("gender");
         if("男".equals(sex)){
             sex = "1";
@@ -71,7 +71,6 @@ public class WxUserServiceImpl extends BaseServiceImpl<WxUser, String> implement
         user.setUserPic(icon);
         user.setNickName(nickName);
         user.setGender(sex);
-        this.addUser(user);
         return user;
     }
 

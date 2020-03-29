@@ -49,6 +49,7 @@ public class QQController {
             String accessToken = wxUserService.getAccessToken(code);
             String openId = wxUserService.getOpenId(accessToken);
             WxUser qqUserInfo = wxUserService.getQQUserInfo(accessToken, openId);
+            wxUserService.addUser(qqUserInfo);
             ret.setData(qqUserInfo);
             return ret;
         }catch (Exception e){
