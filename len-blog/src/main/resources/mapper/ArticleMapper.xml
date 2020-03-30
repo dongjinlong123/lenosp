@@ -297,13 +297,27 @@
 	</select>
     <!-- 点击推荐列表 10 个 -->
     <select id="getClickRecommendList" resultType="java.util.HashMap">
-		select t.id, t.title from boke_article t where t.status =1 order by t.readCounts limit 10
+		SELECT
+            t.id,
+            t.title,
+            t1.category
+        FROM
+            boke_article t
+            join boke_article_type t1
+            on t.id = t1.articleId
+        WHERE
+            t. STATUS = 1
+        ORDER BY
+            t.readCounts,t1.category
+        LIMIT 10
 	</select>
     <select id="getCommentRecommendList" resultType="java.util.HashMap">
-		select t.id, t.title ,count(1) as commentNum from boke_article t join boke_article_comment t2
+	  select t.id, t.title ,count(1) as commentNum ,t3.category from boke_article t join boke_article_comment t2
 		on t.id = t2.articleId
+		join boke_article_type t3
+		on t3.articleId = t.id
 		where t.status =1
-		GROUP BY t.id,t.title
+		GROUP BY t.id,t.title,t3.category
 		order by commentNum desc
 		limit 10
 	</select>
