@@ -100,7 +100,7 @@
 
   <div class="layui-footer">
   <!-- 底部固定区域 -->
-  <#--2019 &copy; <a  href="#">董锦龙的个人项目后台管理系统</a> 网站备案：粤ICP备18131046号-1-->
+  2019 &copy; <a  href="#">董锦龙的个人项目后台管理系统</a> 网站备案：粤ICP备18131046号-1
   </div>
 </div>
 <script src="${re.contextPath}/plugin/layui/layui.js"></script>
