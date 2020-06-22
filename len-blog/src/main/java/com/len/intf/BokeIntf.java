@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * 博客对外接口
  */
-@CrossOrigin
+@CrossOrigin(origins="*",maxAge = 3600)
 @Controller
 @Slf4j
 @RequestMapping("/intf")
@@ -222,6 +222,10 @@ public class BokeIntf extends BaseController {
         boolean flag = bokeIntfService.saveComment(articleComment);
         result.put("result",flag);
         result.put("replyerId",articleComment.getReplyerId());
+        //返回评论信息
+        result.put("articleComment",articleComment);
+        WxUser user = bokeIntfService.getUserById(articleComment.getReplyerId());
+        result.put("user",user);
         return result;
     }
     @GetMapping("/addReadCount")
@@ -236,7 +240,7 @@ public class BokeIntf extends BaseController {
 
     @PostMapping("/sendNew")
     @ResponseBody
-    @ApiOperation(value = "sendNew", notes = "保存文章评论")
+    @ApiOperation(value = "sendNew", notes = "保存文章评论信息")
     public Map<String, Object> sendNew(@RequestBody BoKeUserMessage boKeUserMessage, HttpServletRequest req, HttpServletResponse resp) {
         Map<String, Object> result = new HashMap<String, Object>();
         boolean flag = bokeIntfService.sendNew(boKeUserMessage);

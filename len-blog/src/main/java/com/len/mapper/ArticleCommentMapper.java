@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ArticleCommentMapper extends BaseMapper<ArticleComment, String> {
     List<ArticleComment> selectCommentList(ArticleComment ac);
+
+    void add(ArticleComment articleComment);
 }

@@ -84,4 +84,11 @@ public interface BokeIntfService {
      * @return
      */
     int getArticleCount(Article article);
+
+    /**
+     * 用户ID获取用户信息
+     * @param userId
+     * @return
+     */
+    WxUser getUserById(Integer userId);
 }

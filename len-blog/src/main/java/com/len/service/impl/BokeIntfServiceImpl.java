@@ -206,6 +206,7 @@ public class BokeIntfServiceImpl implements BokeIntfService {
         }
         for (ArticleComment articleComment : list) {
             Map<String, Object> retMap = new HashMap<String, Object>();
+            retMap.put("userId", articleComment.getReplyerId());
 
             retMap.put("createdAt", articleComment.getCreatedAt());
             retMap.put("content", articleComment.getContent());
@@ -240,9 +241,9 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     @Override
     public boolean saveComment(ArticleComment articleComment) {
         try {
-            articleComment.setCreatedAt(new Date());
-            articleCommentService.insertSelective(articleComment);
+            articleCommentService.add(articleComment);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -357,4 +358,16 @@ public class BokeIntfServiceImpl implements BokeIntfService {
     public int getArticleCount(Article article) {
         return articleService.getArticleCount(article);
     }
+
+    /**
+     * 用户ID获取用户信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public WxUser getUserById(Integer userId) {
+        return wxUserService.selectByPrimaryKey(userId);
+    }
+
 }

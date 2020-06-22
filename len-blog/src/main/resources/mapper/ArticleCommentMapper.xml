@@ -53,7 +53,18 @@
             resultType="com.len.entity.ArticleComment">
         select * from boke_article_comment
         where articleId = #{articleId}
-        order by createdAt asc
+        order by createdAt desc
 
     </select>
+
+    <insert id="add" parameterType="com.len.entity.ArticleComment">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into boke_article_comment
+        (id,articleId,replyerId,userId,createdAt,formId,content)
+        values(
+        #{id},#{articleId},#{replyerId},#{userId},now(),#{formId},#{content}
+        )
+    </insert>
 </mapper>

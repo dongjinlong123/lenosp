@@ -22,4 +22,9 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl<ArticleComment, S
     public List<ArticleComment> selectCommentList(ArticleComment ac) {
         return articleCommentMapper.selectCommentList(ac);
     }
+
+    @Override
+    public void add(ArticleComment articleComment) {
+        articleCommentMapper.add(articleComment);
+    }
 }
